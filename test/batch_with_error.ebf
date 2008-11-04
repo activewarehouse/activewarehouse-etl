@@ -1,0 +1,6 @@
+# This is an ETL Batch File and defines a means for executing
+# a collection of ETL scripts as a single process.
+
+use_temp_tables
+run 'delimited_with_bulk_load.ctl'
+run 'screen_test_fatal.ctl'

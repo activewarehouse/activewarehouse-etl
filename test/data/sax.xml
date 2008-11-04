@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+
+<people>
+  <person age="24">
+    <first_name>Bob</first_name>
+    <last_name>Smith</last_name>
+    <social_security_number>123456789</social_security_number>
+  </person>
+  <person age="31">
+    <first_name>John</first_name>
+    <last_name>Doe</last_name>
+    <social_security_number>222114545</social_security_number>
+  </person>
+</people>

@@ -1,0 +1,16 @@
+etl_execution:
+  adapter: mysql
+  username: root
+  host: localhost
+  database: etl_execution
+  encoding: utf8
+datawarehouse:
+  adapter: mysql
+  username: root
+  host: localhost
+  database: datawarehouse_development
+operational:
+  adapter: mysql
+  username: root
+  host: localhost
+  database: operational_production
