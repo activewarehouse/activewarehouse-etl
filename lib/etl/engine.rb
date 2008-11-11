@@ -358,11 +358,15 @@ module ETL #:nodoc:
                   row[name] = transform.transform(name, row[name], row)
                 end
               end
+            rescue ResolverError => e
+              Engine.logger.error(e.message)
+              errors << e.message
             rescue => e
               msg = "Error transforming from #{Engine.current_source} on line #{Engine.current_source_row}: #{e}"
               errors << msg
               Engine.logger.error(msg)
               e.backtrace.each { |line| Engine.logger.error(line) }
+            ensure
               begin
                 exceeded_error_threshold?(control) ? break : next
               rescue => inner_error

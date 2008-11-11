@@ -188,3 +188,8 @@
   and it will let you call etl on an unpacked/pistoned version of AW-ETL (thbar)
 * Upgraded to support Rails 2.1. No longer compatible with older versions of Rails.
 * Added ETL::Builder::TimeDimensionBuilder
+* Added :default option to ForeignKeyLookupTransform that will be used if no
+  foreign key is found.
+* Added :cache option to ForeignKeyLookupTransform that will preload the FK
+  mappings if the underlying resolver supports it. Currently supported by 
+  SQLResolver.

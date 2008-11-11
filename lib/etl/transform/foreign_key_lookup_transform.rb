@@ -5,6 +5,9 @@ module ETL #:nodoc:
       # The resolver to use if the foreign key is not found in the collection
       attr_accessor :resolver
       
+      # The default foreign key to use if none is found.
+      attr_accessor :default
+      
       # Initialize the foreign key lookup transform.
       #
       # Configuration options:
@@ -12,12 +15,21 @@ module ETL #:nodoc:
       #  an empty Hash will be used. This Hash will be used to cache values that have been resolved already
       #  for future use.
       # *<tt>:resolver</tt>: Object or Class which implements the method resolve(value)
+      # *<tt>:default</tt>: A default foreign key to use if no foreign key is found
       def initialize(control, name, configuration={})
         super
         
         @collection = (configuration[:collection] || {})
         @resolver = configuration[:resolver]
         @resolver = @resolver.new if @resolver.is_a?(Class)
+        @default = configuration[:default]
+        if configuration[:cache] ||= true
+          if resolver.respond_to?(:load_cache)
+            resolver.load_cache
+          else
+            ETL::Engine.logger.info "#{resolver.class.name} does not support caching"
+          end
+        end
       end
       
       # Transform the value by resolving it to a foriegn key
@@ -27,7 +39,8 @@ module ETL #:nodoc:
           raise ResolverError, "Foreign key for #{value} not found and no resolver specified" unless resolver
           raise ResolverError, "Resolver does not appear to respond to resolve method" unless resolver.respond_to?(:resolve)
           fk = resolver.resolve(value)
-          raise ResolverError, "Unable to resolve #{value} to foreign key for #{name} in row #{ETL::Engine.rows_read}" unless fk
+          fk ||= @default
+          raise ResolverError, "Unable to resolve #{value} to foreign key for #{name} in row #{ETL::Engine.rows_read}. You may want to specify a :default value." unless fk
           @collection[value] = fk
         end
         fk
@@ -81,10 +94,26 @@ class SQLResolver
     @connection ||= ActiveRecord::Base.connection
   end
   def resolve(value)
-    @connection.select_value("SELECT id FROM #{table_name} WHERE #{@field} = #{@connection.quote(value)}")
+    if @use_cache
+      cache[value]
+    else
+      q = "SELECT id FROM #{table_name} WHERE #{@field} = #{@connection.quote(value)}"
+      ETL::Engine.logger.debug("Executing query: #{q}")
+      @connection.select_value(q)
+    end
   end
   def table_name
     ETL::Engine.table(@table, @connection)
+  end
+  def cache
+    @cache ||= {}
+  end
+  def load_cache
+    @use_cache = true
+    q = "SELECT id, #{@field} FROM #{table_name}"
+    @connection.select_all(q).each do |record|
+      cache[record[@field]] = record['id']
+    end
   end
 end
 
