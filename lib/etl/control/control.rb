@@ -122,6 +122,8 @@ module ETL #:nodoc:
             rescue NameError => e
               raise ControlError, "Unable to find transformer #{class_name}: #{e}"
             end
+          when Class
+            transforms << transformer.new(self, transformer.name, configuration)
           else
             #transformer.class.inspect
             if transformer.is_a?(ETL::Transform::Transform)
@@ -130,7 +132,7 @@ module ETL #:nodoc:
               t.name = name
               transforms << t 
             else
-              raise ControlError, "Transformer must be a String, Symbol or Transform instance"
+              raise ControlError, "Transformer must be a String, Symbol, Class or Transform instance"
             end
           end
         elsif block_given?
@@ -198,7 +200,7 @@ module ETL #:nodoc:
         when Class
           processor_collection << name.new(self, configuration)
         else
-          raise ControlError, "The process declaration requires a String, Symbol or Class, or a Block to be passed"
+          raise ControlError, "The process declaration requires a String, Symbol, Class, or a Block to be passed"
         end
       end
       
