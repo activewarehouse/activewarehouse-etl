@@ -59,10 +59,10 @@ module ETL #:nodoc:
             names = []
             values = []
             order.each do |name|
-              names << name
+              names << "`#{name}`"
               values << conn.quote(row[name]) # TODO: this is probably not database agnostic
             end
-            q = "INSERT INTO #{table_name} (#{names.join(',')}) VALUES (#{values.join(',')})"
+            q = "INSERT INTO `#{table_name}` (#{names.join(',')}) VALUES (#{values.join(',')})"
             ETL::Engine.logger.debug("Executing insert: #{q}")
             conn.insert(q, "Insert row #{current_row}")
             @current_row += 1
