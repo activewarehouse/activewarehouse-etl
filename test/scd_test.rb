@@ -247,14 +247,6 @@ class ScdTest < Test::Unit::TestCase
     DateTime.parse(Time.now.to_s(:db))
   end
   
-  def type_1_crc_records
-    ETL::Execution::Record.find_all_by_control_file_and_natural_key(File.dirname(__FILE__) + "/scd_test_type_1.ctl", "Bob|Smith")
-  end
-  
-  def type_2_crc_records
-    ETL::Execution::Record.find_all_by_control_file_and_natural_key(File.dirname(__FILE__) + "/scd_test_type_2.ctl", "Bob|Smith")
-  end
-  
   def assert_boston_address(bob, street = "200 South Drive")
     assert_equal street, bob['address'], bob.inspect
     assert_equal "Boston", bob['city'], bob.inspect
