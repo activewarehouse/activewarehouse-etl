@@ -72,11 +72,11 @@ module AWETL
         ActiveWarehouse ETL is a pure Ruby Extract-Transform-Load application for loading data into a database.
       EOF
 
-      s.add_dependency('rake',                '>= 0.7.1')
-      s.add_dependency('activesupport',       '>= 1.3.1')
-      s.add_dependency('activerecord',        '>= 1.14.4')
+      s.add_dependency('rake',                '>= 0.8.3')
+      s.add_dependency('activesupport',       '>= 2.1.0')
+      s.add_dependency('activerecord',        '>= 2.1.0')
       s.add_dependency('fastercsv',           '>= 1.2.0')
-      s.add_dependency('adapter_extensions',  '>= 0.1.0')
+      s.add_dependency('adapter_extensions',  '>= 0.5.0')
 
       s.rdoc_options << '--exclude' << '.'
       s.has_rdoc = false
