@@ -13,7 +13,7 @@ source :in, {
 ]
 
 before_write :surrogate_key, :target => :data_warehouse, :table => 'person_dimension', :column => 'id'
-before_write :check_exists, {
+before_write :check_exist, {
   :target => :data_warehouse, 
   :table => 'person_dimension', 
   :columns => [:first_name, :last_name]
