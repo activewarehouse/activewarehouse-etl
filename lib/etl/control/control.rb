@@ -66,8 +66,8 @@ module ETL #:nodoc:
               sources << source_class.new(self, configuration, definition)
               break
             end
-            raise ControlError, "A source was specified but no matching type was found"
           end
+          raise ControlError, "A source was specified but no matching type was found" if sources.empty?
         end
       end
       
@@ -100,8 +100,8 @@ module ETL #:nodoc:
               destinations << dest_class.new(self, configuration, mapping)
               break
             end
-            raise ControlError, "A destination was specified but no matching destination type was found"
           end
+          raise ControlError, "A destination was specified but no matching destination type was found" if destinations.empty?      
         end
       end
       
