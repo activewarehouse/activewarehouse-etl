@@ -280,7 +280,7 @@ module ETL #:nodoc:
           values << row[nk]
         end
         statement = statement.join(" AND ")
-        ActiveRecord::Base.send(:sanitize_sql, [statement, *values])
+        ETL::Execution::Base.send(:sanitize_sql, [statement, *values])
       end
       
       # Do all the steps required when a SCD *has* changed.  Exact steps
