@@ -46,9 +46,10 @@ module ETL #:nodoc:
         @separator = configuration[:separator] ||= ','
         @eol = configuration[:eol] ||= "\n"
         @enclose = configuration[:enclose]
-        @unique = configuration[:unique]
-        
-        @order = mapping[:order] || order_from_source
+        @unique = configuration[:unique] ? configuration[:unique] + scd_required_fields : configuration[:unique]
+        @unique.uniq! unless @unique.nil?
+        @order = mapping[:order] ? mapping[:order] + scd_required_fields : order_from_source
+        @order.uniq! unless @order.nil?
         raise ControlError, "Order required in mapping" unless @order
       end
       

@@ -129,11 +129,23 @@ module ETL #:nodoc:
       # missing, uses all of the row's fields.
       def scd_fields(row)
         @scd_fields ||= configuration[:scd_fields] || row.keys
+        ETL::Engine.logger.debug "@scd_fields is: #{@scd_fields.inspect}"
+        @scd_fields
+      end
+
+      # returns the fields that are required to identify an SCD
+      def scd_required_fields
+        if scd?
+         [scd_effective_date_field, scd_end_date_field, scd_latest_version_field]
+        else
+         []
+        end
       end
       
       def non_scd_fields(row)
-        @non_csd_fields ||= row.keys - natural_key - scd_fields(row) -
-          [primary_key, scd_effective_date_field, scd_end_date_field, scd_latest_version_field]
+        @non_scd_fields ||= row.keys - natural_key - scd_fields(row) - [primary_key] - scd_required_fields
+        ETL::Engine.logger.debug "@non_scd_fields is: #{@non_scd_fields.inspect}"
+        @non_scd_fields
       end
       
       def non_evolving_fields

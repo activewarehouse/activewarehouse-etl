@@ -38,8 +38,10 @@ module ETL #:nodoc:
         @target = configuration[:target]
         @table = configuration[:table]
         @truncate = configuration[:truncate] ||= false
-        @unique = configuration[:unique]
-        @order = mapping[:order] || order_from_source
+        @unique = configuration[:unique] ? configuration[:unique] + [scd_effective_date_field] : configuration[:unique]
+        @unique.uniq! unless @unique.nil?
+        @order = mapping[:order] ? mapping[:order] + scd_required_fields : order_from_source
+        @order.uniq! unless @order.nil?
         raise ControlError, "Order required in mapping" unless @order
         raise ControlError, "Table required" unless @table
         raise ControlError, "Target required" unless @target
