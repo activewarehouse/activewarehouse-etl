@@ -308,7 +308,7 @@ module ETL #:nodoc:
       
       sources.each do |source|
         Engine.current_source = source
-        Engine.logger.debug "Processing source #{source}"
+        Engine.logger.debug "Processing source #{source.inspect}"
         say "Source: #{source}"
         say "Limiting enabled: #{Engine.limit}" if Engine.limit != nil
         say "Offset enabled: #{Engine.offset}" if Engine.offset != nil
