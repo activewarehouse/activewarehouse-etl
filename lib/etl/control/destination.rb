@@ -366,10 +366,10 @@ module ETL #:nodoc:
         q = "SELECT * FROM #{dimension_table} WHERE #{natural_key_equality_for_row(row)}"
         q << " AND #{scd_latest_version_field}" if scd_type == 2
         
-        #puts "looking for original record"
+        ETL::Engine.logger.debug "looking for original record"
         result = connection.select_one(q)
         
-        #puts "Result: #{result.inspect}"
+        ETL::Engine.logger.debug "Result: #{result.inspect}"
         
         result ? ETL::Row[result.symbolize_keys!] : nil
       end
@@ -377,7 +377,14 @@ module ETL #:nodoc:
       # Check whether non-scd fields have changed since the last
       # load of this record.
       def has_scd_field_changes?(row)
-        scd_fields(row).any? { |csd_field| row[csd_field].to_s != @existing_row[csd_field].to_s }
+        scd_fields(row).any? { |csd_field| 
+          ETL::Engine.logger.debug "Row: #{row.inspect}"
+          ETL::Engine.logger.debug "Existing Row: #{@existing_row.inspect}"
+          ETL::Engine.logger.debug "comparing: #{row[csd_field].to_s} != #{@existing_row[csd_field].to_s}"
+          x=row[csd_field].to_s != @existing_row[csd_field].to_s 
+          ETL::Engine.logger.debug x
+          x
+        }
       end
       
       # Check whether non-scd fields have changed since the last
