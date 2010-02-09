@@ -39,7 +39,12 @@ end
 require 'active_support'
 require 'active_record'
 require 'adapter_extensions'
-require 'faster_csv'
+
+if RUBY_VERSION < '1.9'
+  require 'faster_csv'
+else
+  require 'csv'
+end
 
 $:.unshift(File.dirname(__FILE__))
 
