@@ -38,8 +38,10 @@ module ETL #:nodoc:
         @target = configuration[:target]
         @table = configuration[:table]
         @truncate = configuration[:truncate] ||= false
-        @unique = configuration[:unique]
-        @order = mapping[:order] || order_from_source
+        @unique = configuration[:unique] ? configuration[:unique] + [scd_effective_date_field] : configuration[:unique]
+        @unique.uniq! unless @unique.nil?
+        @order = mapping[:order] ? mapping[:order] + scd_required_fields : order_from_source
+        @order.uniq! unless @order.nil?
         raise ControlError, "Order required in mapping" unless @order
         raise ControlError, "Table required" unless @table
         raise ControlError, "Target required" unless @target
@@ -59,10 +61,10 @@ module ETL #:nodoc:
             names = []
             values = []
             order.each do |name|
-              names << "`#{name}`"
-              values << conn.quote(row[name]) # TODO: this is probably not database agnostic
+              names << conn.quote_column_name(name)
+              values << conn.quote(row[name])
             end
-            q = "INSERT INTO `#{table_name}` (#{names.join(',')}) VALUES (#{values.join(',')})"
+            q = "INSERT INTO #{conn.quote_table_name(table_name)} (#{names.join(',')}) VALUES (#{values.join(',')})"
             ETL::Engine.logger.debug("Executing insert: #{q}")
             conn.insert(q, "Insert row #{current_row}")
             @current_row += 1

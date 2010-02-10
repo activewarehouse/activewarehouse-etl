@@ -38,8 +38,10 @@ module ETL #:nodoc:
       # * <tt>:field_enclosure</tt>: The field enclosure charcaters
       def initialize(control, configuration)
         super
-        @file = File.join(File.dirname(control.file), configuration[:file])
         @target = configuration[:target]
+        path = Pathname.new(configuration[:file])
+        @file = path.absolute? ? path : Pathname.new(File.dirname(File.expand_path(control.file))) + path
+
         @table = configuration[:table]
         @truncate = configuration[:truncate] ||= false
         @columns = configuration[:columns]
