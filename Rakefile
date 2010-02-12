@@ -25,12 +25,16 @@ task :create_extra_mysql_db do
   system cmd_string
 end
 
+task :copy_runcoderun_yml do
+  system("cp #{File.dirname(__FILE__)}/database.runcoderun.yml #{File.dirname(__FILE__)}/database.yml")
+end
+
 def runcoderun?
   ENV["RUN_CODE_RUN"]
 end
 
 if runcoderun?
-  task :default => [:create_extra_mysql_db, :test]
+  task :default => [:create_extra_mysql_db, :copy_runcoderun_yml, :test]
 else
   desc 'Default: run unit tests.'
   task :default => :test
