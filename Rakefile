@@ -26,7 +26,7 @@ task :create_extra_mysql_db do
 end
 
 task :copy_runcoderun_yml do
-  system("cp #{File.dirname(__FILE__)}/tests/database.runcoderun.yml #{File.dirname(__FILE__)}/tests/database.yml")
+  system("cp #{File.dirname(__FILE__)}/test/database.runcoderun.yml #{File.dirname(__FILE__)}/test/database.yml")
 end
 
 def runcoderun?
