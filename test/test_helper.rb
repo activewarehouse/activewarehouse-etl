@@ -1,6 +1,8 @@
 $:.unshift(File.dirname(__FILE__) + '/../lib')
 $:.unshift(File.dirname(__FILE__))
 
+Dir[File.dirname(__FILE__) + "/vendor/**/lib"].each { |lib| $:.unshift(lib) }
+
 require 'test/unit'
 require 'pp'
 require 'etl'
