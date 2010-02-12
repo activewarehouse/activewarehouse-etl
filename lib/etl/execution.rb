@@ -16,5 +16,4 @@ end
 require 'etl/execution/base'
 require 'etl/execution/batch'
 require 'etl/execution/job'
-require 'etl/execution/record'
 require 'etl/execution/migration'
