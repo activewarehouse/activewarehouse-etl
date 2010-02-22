@@ -95,10 +95,9 @@ class SQLResolver
   end
   def resolve(value)
     if @use_cache
-      cache[value]
+      cache[cache_key(value)]
     else
-      q = "SELECT id FROM #{table_name} WHERE #{@field} = #{@connection.quote(value)}"
-      ETL::Engine.logger.debug("Executing query: #{q}")
+      q = "SELECT id FROM #{table_name} WHERE #{wheres(value)}"
       @connection.select_value(q)
     end
   end
@@ -110,10 +109,29 @@ class SQLResolver
   end
   def load_cache
     @use_cache = true
-    q = "SELECT id, #{@field} FROM #{table_name}"
+    q = "SELECT id, #{field.join(', ')} FROM #{table_name}"
     @connection.select_all(q).each do |record|
-      cache[record[@field]] = record['id']
+      cache[cache_key(record.values_at(*field))] = record['id']
     end
+  end
+
+  private
+  def field
+    unless @field.kind_of?(Array)
+      @field = [ @field ]
+    end
+    @field
+  end
+
+  def cache_key(value)
+    value.hash
+  end
+
+  def wheres(value)
+    value  = [ value ]  unless value.kind_of?(Array)
+    field.zip(value).collect { |a|
+      "#{a[0]} = #{@connection.quote(a[1])}"
+    }.join(' AND ')
   end
 end
 
