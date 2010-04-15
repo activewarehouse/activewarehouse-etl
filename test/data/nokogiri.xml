@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="US-ASCII" standalone="yes"?>
+<!DOCTYPE people >
+<people>
+  <person ssn="123456789" type="employee">
+    <first_name>Bob</first_name>
+    <last_name>Smith</last_name>
+    <email>bsmith@foo.com</email>
+    <colours>
+      <eyes>brown</eyes>
+      <hair>black</hair>
+      <skin>fair</skin>
+    </colours>
+    <age>24</age>
+  </person>
+  <person ssn="111223333" type="client">
+    <first_name>Jane</first_name>
+    <last_name>Doe</last_name>
+    <email>jdoe@bar.com</email>
+    <colours>
+      <eyes>blue</eyes>
+      <hair>blond</hair>
+      <skin>medium</skin>
+    </colours>
+    <age>45</age>
+  </person>
+  <person ssn="133244566" type="client">
+    <first_name>Jake</first_name>
+    <last_name>Smithsonian</last_name>
+    <email>jake@example.com</email>
+    <colours>
+      <eyes>brown</eyes>
+      <hair>black</hair>
+      <skin>dark</skin>
+    </colours>
+    <age>37</age>
+  </person>
+</people>
+
