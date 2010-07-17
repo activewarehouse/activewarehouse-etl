@@ -4,6 +4,8 @@ module ETL
   module Parser
     class ExcelParser < ETL::Parser::Parser
 
+      attr_accessor :first_line_is_header
+
       # Initialize the parser
       # * <tt>source</tt>: The Source object
       # * <tt>options</tt>: Parser options Hash
@@ -19,11 +21,28 @@ module ETL
           line = 0
           lines_skipped = 0
           book = Spreadsheet.open file
-          book.worksheets.each do |sheet|
+          loopworksheets = []
+
+          if worksheets.empty?
+            loopworksheets = book.worksheets
+          else
+            worksheets.each do |index|
+              loopworksheets << book.worksheet(index)
+            end
+          end
+
+          loopworksheets.each do |sheet|
             sheet.each do |raw_row|
               if lines_skipped < source.skip_lines
                 ETL::Engine.logger.debug "skipping line"
                 lines_skipped += 1
+                next
+              end
+              if self.first_line_is_header
+                raw_row.each do |value|
+                  fields << Field.new(value.to_sym)
+                end
+                self.first_line_is_header = false
                 next
               end
               line += 1
@@ -37,6 +56,11 @@ module ETL
             end
           end
         end
+      end
+
+      # Get an array of defined worksheets
+      def worksheets
+        @worksheets ||= []
       end
 
       # Get an array of defined fields
@@ -57,7 +81,20 @@ module ETL
       
       private
       def configure
-        source.definition.each do |options|
+        source.definition[:worksheets].each do |worksheet|
+          if Integer(worksheet)
+            worksheets << worksheet.to_i
+          else
+            raise DefinitionError, "Each worksheet definition must be an integer"
+          end
+        end unless source.definition[:worksheets].nil?
+
+        self.first_line_is_header = source.definition[:first_line_is_header]
+        if self.first_line_is_header
+          return
+        end
+
+        source.definition[:fields].each do |options|
           case options
           when Symbol
             fields << Field.new(options)

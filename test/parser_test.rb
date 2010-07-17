@@ -55,6 +55,15 @@ class ParserTest < Test::Unit::TestCase
     assert_equal({:first_name=>"Bob", :last_name=>"Smith", :ssn=>123456789, :age=>24}, rows.first)
   end
   
+  # Test 2 the Excel parser
+  def test_excel2_parser
+    control = ETL::Control::Control.resolve(File.dirname(__FILE__) + '/excel2.ctl')
+    parser = control.sources.first.parser
+    rows = parser.collect { |row| row }
+    assert_equal 1, rows.length
+    assert_equal({:first_name=>"John", :last_name=>"Doe", :ssn=>222114545, :age=>31}, rows.first)
+  end
+  
   # Test the Apache combined log format parser
   def test_apache_combined_log_parser
     control = ETL::Control::Control.resolve(File.dirname(__FILE__) + '/apache_combined_log.ctl')
