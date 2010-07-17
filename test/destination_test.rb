@@ -1,3 +1,5 @@
+require 'rubygems'
+require 'spreadsheet'
 require File.dirname(__FILE__) + '/test_helper'
 
 class Person < ActiveRecord::Base
@@ -167,5 +169,44 @@ class DestinationTest < Test::Unit::TestCase
     assert_raise NotImplementedError do
       dest.close
     end
+  end
+
+  def test_excel_destination
+    outfile = 'output/test_excel_destination.xls'
+    row = ETL::Row[ :address => '123 SW 1st Street', :city => 'Melbourne', 
+      :state => 'Florida', :country => 'United States' ]
+    control = ETL::Control::Control.parse(File.dirname(__FILE__) + 
+      '/delimited_excel.ctl')
+
+    # First define a basic configuration to check defaults
+    configuration = { 
+      :file => outfile, 
+      :buffer_size => 0,
+    }
+    mapping = { 
+      :order => [:address, :city, :state, :country, :country_code],
+      :virtual => {
+        :country_code => Proc.new do |r|
+          {
+            'United States' => 'US',
+            'Mexico' => 'MX'
+          }[r[:country]]
+        end
+      }
+    }
+    
+    dest = ETL::Control::ExcelDestination.new(control, configuration, mapping)    
+    dest.write(row)
+    dest.close
+    
+    # Read back the resulting
+    book = Spreadsheet.open File.join(File.dirname(__FILE__), outfile)
+    sheet = book.worksheet(0)
+
+    assert_equal "123 SW 1st Street", sheet[0, 0]
+    assert_equal "Melbourne", sheet[0, 1]
+    assert_equal "Florida", sheet[0, 2]
+    assert_equal "United States", sheet[0, 3]
+    assert_equal "US", sheet[0, 4]
   end
 end
