@@ -4,7 +4,7 @@ module ETL
   module Parser
     class ExcelParser < ETL::Parser::Parser
 
-      attr_accessor :first_line_is_header
+      attr_accessor :ignore_blank_line
 
       # Initialize the parser
       # * <tt>source</tt>: The Source object
@@ -38,15 +38,12 @@ module ETL
                 lines_skipped += 1
                 next
               end
-              if self.first_line_is_header
-                raw_row.each do |value|
-                  fields << Field.new(value.to_sym)
-                end
-                self.first_line_is_header = false
-                next
-              end
               line += 1
               row = {}
+              if self.ignore_blank_line and raw_row.empty?
+                lines_skipped += 1
+                next
+              end
               validate_row(raw_row, line, file)
               raw_row.each_with_index do |value, index|
                 f = fields[index]
@@ -89,10 +86,7 @@ module ETL
           end
         end unless source.definition[:worksheets].nil?
 
-        self.first_line_is_header = source.definition[:first_line_is_header]
-        if self.first_line_is_header
-          return
-        end
+        self.ignore_blank_line = source.definition[:ignore_blank_line]
 
         source.definition[:fields].each do |options|
           case options

@@ -3,7 +3,7 @@ source :in, {
   :parser => :excel
 }, 
 {
-  :first_line_is_header => false,
+  :ignore_blank_line => false,
   :fields => [ 
       :first_name,
       :last_name,

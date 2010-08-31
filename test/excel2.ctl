@@ -3,8 +3,14 @@ source :in, {
   :parser => :excel
 }, 
 {
-  :first_line_is_header => true,
-  :worksheets => [ 1 ]
+  :ignore_blank_line => true,
+  :worksheets => [ 1 ],
+  :fields => [ 
+      :first_name,
+      :last_name,
+      :ssn,
+      :age
+  ]
 }
 
 transform :ssn, :sha1
