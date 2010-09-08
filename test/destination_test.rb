@@ -209,4 +209,37 @@ class DestinationTest < Test::Unit::TestCase
     assert_equal "United States", sheet[0, 3]
     assert_equal "US", sheet[0, 4]
   end
+
+  # Test a insert update database destination
+  def test_insert_update_database_destination
+    row = ETL::Row[:id => 1, :first_name => 'Bob', :last_name => 'Smith', :ssn => '111234444']
+    row_needs_escape = ETL::Row[:id => 2, :first_name => "Foo's", :last_name => "Bar", :ssn => '000000000' ]
+    row_needs_update = ETL::Row[:id => 1, :first_name => "Sean", :last_name => "Toon", :ssn => '000000000' ]
+    control = ETL::Control::Control.parse(File.dirname(__FILE__) + 
+      '/delimited_insert_update.ctl')
+    
+    Person.delete_all
+    assert_equal 0, Person.count
+    
+    # First define a basic configuration to check defaults
+    configuration = { 
+      :type => :insert_update_database,
+      :target => :data_warehouse,
+      :database => 'etl_unittest',
+      :table => 'people',
+      :buffer_size => 0 
+    }
+    mapping = {
+      :primarykey => [:id],
+      :order => [:id, :first_name, :last_name, :ssn]
+    }
+    dest = ETL::Control::InsertUpdateDatabaseDestination.new(control, configuration, mapping)
+    dest.write(row)
+    dest.write(row_needs_escape)
+    dest.write(row_needs_update)
+    dest.close
+    
+    assert_equal 2, Person.find(:all).length
+  end
+  
 end
