@@ -46,13 +46,13 @@ module ETL #:nodoc:
       
       # Get a String identifier for the source
       def to_s
-        "#{host}/#{database}/#{table}"
+        "#{host}/#{database}/#{@table}"
       end
       
       # Get the local directory to use, which is a combination of the 
       # local_base, the db hostname the db database name and the db table.
       def local_directory
-        File.join(local_base, host, database, configuration[:table])
+        File.join(local_base, to_s)
       end
       
       # Get the join part of the query, defaults to nil
@@ -166,7 +166,7 @@ module ETL #:nodoc:
       # Get the query to use
       def query
         return @query if @query
-        q = "SELECT #{select} FROM #{configuration[:table]}"
+        q = "SELECT #{select} FROM #{@table}"
         q << " #{join}" if join
         
         conditions = []
