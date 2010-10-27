@@ -41,6 +41,7 @@ module ETL #:nodoc:
         super
         @target = configuration[:target]
         @table = configuration[:table]
+        @query = configuration[:query]
       end
       
       # Get a String identifier for the source
