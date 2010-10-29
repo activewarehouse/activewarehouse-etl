@@ -84,7 +84,7 @@ module ETL #:nodoc:
       # Get the number of rows in the source
       def count(use_cache=true)
         return @count if @count && use_cache
-        if store_locally || read_locally
+        if @store_locally || read_locally
           @count = count_locally
         else
           @count = connection.select_value(query.gsub(/SELECT .* FROM/, 'SELECT count(1) FROM'))
@@ -108,7 +108,7 @@ module ETL #:nodoc:
           ETL::Engine.logger.debug "Reading from local cache"
           read_rows(last_local_file, &block)
         else # Read from the original source
-          if store_locally
+          if @store_locally
             file = local_file
             write_local(file)
             read_rows(file, &block)
