@@ -16,7 +16,7 @@ module ETL
         return nil if row.nil?
 
         if eval_condition(row, @condition)
-          return nil if @outtrue.nil?
+          return [] if @outtrue.nil?
 
           eval(@outtrue)
         else
