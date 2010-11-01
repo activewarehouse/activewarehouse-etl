@@ -41,7 +41,7 @@ module ETL #:nodoc:
       # Returns each row from the source
       def each
         count = 0
-        copy_sources if store_locally
+        copy_sources if @store_locally
         @parser.each do |row|
           if ETL::Engine.offset && count < ETL::Engine.offset
             count += 1
