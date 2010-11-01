@@ -113,8 +113,11 @@ module ETL #:nodoc:
             write_local(file)
             read_rows(file, &block)
           else
-            query_rows.each do |row|
-              row = ETL::Row.new(row.symbolize_keys)
+            query_rows.each do |r|
+              row = ETL::Row.new()
+              r.symbolize_keys.each_pair { |key, value|
+                row[key] = value
+              }
               row.source = self
               yield row
             end
