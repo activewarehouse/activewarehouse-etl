@@ -13,8 +13,6 @@ module ETL #:nodoc:
 
       attr_reader :filters
 
-      attr_reader :buffer
-      
       # Initialize the processor.
       #
       # Configuration options:
@@ -33,7 +31,6 @@ module ETL #:nodoc:
         path = Pathname.new(configuration[:target_file])
         @target_file = path.absolute? ? path : Pathname.new(File.dirname(File.expand_path(configuration[:target_file]))) + path
         @filters = configuration[:filters] || [{:replace => '\"', :result => '""'}]
-        @buffer = configuration[:buffer] || 8192
         raise ControlError, "Source file must be specified" if @source_file.nil?
         raise ControlError, "Target file must be specified" if @target_file.nil?
         raise ControlError, "Source and target file cannot currently point to the same file" if @source_file == @target_file
@@ -44,13 +41,23 @@ module ETL #:nodoc:
         reader = File.open(@source_file, 'r')
         writer = File.open(@target_file, 'w')
 
-        while !reader.eof?
-          reading = reader.readpartial(@buffer)
+        reader.each_line do |line|
+          reading = line
           @filters.each do |filter|
-            result = reading.gsub(Regexp.new(filter[:replace]), filter[:result])
-            reading = result
+            if (!filter[:replace].nil? &&
+                !filter[:result].nil?)
+              result = reading.gsub(Regexp.new(filter[:replace]), filter[:result])
+              reading = result
+            end
+            if (!filter[:charcount].nil? &&
+                !filter[:count].nil?)
+              charcount = reading.count "\t"
+              if charcount != filter[:count]
+                reading = nil
+              end
+            end
           end
-          writer.write(reading)
+          writer.write(reading) unless reading.nil?
         end
 
         reader.close
