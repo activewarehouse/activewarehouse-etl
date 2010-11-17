@@ -23,6 +23,8 @@ module ETL #:nodoc:
       attr_accessor :line_separator
       # The string that indicates a NULL (defaults to an empty string)
       attr_accessor :null_string
+      # boolean that indicates disable keys before, then enable after load (MySql only optimization)
+      attr_accessor :disable_keys
        
       # Initialize the processor.
       #
@@ -36,6 +38,7 @@ module ETL #:nodoc:
       # * <tt>:field_separator</tt>: The field separator. Defaults to a comma
       # * <tt>:line_separator</tt>: The line separator. Defaults to a newline
       # * <tt>:field_enclosure</tt>: The field enclosure charcaters
+      # * <tt>:disable_keys</tt>: Set to true to disable keys before, then enable after load (MySql only optimization)
       def initialize(control, configuration)
         super
         @target = configuration[:target]
@@ -49,6 +52,7 @@ module ETL #:nodoc:
         @line_separator = (configuration[:line_separator] || "\n")
         @null_string = (configuration[:null_string] || "")
         @field_enclosure = configuration[:field_enclosure]
+        @disable_keys = configuration[:disable_keys] || false
         
         raise ControlError, "Target must be specified" unless @target
         raise ControlError, "Table must be specified" unless @table
@@ -64,6 +68,8 @@ module ETL #:nodoc:
           conn.truncate(table_name) if truncate
           options = {}
           options[:columns] = columns
+          
+          options[:disable_keys] = true if disable_keys
           if field_separator || field_enclosure || line_separator || null_string
             options[:fields] = {}
             options[:fields][:null_string] = null_string if null_string
