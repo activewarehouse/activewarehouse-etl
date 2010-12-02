@@ -51,7 +51,7 @@ module ETL #:nodoc:
             end
             if (!filter[:charcount].nil? &&
                 !filter[:count].nil?)
-              charcount = reading.count "\t"
+              charcount = reading.count filter[:charcount]
               if charcount != filter[:count]
                 reading = nil
               end
