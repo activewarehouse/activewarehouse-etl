@@ -12,6 +12,7 @@ module ETL
       
       def transform(name, value, row)
         return nil if row.nil?
+        return nil if row[name].nil?
 
         fields = row[name].split(@delimiter)
         @new_fields.each_with_index do |new, index|
