@@ -12,13 +12,18 @@ module ETL
       
       def transform(name, value, row)
         return nil if row.nil?
+        return nil if row[@fields[0]].nil?
 
         if (@function.eql? "A + B")
-          first = ""
-          first = row[@fields[0]] unless row[@fields[0]].nil?
+          first = row[@fields[0]]
           second = ""
           second = row[@fields[1]] unless row[@fields[1]].nil?
           row[name] = first + second
+        end
+
+        if (@function.eql? "date A")
+          first = row[@fields[0]]
+          row[name] = Time.parse(first)
         end
 
         row[name]
