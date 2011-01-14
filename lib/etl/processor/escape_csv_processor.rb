@@ -12,6 +12,7 @@ module ETL #:nodoc:
       attr_reader :use_temp_file
 
       attr_reader :filters
+      attr_reader :charcount
 
       # Initialize the processor.
       #
@@ -31,6 +32,7 @@ module ETL #:nodoc:
         path = Pathname.new(configuration[:target_file])
         @target_file = path.absolute? ? path : Pathname.new(File.dirname(File.expand_path(configuration[:target_file]))) + path
         @filters = configuration[:filters] || [{:replace => '\"', :result => '""'}]
+        @charcount = configuration[:charcount]
         raise ControlError, "Source file must be specified" if @source_file.nil?
         raise ControlError, "Target file must be specified" if @target_file.nil?
         raise ControlError, "Source and target file cannot currently point to the same file" if @source_file == @target_file
@@ -49,14 +51,16 @@ module ETL #:nodoc:
               result = reading.gsub(Regexp.new(filter[:replace]), filter[:result])
               reading = result
             end
-            if (!filter[:charcount].nil? &&
-                !filter[:count].nil?)
-              charcount = reading.count filter[:charcount]
-              if charcount != filter[:count]
+          end unless @filters.nil?
+          @charcount.each do |count|
+            if (!count[:char].nil? &&
+                !count[:count].nil?)
+              c = reading.count count[:char]
+              if c != count[:count]
                 reading = nil
               end
             end
-          end
+          end unless @charcount.nil?
           writer.write(reading) unless reading.nil?
         end
 
