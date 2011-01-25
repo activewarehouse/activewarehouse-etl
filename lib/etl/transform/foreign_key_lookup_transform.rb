@@ -87,44 +87,57 @@ class SQLResolver
   # referencing a connection defined in the ETL database.yml file or an actual
   # ActiveRecord connection instance. If the connection is not specified then
   # the ActiveRecord::Base.connection will be used.
-  def initialize(table, field, connection=nil)
-    @table = table
-    @field = field
+  def initialize(atable, afield, connection=nil)
+    puts "table: #{atable.inspect} field:#{afield.inspect}"
+    @table = atable
+    @field = afield
     @connection = (connection.respond_to?(:quote) ? connection : ETL::Engine.connection(connection)) if connection
     @connection ||= ActiveRecord::Base.connection
   end
+  
   def resolve(value)
+    return nil if value.nil?
+    r = nil
     if @use_cache
-      cache[cache_key(value)]
+      r = cache[value]
+      puts "resolve failed: #{value.class.name}:#{value.inspect} from: #{@table}.#{@field}" unless r
     else
       q = "SELECT id FROM #{table_name} WHERE #{wheres(value)}"
-      @connection.select_value(q)
+      puts q
+      r = @connection.select_value(q)
     end
+    r
   end
+  
   def table_name
     ETL::Engine.table(@table, @connection)
   end
+  
   def cache
     @cache ||= {}
   end
+  
   def load_cache
     @use_cache = true
     q = "SELECT id, #{field.join(', ')} FROM #{table_name}"
+    puts q
     @connection.select_all(q).each do |record|
-      cache[cache_key(record.values_at(*field))] = record['id']
+      ck = @field.kind_of?(Array) ? record.values_at(*@field) : record[@field]
+      # puts "load_cache key: #{ck.class.name}:#{ck.inspect}"
+      # puts "  #{@field.class.name}:#{@field.inspect}"
+      # puts "  #{record[@field].class.name}:#{record[@field].inspect}"
+      cache[ck] = record['id']
     end
   end
 
   private
-  def field
-    unless @field.kind_of?(Array)
-      @field = [ @field ]
-    end
-    @field
-  end
 
-  def cache_key(value)
-    value.hash
+  def field
+    if @field.kind_of?(Array)
+      @field
+    else
+      [ @field ]
+    end
   end
 
   def wheres(value)
