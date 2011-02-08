@@ -88,7 +88,7 @@ class SQLResolver
   # ActiveRecord connection instance. If the connection is not specified then
   # the ActiveRecord::Base.connection will be used.
   def initialize(atable, afield, connection=nil)
-    puts "table: #{atable.inspect} field:#{afield.inspect}"
+    # puts "table: #{atable.inspect} field:#{afield.inspect}"
     @table = atable
     @field = afield
     @connection = (connection.respond_to?(:quote) ? connection : ETL::Engine.connection(connection)) if connection
@@ -100,10 +100,10 @@ class SQLResolver
     r = nil
     if @use_cache
       r = cache[value]
-      puts "resolve failed: #{value.class.name}:#{value.inspect} from: #{@table}.#{@field}" unless r
+      # puts "resolve failed: #{value.class.name}:#{value.inspect} from: #{@table}.#{@field}" unless r
     else
       q = "SELECT id FROM #{table_name} WHERE #{wheres(value)}"
-      puts q
+      # puts q
       r = @connection.select_value(q)
     end
     r
@@ -120,7 +120,7 @@ class SQLResolver
   def load_cache
     @use_cache = true
     q = "SELECT id, #{field.join(', ')} FROM #{table_name}"
-    puts q
+    # puts q
     @connection.select_all(q).each do |record|
       ck = @field.kind_of?(Array) ? record.values_at(*@field) : record[@field]
       # puts "load_cache key: #{ck.class.name}:#{ck.inspect}"
