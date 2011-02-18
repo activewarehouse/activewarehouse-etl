@@ -32,7 +32,7 @@ module ETL #:nodoc:
           options[:config] = 'config/database.yml' unless File.exist?(options[:config])
           database_configuration = YAML::load(ERB.new(IO.read(options[:config])).result + "\n")
           ActiveRecord::Base.configurations.merge!(database_configuration)
-          ETL::Base.configurations = database_configuration
+          ETL::Base.configurations = HashWithIndifferentAccess.new(database_configuration)
           #puts "configurations in init: #{ActiveRecord::Base.configurations.inspect}"
           
           require 'etl/execution'
