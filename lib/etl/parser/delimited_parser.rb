@@ -10,10 +10,29 @@ module ETL #:nodoc:
         configure
       end
       
+      def get_fields_names(file)
+        File.open(file) do |input|
+          fields = FasterCSV.parse(input.readline).first
+          new_fields = []
+          fields.each_with_index do |field,index|
+            # compute the index of occurrence of this specific occurrence of the field (usually, will be 1)
+            occurrence_index = fields[0..index].find_all { |e| e == field }.size
+            number_of_occurrences = fields.find_all { |e| e == field }.size
+            new_field = field + (number_of_occurrences > 1 ? "_#{occurrence_index}" : "")
+            new_fields << Field.new(new_field.to_sym)
+          end
+          return new_fields
+        end
+      end
+
       # Returns each row.
       def each
         Dir.glob(file).each do |file|
           ETL::Engine.logger.debug "parsing #{file}"
+          if fields.length == 0
+            ETL::Engine.logger.debug "no columns specified so reading names from first line of #{file}"
+            @fields = get_fields_names(file)
+          end
           line = 0
           lines_skipped = 0
           FasterCSV.foreach(file, options) do |raw_row|
