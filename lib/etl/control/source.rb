@@ -40,7 +40,8 @@ module ETL #:nodoc:
         @configuration = configuration
         @definition = definition
         
-        @store_locally = configuration[:store_locally] || true
+        @store_locally = true
+        @store_locally = configuration[:store_locally] unless configuration[:store_locally].nil?
       end
       
       # Get an array of errors that occur during reading from the source

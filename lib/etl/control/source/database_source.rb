@@ -41,17 +41,18 @@ module ETL #:nodoc:
         super
         @target = configuration[:target]
         @table = configuration[:table]
+        @query = configuration[:query]
       end
       
       # Get a String identifier for the source
       def to_s
-        "#{host}/#{database}/#{table}"
+        "#{host}/#{database}/#{@table}"
       end
       
       # Get the local directory to use, which is a combination of the 
       # local_base, the db hostname the db database name and the db table.
       def local_directory
-        File.join(local_base, host, database, configuration[:table])
+        File.join(local_base, to_s)
       end
       
       # Get the join part of the query, defaults to nil
@@ -83,7 +84,7 @@ module ETL #:nodoc:
       # Get the number of rows in the source
       def count(use_cache=true)
         return @count if @count && use_cache
-        if store_locally || read_locally
+        if @store_locally || read_locally
           @count = count_locally
         else
           @count = connection.select_value(query.gsub(/SELECT .* FROM/, 'SELECT count(1) FROM'))
@@ -107,13 +108,16 @@ module ETL #:nodoc:
           ETL::Engine.logger.debug "Reading from local cache"
           read_rows(last_local_file, &block)
         else # Read from the original source
-          if store_locally
+          if @store_locally
             file = local_file
             write_local(file)
             read_rows(file, &block)
           else
-            query_rows.each do |row|
-              row = ETL::Row.new(row.symbolize_keys)
+            query_rows.each do |r|
+              row = ETL::Row.new()
+              r.symbolize_keys.each_pair { |key, value|
+                row[key] = value
+              }
               row.source = self
               yield row
             end
@@ -165,7 +169,7 @@ module ETL #:nodoc:
       # Get the query to use
       def query
         return @query if @query
-        q = "SELECT #{select} FROM #{configuration[:table]}"
+        q = "SELECT #{select} FROM #{@table}"
         q << " #{join}" if join
         
         conditions = []

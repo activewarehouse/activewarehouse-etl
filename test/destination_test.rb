@@ -1,3 +1,5 @@
+require 'rubygems'
+require 'spreadsheet'
 require File.dirname(__FILE__) + '/test_helper'
 
 class Person < ActiveRecord::Base
@@ -168,4 +170,76 @@ class DestinationTest < Test::Unit::TestCase
       dest.close
     end
   end
+
+  def test_excel_destination
+    outfile = 'output/test_excel_destination.xls'
+    row = ETL::Row[ :address => '123 SW 1st Street', :city => 'Melbourne', 
+      :state => 'Florida', :country => 'United States' ]
+    control = ETL::Control::Control.parse(File.dirname(__FILE__) + 
+      '/delimited_excel.ctl')
+
+    # First define a basic configuration to check defaults
+    configuration = { 
+      :file => outfile, 
+      :buffer_size => 0,
+    }
+    mapping = { 
+      :order => [:address, :city, :state, :country, :country_code],
+      :virtual => {
+        :country_code => Proc.new do |r|
+          {
+            'United States' => 'US',
+            'Mexico' => 'MX'
+          }[r[:country]]
+        end
+      }
+    }
+    
+    dest = ETL::Control::ExcelDestination.new(control, configuration, mapping)    
+    dest.write(row)
+    dest.close
+    
+    # Read back the resulting
+    book = Spreadsheet.open File.join(File.dirname(__FILE__), outfile)
+    sheet = book.worksheet(0)
+
+    assert_equal "123 SW 1st Street", sheet[0, 0]
+    assert_equal "Melbourne", sheet[0, 1]
+    assert_equal "Florida", sheet[0, 2]
+    assert_equal "United States", sheet[0, 3]
+    assert_equal "US", sheet[0, 4]
+  end
+
+  # Test a insert update database destination
+  def test_insert_update_database_destination
+    row = ETL::Row[:id => 1, :first_name => 'Bob', :last_name => 'Smith', :ssn => '111234444']
+    row_needs_escape = ETL::Row[:id => 2, :first_name => "Foo's", :last_name => "Bar", :ssn => '000000000' ]
+    row_needs_update = ETL::Row[:id => 1, :first_name => "Sean", :last_name => "Toon", :ssn => '000000000' ]
+    control = ETL::Control::Control.parse(File.dirname(__FILE__) + 
+      '/delimited_insert_update.ctl')
+    
+    Person.delete_all
+    assert_equal 0, Person.count
+    
+    # First define a basic configuration to check defaults
+    configuration = { 
+      :type => :insert_update_database,
+      :target => :data_warehouse,
+      :database => 'etl_unittest',
+      :table => 'people',
+      :buffer_size => 0 
+    }
+    mapping = {
+      :primarykey => [:id],
+      :order => [:id, :first_name, :last_name, :ssn]
+    }
+    dest = ETL::Control::InsertUpdateDatabaseDestination.new(control, configuration, mapping)
+    dest.write(row)
+    dest.write(row_needs_escape)
+    dest.write(row_needs_update)
+    dest.close
+    
+    assert_equal 2, Person.find(:all).length
+  end
+  
 end

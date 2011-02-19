@@ -86,6 +86,7 @@ The tests require:
 - gem install shoulda
 - gem install flexmock
 - gem install pg (if you want to run the tests on pg)
+- gem install spreadsheet
 
 The tests subfolder contains examples database.yml for mysql and postgres.
 
