@@ -67,6 +67,8 @@ module ETL
       end
 
       def applyfilter(mail, cond)
+        return true if (cond.nil? or cond.size < 3)
+
         first = cond[1]
         if (cond[1].class == Array)
           first = eval_condition(row, cond[1])
