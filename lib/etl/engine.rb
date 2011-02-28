@@ -346,6 +346,7 @@ module ETL #:nodoc:
               msg = "Error processing rows after read from #{Engine.current_source} on line #{Engine.current_source_row}: #{e}"
               errors << msg
               Engine.logger.error(msg)
+              e.backtrace.each { |line| Engine.logger.error(line) }
               exceeded_error_threshold?(control) ? break : next
             end
           end
