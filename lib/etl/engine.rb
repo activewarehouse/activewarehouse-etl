@@ -356,9 +356,12 @@ module ETL #:nodoc:
             begin
               Engine.logger.debug "Executing transforms"
               rows.each do |row|
-                control.transforms.each do |transform|
-                  name = transform.name.to_sym
-                  row[name] = transform.transform(name, row[name], row)
+                # only do the transform if there is a row
+                if row && row.respond_to?(:[])
+                  control.transforms.each do |transform|
+                    name = transform.name.to_sym
+                    row[name] = transform.transform(name, row[name], row)
+                  end
                 end
               end
             rescue ResolverError => e
