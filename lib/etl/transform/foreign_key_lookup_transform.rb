@@ -118,7 +118,6 @@ class SQLResolver
   end
   
   def load_cache
-    @use_cache = true
     q = "SELECT id, #{field.join(', ')} FROM #{table_name}"
     # puts q
     @connection.select_all(q).each do |record|
@@ -128,6 +127,7 @@ class SQLResolver
       # puts "  #{record[@field].class.name}:#{record[@field].inspect}"
       cache[ck] = record['id']
     end
+    @use_cache = true
   end
 
   private
@@ -146,6 +146,31 @@ class SQLResolver
       "#{a[0]} = #{@connection.quote(a[1])}"
     }.join(' AND ')
   end
+end
+
+class IncrementalCacheSQLResolver < SQLResolver
+
+  def initialize(atable, afield, connection=nil)
+    super
+  end
+  
+  def resolve(value)
+    return nil if value.nil?
+    r = cache[value]
+    unless r
+      q = "SELECT id FROM #{table_name} WHERE #{wheres(value)}"
+      r = @connection.select_value(q)
+      if r
+        cache[value] = r
+      end
+    end
+    r
+  end
+
+  def load_cache
+    @cache = {}
+  end
+
 end
 
 class FlatFileResolver
