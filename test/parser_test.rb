@@ -60,8 +60,8 @@ class ParserTest < Test::Unit::TestCase
     control = ETL::Control::Control.resolve(File.dirname(__FILE__) + '/excel2.ctl')
     parser = control.sources.first.parser
     rows = parser.collect { |row| row }
-    assert_equal 1, rows.length
-    assert_equal({:first_name=>"John", :last_name=>"Doe", :ssn=>222114545, :age=>31}, rows.first)
+    assert_equal 2, rows.length
+    assert_equal({:first_name=>"John", :last_name=>"Doe", :ssn=>222114545, :age=>31}, rows[1])
   end
   
   # Test the Apache combined log format parser
