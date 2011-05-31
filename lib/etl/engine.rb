@@ -173,17 +173,19 @@ module ETL #:nodoc:
       # Modify the table name if necessary
       def table(table_name, connection)
         if use_temp_tables?
-          returning "tmp_#{table_name}" do |temp_table_name|
-            if temp_tables[temp_table_name].nil?
-              # Create the temp table and add it to the mapping
-              begin connection.drop_table(temp_table_name); rescue; end
-              connection.copy_table(table_name, temp_table_name)
-              temp_tables[temp_table_name] = {
-                :table => table_name,
-                :connection => connection
-              }
-            end
+          temp_table_name = "tmp_#{table_name}"
+
+          if temp_tables[temp_table_name].nil?
+            # Create the temp table and add it to the mapping
+            begin connection.drop_table(temp_table_name); rescue; end
+            connection.copy_table(table_name, temp_table_name)
+            temp_tables[temp_table_name] = {
+              :table => table_name,
+              :connection => connection
+            }
           end
+
+          temp_table_name
         else
           table_name
         end
