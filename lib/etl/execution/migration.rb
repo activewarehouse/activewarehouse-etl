@@ -74,6 +74,11 @@ module ETL #:nodoc:
         def migration_4
           connection.drop_table :records
         end
+
+        def migration_5
+          connection.add_column :batches, :batch_id, :integer
+          connection.add_index :batches, :batch_id
+        end
       
         # Update the schema info table, setting the version value
         def update_schema_info(version)
