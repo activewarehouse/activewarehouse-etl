@@ -86,8 +86,7 @@ class ScdTest < Test::Unit::TestCase
         end
         should "skip the load if there is no change" do
           do_type_2_run(1)
-          lines = lines_for('scd_test_type_2.txt')
-          assert lines.empty?, "scheduled load expected to be empty, was #{lines.size} records"
+          assert_equal 1, find_bobs.last.id, "scheduled load expected to be empty"
         end
         
       end
@@ -134,9 +133,7 @@ class ScdTest < Test::Unit::TestCase
         end
         should "only execute a change once" do
           do_type_2_run(2)
-          assert_equal 2, count_bobs
-          lines = lines_for('scd_test_type_2.txt')
-          assert lines.empty?, "scheduled load expected to be empty, was #{lines.size} records"
+          assert_equal 2, count_bobs, "scheduled load expected to be empty"
         end
         should "insert new records on revert" do
           do_type_2_run(1)
@@ -184,8 +181,7 @@ class ScdTest < Test::Unit::TestCase
         end
         should "skip load when there is no change" do
           do_type_2_run_with_only_city_state_zip_scd(2)
-          lines = lines_for('scd_test_type_2.txt')
-          assert lines.empty?, "scheduled load expected to be empty, was #{lines.size} records"
+          assert_equal 2, count_bobs, "scheduled load expected to be empty"
         end
       end
     end
