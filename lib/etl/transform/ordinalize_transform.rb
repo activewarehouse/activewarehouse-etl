@@ -1,3 +1,5 @@
+require 'active_support/core_ext/integer/inflections.rb'
+
 module ETL #:nodoc:
   module Transform #:nodoc:
     # Transform a number to an ordinalized version using the ActiveSupport ordinalize
