@@ -11,13 +11,11 @@ source :in, {
   :zip_code
 ]
 
-
-
-
-
-
 destination :out, {
-  :file => 'output/scd_test_type_2.txt',
+  :type => :database,
+  :target => :data_warehouse,
+  :database => 'etl_unittest',
+  :table => 'person_dimension',
   :natural_key => [:first_name, :last_name],
   :scd => {
     :type => 2,
@@ -33,10 +31,4 @@ destination :out, {
   :virtual => {
     :id => ETL::Generator::SurrogateKeyGenerator.new(:target => :data_warehouse, :table => 'person_dimension')
   }
-}
-
-post_process :bulk_import, {
-  :file => 'output/scd_test_type_2.txt',
-  :target => :data_warehouse,
-  :table => 'person_dimension'
 }

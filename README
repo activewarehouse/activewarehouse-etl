@@ -87,6 +87,7 @@ The tests require:
 - gem install flexmock
 - gem install pg (if you want to run the tests on pg)
 - gem install spreadsheet
+- gem install tmail
 
 The tests subfolder contains examples database.yml for mysql and postgres.
 

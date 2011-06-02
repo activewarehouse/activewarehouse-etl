@@ -15,7 +15,8 @@ class ProcessorTest < Test::Unit::TestCase
   end
   
   def test_bulk_import_with_empties
-    assert_raise(ActiveRecord::StatementInvalid) { do_bulk_import('bulk_import_with_empties.txt') }
+    assert_nothing_raised { do_bulk_import('bulk_import_with_empties.txt') }
+    assert_equal 1, Person.count
   end
 
   def test_truncate
