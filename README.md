@@ -1,15 +1,15 @@
 Ruby Extract-Transform-Load (ETL) tool.
 
-== Requirements
+## Requirements
 
 * Ruby 1.8.5 or higher
 * Rubygems
 
-== Online Documentation
+## Online Documentation
 
 Available at https://github.com/aeden/activewarehouse-etl/wiki/Documentation
 
-== Features
+## Features
 
 Current supported features:
 
@@ -52,19 +52,23 @@ Current supported features:
   * Automated effective date and end date time stamping for type 2
   * CRC checking
 
-== Dependencies
+## Dependencies
+
 ActiveWarehouse ETL depends on the following gems:
+
 * ActiveSupport Gem
 * ActiveRecord Gem
 * FasterCSV Gem
 * AdapterExtensions Gem
 
-== Usage
+## Usage
+
 Once the ActiveWarehouse ETL gem is installed jobs can be invoked using the
 included `etl` script. The etl script includes several command line options
 and can process multiple control files at a time.
 
 Command line options:
+
 * <tt>--help, -h</tt>: Display the usage message.
 * <tt>--config, -c</tt>: Specify a database.yml configuration file to use.
 * <tt>--limit, -l</tt>: Specify a limit to the number of rows to process. This option is currently only applicable to database sources.
@@ -73,29 +77,32 @@ Command line options:
 * <tt>--skip-bulk-import, -s</tt>: Skip any bulk imports.
 * <tt>--read-locally</tt>: Read from the local cache (skip source extraction)
 
-== Control File Examples
+## Control File Examples
+
 Control file examples can be found in the examples directory.
 
-== Running Tests
+## Running Tests
 
 Current state:
-- 11 failures on MySQL
-- 1 failure on Postgres
+
+* 11 failures on MySQL
+* 1 failure on Postgres
 
 The tests require:
-- gem install shoulda
-- gem install flexmock
-- gem install pg (if you want to run the tests on pg)
-- gem install spreadsheet
-- gem install tmail
+
+* gem install shoulda
+* gem install flexmock
+* gem install pg (if you want to run the tests on pg)
+* gem install spreadsheet
+* gem install tmail
 
 The tests subfolder contains examples database.yml for mysql and postgres.
 
 To run the tests:
-- rake test DB=postgresql (for postgres)
-- otherwise just rake test
 
-== Feedback
-This is a work in progress. Comments should be made on the 
-activewarehouse-discuss mailing list at the moment. Contributions are always
-welcome.
+* rake test DB=postgresql (for postgres)
+* otherwise just rake test
+
+## Feedback
+
+This is a work in progress. Comments should be made on the activewarehouse-discuss mailing list at the moment. Contributions are always welcome.
