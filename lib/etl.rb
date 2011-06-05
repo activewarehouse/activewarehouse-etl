@@ -33,7 +33,9 @@ require 'rubygems'
 
 unless defined?(REXML::VERSION)
   require 'rexml/rexml'
-  REXML::VERSION = REXML::Version
+  unless defined?(REXML::VERSION)
+    REXML::VERSION = REXML::Version
+  end
 end
 
 require 'active_support'
