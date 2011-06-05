@@ -87,7 +87,7 @@ class SourceTest < Test::Unit::TestCase
     should "set the local file for extraction storage" do
       assert_match %r{source_data/localhost/etl_unittest/people/\d+.csv}, @source.local_file.to_s
     end
-    should_eventually "find 1 row" do
+    should "find 1 row" do
       Person.delete_all
       assert 0, Person.count
       Person.create!(:first_name => 'Bob', :last_name => 'Smith', :ssn => '123456789')
