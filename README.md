@@ -94,6 +94,18 @@ Control file examples can be found in the examples directory.
     rake test                  # for mysql
     rake test DB=postgresql    # for postgresql
 
+## Running tests for MySQL and Postgresql in a row
+
+* create the 2 databases for both systems
+* fill test/database.mysql.yml
+* fill test/database.postgresql.yml
+
+Then (be warned that test/database.yml will be erased):
+
+    rake test:all
+    
+will run the test suite against both MySQL and Postgresql in a row.
+
 ## Feedback
 
 This is a work in progress. Comments should be made on the [activewarehouse-discuss mailing list](http://groups.google.com/group/activewarehouse-discuss). Contributions are always welcome.

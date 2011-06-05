@@ -27,6 +27,17 @@ namespace :test do
     system "mysqladmin drop etl_unittest -u root"
     system "mysqladmin drop etl_unittest_execution -u root"
   end
+  
+  desc 'Test against all databases'
+  task :all do
+    [
+      ['test/database.mysql.yml', ''],
+      ['test/database.postgres.yml', 'DB=postgresql']
+    ].each do |yml_file, run_flag|
+      FileUtils.cp(yml_file, 'test/database.yml')
+      system ["rake test", run_flag].join(" ")
+    end
+  end
 end  
 
 task :default => :test
