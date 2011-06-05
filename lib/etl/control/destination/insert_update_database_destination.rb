@@ -73,8 +73,13 @@ module ETL #:nodoc:
             ETL::Engine.logger.debug("Executing select: #{q}")
             res = conn.execute(q, "Select row #{current_row}")
             none = true
-            res.each_hash do |f|
-              none = false
+            
+            case conn
+              when ActiveRecord::ConnectionAdapters::PostgreSQLAdapter;
+                res.each { none = false }
+              when ActiveRecord::ConnectionAdapters::MysqlAdapter;
+                res.each_hash { none = false }
+              else raise "Unsupported adapter #{conn.class} for this destination"
             end
 
             if none
