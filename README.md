@@ -85,8 +85,10 @@ Control file examples can be found in the examples directory.
 
     gem install bundler
     bundle install             # install the gems required for tests
-    rake create_test_databases # create the two tests databases
-
+    
+    # then for either mysql/postgresql:
+    # create database etl_unittest
+    # create database etl_unittest_execution
     # adjust test/database.yml if needed
 
     rake test                  # for mysql
