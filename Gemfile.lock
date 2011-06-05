@@ -10,6 +10,8 @@ GEM
     net-sftp (2.0.5)
       net-ssh (>= 2.0.9)
     net-ssh (2.1.4)
+    rake (0.9.0)
+    rdoc (3.6.1)
     ruby-ole (1.2.11.1)
     shoulda (2.11.3)
     spreadsheet (0.6.5.4)
@@ -27,6 +29,8 @@ DEPENDENCIES
   flexmock (= 0.9.0)
   mysql (= 2.8.1)
   net-sftp (= 2.0.5)
+  rake
+  rdoc
   shoulda (= 2.11.3)
   spreadsheet (= 0.6.5.4)
   tmail (= 1.2.7.1)
