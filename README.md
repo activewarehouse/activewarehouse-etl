@@ -83,26 +83,15 @@ Control file examples can be found in the examples directory.
 
 ## Running Tests
 
-Current state:
+    gem install bundler
+    bundle install             # install the gems required for tests
+    rake create_test_databases # create the two tests databases
 
-* 11 failures on MySQL
-* 1 failure on Postgres
+    # adjust test/database.yml if needed
 
-The tests require:
-
-* gem install shoulda
-* gem install flexmock
-* gem install pg (if you want to run the tests on pg)
-* gem install spreadsheet
-* gem install tmail
-
-The tests subfolder contains examples database.yml for mysql and postgres.
-
-To run the tests:
-
-* rake test DB=postgresql (for postgres)
-* otherwise just rake test
+    rake test                  # for mysql
+    rake test DB=postgresql    # for postgresql
 
 ## Feedback
 
-This is a work in progress. Comments should be made on the activewarehouse-discuss mailing list at the moment. Contributions are always welcome.
+This is a work in progress. Comments should be made on the [activewarehouse-discuss mailing list](http://groups.google.com/group/activewarehouse-discuss). Contributions are always welcome.
