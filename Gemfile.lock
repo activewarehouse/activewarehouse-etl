@@ -6,7 +6,7 @@ GEM
     activesupport (2.3.11)
     fastercsv (1.5.4)
     flexmock (0.9.0)
-    mysql2 (0.3.2)
+    mysql (2.8.1)
     net-sftp (2.0.5)
       net-ssh (>= 2.0.9)
     net-ssh (2.1.4)
@@ -24,8 +24,8 @@ DEPENDENCIES
   activerecord (= 2.3.11)
   activesupport (= 2.3.11)
   fastercsv (= 1.5.4)
-  flexmock
-  mysql2
+  flexmock (= 0.9.0)
+  mysql
   net-sftp (= 2.0.5)
   shoulda (= 2.11.3)
   spreadsheet (= 0.6.5.4)

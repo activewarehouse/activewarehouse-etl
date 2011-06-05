@@ -18,4 +18,4 @@ gem "zip", "2.0.2"
 
 gem "shoulda", "2.11.3"
 gem "flexmock", "0.9.0"
-gem "mysql2", "0.3.2" # unsure on this one
+gem "mysql", "2.8.1"
