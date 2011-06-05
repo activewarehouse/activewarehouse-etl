@@ -2,7 +2,7 @@ require 'rake'
 require 'rake/testtask'
 require 'rake/rdoctask'
 require 'rake/packagetask'
-require 'rake/gempackagetask'
+require 'rubygems/package_task'
 require 'rake/contrib/rubyforgepublisher'
 
 require File.join(File.dirname(__FILE__), 'lib/etl', 'version')
@@ -118,7 +118,7 @@ module AWETL
   end
 end
 
-Rake::GemPackageTask.new(AWETL.spec) do |pkg|
+Gem::PackageTask.new(AWETL.spec) do |pkg|
   pkg.gem_spec = AWETL.spec
   pkg.need_tar = true
   pkg.need_zip = true
