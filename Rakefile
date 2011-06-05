@@ -15,30 +15,21 @@ module AWETL
   PKG_DESTINATION = ENV["PKG_DESTINATION"] || "../#{PKG_NAME}"
 end
 
-# runcoderun
+namespace :test do
+  desc 'Create the databases required for tests'
+  task :create_databases do
+    system "mysqladmin create etl_unittest -u root"
+    system "mysqladmin create etl_unittest_execution -u root"
+  end
+  
+  desc 'Drop the test databases'
+  task :drop_databases do
+    system "mysqladmin drop etl_unittest -u root"
+    system "mysqladmin drop etl_unittest_execution -u root"
+  end
+end  
 
-task :create_extra_mysql_db do
-  cmd_string = %[mysqladmin create etl_unittest -u build]
-  system cmd_string
-
-  cmd_string = %[mysqladmin create etl_unittest_execution -u build]
-  system cmd_string
-end
-
-task :copy_runcoderun_yml do
-  system("cp #{File.dirname(__FILE__)}/test/database.runcoderun.yml #{File.dirname(__FILE__)}/test/database.yml")
-end
-
-def runcoderun?
-  ENV["RUN_CODE_RUN"]
-end
-
-if runcoderun?
-  task :default => [:create_extra_mysql_db, :copy_runcoderun_yml, :test]
-else
-  desc 'Default: run unit tests.'
-  task :default => :test
-end
+task :default => :test
 
 desc 'Test the ETL application.'
 Rake::TestTask.new(:test) do |t|
