@@ -1,19 +1,14 @@
 drop table people;
 create table people (
-  id int not null primary key,
+  id SERIAL PRIMARY KEY,
   first_name character varying(255) not null,
   last_name character varying(255) not null,
   ssn character varying(64) not null
 );
 
--- Needed for ActiveRecord
-drop sequence people_id_seq;
-create sequence people_id_seq;
-SELECT nextval('people_id_seq');
-
 drop table places;
 create table places (
-  id int not null primary key,
+  id SERIAL PRIMARY KEY,
 	address text,
 	city character varying(255),
 	state character varying(255),
@@ -22,7 +17,7 @@ create table places (
 
 drop table person_dimension;
 create table person_dimension (
-  id int not null primary key,
+  id SERIAL PRIMARY KEY,
   first_name character varying(50),
   last_name character varying(50),
   address character varying(100),
