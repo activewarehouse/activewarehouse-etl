@@ -2,7 +2,8 @@ drop table people;
 create table people (
   id SERIAL PRIMARY KEY,
   first_name character varying(255) not null,
-  last_name character varying(255) not null,
+  /* null below allowed for bulk_import_with_empties.txt test */
+  last_name character varying(255) null,
   ssn character varying(64) not null
 );
 
