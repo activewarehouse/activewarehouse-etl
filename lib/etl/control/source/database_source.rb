@@ -132,7 +132,7 @@ module ETL #:nodoc:
         raise "Local cache trigger file not found" unless File.exists?(local_file_trigger(file))
         
         t = Benchmark.realtime do
-          FasterCSV.open(file, :headers => true).each do |row|
+          CSV.open(file, :headers => true).each do |row|
             result_row = ETL::Row.new
             result_row.source = self
             row.each do |header, field|
@@ -154,7 +154,7 @@ module ETL #:nodoc:
       def write_local(file)
         lines = 0
         t = Benchmark.realtime do
-          FasterCSV.open(file, 'w') do |f|
+          CSV.open(file, 'w') do |f|
             f << columns
             query_rows.each do |row|
               f << columns.collect { |column| row[column.to_s] }

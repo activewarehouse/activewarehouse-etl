@@ -58,7 +58,7 @@ ActiveWarehouse ETL depends on the following gems:
 
 * ActiveSupport Gem
 * ActiveRecord Gem
-* FasterCSV Gem
+* FasterCSV Gem (for Ruby < 1.9, otherwise the built-in CSV version will be used)
 * AdapterExtensions Gem
 
 ## Usage

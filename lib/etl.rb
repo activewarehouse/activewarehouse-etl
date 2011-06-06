@@ -44,6 +44,7 @@ require 'adapter_extensions'
 
 if RUBY_VERSION < '1.9'
   require 'faster_csv'
+  CSV = FasterCSV unless defined?(CSV)
 else
   require 'csv'
 end

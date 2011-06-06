@@ -196,3 +196,4 @@
 * A Class extending ETL::Transform::Transform may now be passed as a transformer.
   For example, in the control file you would define the transform as:
   transform :a_field, MyTransform, {:option1 => 'option1'}.
+* Support Ruby 1.9 CSV library
