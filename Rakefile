@@ -16,29 +16,35 @@ module AWETL
 end
 
 namespace :test do
-  desc 'Create the databases required for tests'
-  task :create_databases do
-    system "mysqladmin create etl_unittest -u root"
-    system "mysqladmin create etl_unittest_execution -u root"
+
+  def run_tests(rvm, rails, database)
+    database_yml = File.dirname(__FILE__) + "/test/config/database.#{database}.yml"
+    FileUtils.cp(database_yml, 'test/database.yml')
+
+    puts
+    puts "============ Ruby #{rvm} - Rails #{rails} - Db #{database} ============="
+    puts
+
+    sh <<-BASH
+    BUNDLE_GEMFILE=test/config/Gemfile.rails-#{rails} bundle install > null
+    BUNDLE_GEMFILE=test/config/Gemfile.rails-#{rails} rvm #{rvm} rake test
+  BASH
   end
-  
-  desc 'Drop the test databases'
-  task :drop_databases do
-    system "mysqladmin drop etl_unittest -u root"
-    system "mysqladmin drop etl_unittest_execution -u root"
-  end
-  
-  desc 'Test against all databases'
-  task :all do
-    [
-      ['test/database.mysql.yml', ''],
-      ['test/database.postgres.yml', 'DB=postgresql']
-    ].each do |yml_file, run_flag|
-      FileUtils.cp(yml_file, 'test/database.yml')
-      system ["rake test", run_flag].join(" ")
+
+  desc 'Run the tests in all combinations described in test-matrix.yml'
+  task :matrix do
+    # a la travis
+    require 'yaml'
+    data = YAML.load(IO.read(File.dirname(__FILE__) + '/test-matrix.yml'))
+    data['rvm'].each do |rvm|
+      data['rails'].each do |rails|
+        data['database'].each do |database|
+          run_tests(rvm, rails, database)
+        end
+      end
     end
   end
-end  
+end
 
 task :default => :test
 

@@ -83,28 +83,25 @@ Control file examples can be found in the examples directory.
 
 ## Running Tests
 
-    gem install bundler
-    bundle install             # install the gems required for tests
-    
-    # then for either mysql/postgresql:
-    # create database etl_unittest
-    # create database etl_unittest_execution
-    # adjust test/database.yml if needed
+test-matrix.yml describes the combinations that will be tested. Edit the file if needed, first.
 
-    rake test                  # for mysql
-    rake test DB=postgresql    # for postgresql
+Then create (based on test/config/database.example.yml)
 
-## Running tests for MySQL and Postgresql in a row
+* test/config/database.mysql.yml 
+* test/config/database.postgresql.yml
 
-* create the 2 databases for both systems
-* fill test/database.mysql.yml
-* fill test/database.postgresql.yml
+Then for mysql/postgresql:
 
-Then (be warned that test/database.yml will be erased):
+* create a database named etl_unittest
+* create a database named etl_unittest_execution
 
-    rake test:all
-    
-will run the test suite against both MySQL and Postgresql in a row.
+And finally:
+
+  rake test:matrix
+
+will run all the tests on all combinations.
+
+Alternatively, rake test (with optional DB=postgresql) will only run the tests with current environment.
 
 ## Feedback
 
