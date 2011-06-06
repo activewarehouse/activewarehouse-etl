@@ -89,11 +89,11 @@ class SourceTest < Test::Unit::TestCase
     end
     should "find 1 row" do
       Person.delete_all
-      assert 0, Person.count
+      assert_equal 0, Person.count
       Person.create!(:first_name => 'Bob', :last_name => 'Smith', :ssn => '123456789')
-      assert 1, Person.count
+      assert_equal 1, Person.count
       rows = @source.collect { |row| row }
-      assert 1, rows.length
+      assert_equal 1, rows.length
     end
   end
   
