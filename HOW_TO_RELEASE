@@ -3,3 +3,7 @@
 * then use bundler to build + git tag + push to rubygems
 
     rake release
+
+* you can list changes using github:
+
+    https://github.com/activewarehouse/activewarehouse-etl/compare/release-0.9.1...master
