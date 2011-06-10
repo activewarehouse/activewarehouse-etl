@@ -1,50 +1,119 @@
-0.1.0 - Dec 6, 2006
-* Initial release
+0.9.1 - January 14, 2009
+* SQLResolver now uses ETL::Engine.table so it may utilize temp tables. (aeden)
+* Added Thibaut Barrère's encode processor.
+* Added MockSource and MockDestination test helpers (thbar)
+* Added the block processor. Can call a block once (pre/post processor)
+  or once for each row (after_read/before_write row processor) (thbar)
+* Changed temp table to use new AdapterExtension copy_table method (aeden)
+* Added bin/etl.cmd windows batch - just add the bin folder to your PATH
+  and it will let you call etl on an unpacked/pistoned version of AW-ETL (thbar)
+* Upgraded to support Rails 2.1. No longer compatible with older versions of Rails.
+* Added ETL::Builder::TimeDimensionBuilder
+* Added :default option to ForeignKeyLookupTransform that will be used if no
+  foreign key is found.
+* Added :cache option to ForeignKeyLookupTransform that will preload the FK
+  mappings if the underlying resolver supports it. Currently supported by 
+  SQLResolver.
+* A Class extending ETL::Transform::Transform may now be passed as a transformer.
+  For example, in the control file you would define the transform as:
+  transform :a_field, MyTransform, {:option1 => 'option1'}.
+* Support Ruby 1.9 CSV library
 
-0.2.0 - Dec 7, 2006
-* Added an XML parser for source parsing
-* Added support for compound key constraints in destinations via the 
-  :unique => [] option
-* Added ability to declare explicit columns in bulk import
-* Added support for generators in destinations
-* Added a SurrogateKeyGenerator for cases where the database doesn't support
-  auto generated surrogate keys
+0.9.0 - August 9, 2007
+* Added support for batch processing through .ebf files. These files are
+  essentially control files that apply settings to an entire ETL process.
+* Implemented support for screen blocks. These blocks can be used to test
+  the data and raise an error if the screens do not pass.
+* Connections are now cached in a Hash available through 
+  ETL::Engine.connection(name). This should be used rather than including
+  connection information in the control files.
+* Implemented temp table support throughout.
+* DateDimensionBuilder now included in ActiveWarehouse ETL directly.
+* Time calculations for fiscal year now included in ActiveWarehouse ETL.
 
-0.3.0 - Dec 19, 2006
-* Added support for calculated values in virtual fields with Proc
+0.8.4 - May 24, 2007
+* Added fix for backslash in file writer
 
-0.4.0 - Jan 11, 2006
-* Added :skip_lines option to file source configurations, which can be used
-  to skip the first n lines in the source data file
-* Added better error handling in delimited parser - an error is now raised 
-  if the expected and actual field lengths do not match
-* Added :truncate option for database destination. Set to true to truncate 
-  before importing data.
-* Added support for :unique => [] option and virtual fields for the database 
-  destination
+0.8.3 - May 13, 2007
+* Added patches from Andy Triboletti
 
-0.5.0 - Feb 17, 2007
-* Changed require_gem to gem and added alias to allow for older versions of 
-  rubygems.
-* Added support for Hash in the source configuration where :name => :parser_name
-  defines the parser to use and :options => {} defines options to pass to the 
-  parser.
-* Added support for passing a custom Parser class in the source configuration.
-* Removed the need to include Enumerable in each parser implementation.
-* Added new date_to_string and string_to_date transformers.
-* Implemented foreign_key_lookup transform including an ActiveRecordResolver.
-* Added real time activity logging which is called when the etl bin script is 
-  invoked.
-* Improved error handling.
-* Default logger level is now WARN.
+0.8.2 - April 15, 2007
+* Fixed bug with premature destination closing.
+* Added indexes to execution records table.
+* Added a PrintRowProcessor.
+* Added support for conditions and "group by" in the database source.
+* Added after_initialize hook in Processor base class.
+* Added examples directory
 
-0.5.1 - Feb 18, 2007
-* Fixed up truncate processor.
-* Updated HOW_TO_RELEASE doc.
+0.8.1 - Apr 12, 2007
+* Added EnumerableSource
+* Added :type configuration option to the source directive, allowing the source
+  type to be explicitly specified. The source type can be a string or symbol 
+  (in which case the class will be constructed by appending Source to the type 
+  name), a class (which will be instantiate and passed the control, 
+  configuration and mapping) and finally an actual Source instance.
 
-0.5.2 - Feb 19, 2007
-* Added error threshold.
-* Fixed problem with transform error handling.
+0.8.0 - Apr 12, 2007
+* Source now available through the current row source accessor.
+* Added new_rows_only configuration option to DatabaseSource. A date field must
+  be specified and only records that are greater than the date value in that 
+  field, relative to the last successful
+  execution, will be returned from the source.
+* Added an (untested) count feature which returns the number of rows for 
+  processing.
+* If no natural key is defined then an empty array will now be used, resulting
+  in the row being written to the output without going through change checks.
+* Mapping argument in destination is now optional. An empty hash will be used
+  if the mapping hash is not specified. If the mapping hash is not specified 
+  then the order will be determined using the originating source's order.
+* ActiveRecord configurations loaded from database.yml by the etl tool will be 
+  merged with ActiveRecord::Base.configurations.
+* Fixed several bugs in how record change detection was implemented.
+* Fixed how the read_locally functionality was implemented so that it will find
+  that last completed local source copy using the source's trigger file (untested).
+
+0.7.2 - Apr 8, 2007
+* Fixed quoting bug in CheckExistProcessor
+
+0.7.1 - Apr 8, 2007
+* Fixed source caching
+
+0.7 - Apr 8, 2007
+* Job execution is now tracked in a database. This means that ActiveRecord is 
+  required regardless of the sources being used in the ETL scripts. An example 
+  database configuration for the etl can be found in test/database.example.yml. 
+  This file is loaded from either a.) the current working directory or b.) the 
+  location specified using the -c command line argument when running the etl 
+  command.
+* etl script now supports the following command line arguments:
+** -h or --help: Prints the usage
+** -l or --limit: Specifies a limit for the number of source rows to read, 
+   useful for testing your control files before executing a full ETL process
+** -o or --offset: Specified a start offset for reading from the source, useful
+   for testing your control files before executing a full ETL process
+** -c or --config: Specify the database.yml file to configure the ETL 
+   execution data store
+** -n or --newlog: Write to the logfile rather than appending to it
+* Database source now supports specifying the select, join and order parts of 
+  the query.
+* Database source understands the limit argument specified on the etl command 
+  line
+* Added CheckExistProcessor
+* Added CheckUniqueProcessor
+* Added SurrogateKeyProcessor. The SurrogateKey processor should be used in 
+  conjunction with the CheckExistProcessor and CheckUniqueProcessor to provide
+  surrogate keys for all dimension records.
+* Added SequenceProcessor
+* Added OrdinalizeTransform
+* Fixed a bug in the trim transform
+* Sources now provide a trigger file which can be used to indicate that the 
+  original source data has been completely extracted to the local file system. 
+  This is useful if you need to recover from a failed ETL process.
+* Updated README
+
+0.6.1 - Mar 22, 2007
+* Added support for absolute paths in file sources
+* Added CopyFieldProcessor
 
 0.6.0 - Mar 8, 2007
 * Fixed missing method problem in validate in Control class.
@@ -81,119 +150,50 @@
   they are specified.
 * The default field separator in the bulk loader is now a comma (was a tab).
 
-0.6.1 - Mar 22, 2007
-* Added support for absolute paths in file sources
-* Added CopyFieldProcessor
+0.5.2 - Feb 19, 2007
+* Added error threshold.
+* Fixed problem with transform error handling.
 
-0.7 - Apr 8, 2007
-* Job execution is now tracked in a database. This means that ActiveRecord is 
-  required regardless of the sources being used in the ETL scripts. An example 
-  database configuration for the etl can be found in test/database.example.yml. 
-  This file is loaded from either a.) the current working directory or b.) the 
-  location specified using the -c command line argument when running the etl 
-  command.
-* etl script now supports the following command line arguments:
-** -h or --help: Prints the usage
-** -l or --limit: Specifies a limit for the number of source rows to read, 
-   useful for testing your control files before executing a full ETL process
-** -o or --offset: Specified a start offset for reading from the source, useful
-   for testing your control files before executing a full ETL process
-** -c or --config: Specify the database.yml file to configure the ETL 
-   execution data store
-** -n or --newlog: Write to the logfile rather than appending to it
-* Database source now supports specifying the select, join and order parts of 
-  the query.
-* Database source understands the limit argument specified on the etl command 
-  line
-* Added CheckExistProcessor
-* Added CheckUniqueProcessor
-* Added SurrogateKeyProcessor. The SurrogateKey processor should be used in 
-  conjunction with the CheckExistProcessor and CheckUniqueProcessor to provide
-  surrogate keys for all dimension records.
-* Added SequenceProcessor
-* Added OrdinalizeTransform
-* Fixed a bug in the trim transform
-* Sources now provide a trigger file which can be used to indicate that the 
-  original source data has been completely extracted to the local file system. 
-  This is useful if you need to recover from a failed ETL process.
-* Updated README
+0.5.1 - Feb 18, 2007
+* Fixed up truncate processor.
+* Updated HOW_TO_RELEASE doc.
 
-0.7.1 - Apr 8, 2007
-* Fixed source caching
+0.5.0 - Feb 17, 2007
+* Changed require_gem to gem and added alias to allow for older versions of 
+  rubygems.
+* Added support for Hash in the source configuration where :name => :parser_name
+  defines the parser to use and :options => {} defines options to pass to the 
+  parser.
+* Added support for passing a custom Parser class in the source configuration.
+* Removed the need to include Enumerable in each parser implementation.
+* Added new date_to_string and string_to_date transformers.
+* Implemented foreign_key_lookup transform including an ActiveRecordResolver.
+* Added real time activity logging which is called when the etl bin script is 
+  invoked.
+* Improved error handling.
+* Default logger level is now WARN.
 
-0.7.2 - Apr 8, 2007
-* Fixed quoting bug in CheckExistProcessor
+0.4.0 - Jan 11, 2006
+* Added :skip_lines option to file source configurations, which can be used
+  to skip the first n lines in the source data file
+* Added better error handling in delimited parser - an error is now raised 
+  if the expected and actual field lengths do not match
+* Added :truncate option for database destination. Set to true to truncate 
+  before importing data.
+* Added support for :unique => [] option and virtual fields for the database 
+  destination
 
-0.8.0 - Apr 12, 2007
-* Source now available through the current row source accessor.
-* Added new_rows_only configuration option to DatabaseSource. A date field must
-  be specified and only records that are greater than the date value in that 
-  field, relative to the last successful
-  execution, will be returned from the source.
-* Added an (untested) count feature which returns the number of rows for 
-  processing.
-* If no natural key is defined then an empty array will now be used, resulting
-  in the row being written to the output without going through change checks.
-* Mapping argument in destination is now optional. An empty hash will be used
-  if the mapping hash is not specified. If the mapping hash is not specified 
-  then the order will be determined using the originating source's order.
-* ActiveRecord configurations loaded from database.yml by the etl tool will be 
-  merged with ActiveRecord::Base.configurations.
-* Fixed several bugs in how record change detection was implemented.
-* Fixed how the read_locally functionality was implemented so that it will find
-  that last completed local source copy using the source's trigger file (untested).
-  
-0.8.1 - Apr 12, 2007
-* Added EnumerableSource
-* Added :type configuration option to the source directive, allowing the source
-  type to be explicitly specified. The source type can be a string or symbol 
-  (in which case the class will be constructed by appending Source to the type 
-  name), a class (which will be instantiate and passed the control, 
-  configuration and mapping) and finally an actual Source instance.
-  
-0.8.2 - April 15, 2007
-* Fixed bug with premature destination closing.
-* Added indexes to execution records table.
-* Added a PrintRowProcessor.
-* Added support for conditions and "group by" in the database source.
-* Added after_initialize hook in Processor base class.
-* Added examples directory
+0.3.0 - Dec 19, 2006
+* Added support for calculated values in virtual fields with Proc
 
-0.8.3 - May 13, 2007
-* Added patches from Andy Triboletti
+0.2.0 - Dec 7, 2006
+* Added an XML parser for source parsing
+* Added support for compound key constraints in destinations via the 
+  :unique => [] option
+* Added ability to declare explicit columns in bulk import
+* Added support for generators in destinations
+* Added a SurrogateKeyGenerator for cases where the database doesn't support
+  auto generated surrogate keys
 
-0.8.4 - May 24, 2007
-* Added fix for backslash in file writer
-
-0.9.0 - August 9, 2007
-* Added support for batch processing through .ebf files. These files are
-  essentially control files that apply settings to an entire ETL process.
-* Implemented support for screen blocks. These blocks can be used to test
-  the data and raise an error if the screens do not pass.
-* Connections are now cached in a Hash available through 
-  ETL::Engine.connection(name). This should be used rather than including
-  connection information in the control files.
-* Implemented temp table support throughout.
-* DateDimensionBuilder now included in ActiveWarehouse ETL directly.
-* Time calculations for fiscal year now included in ActiveWarehouse ETL.
-
-0.9.1 -
-* SQLResolver now uses ETL::Engine.table so it may utilize temp tables. (aeden)
-* Added Thibaut Barrère's encode processor.
-* Added MockSource and MockDestination test helpers (thbar)
-* Added the block processor. Can call a block once (pre/post processor)
-  or once for each row (after_read/before_write row processor) (thbar)
-* Changed temp table to use new AdapterExtension copy_table method (aeden)
-* Added bin/etl.cmd windows batch - just add the bin folder to your PATH
-  and it will let you call etl on an unpacked/pistoned version of AW-ETL (thbar)
-* Upgraded to support Rails 2.1. No longer compatible with older versions of Rails.
-* Added ETL::Builder::TimeDimensionBuilder
-* Added :default option to ForeignKeyLookupTransform that will be used if no
-  foreign key is found.
-* Added :cache option to ForeignKeyLookupTransform that will preload the FK
-  mappings if the underlying resolver supports it. Currently supported by 
-  SQLResolver.
-* A Class extending ETL::Transform::Transform may now be passed as a transformer.
-  For example, in the control file you would define the transform as:
-  transform :a_field, MyTransform, {:option1 => 'option1'}.
-* Support Ruby 1.9 CSV library
+0.1.0 - Dec 6, 2006
+* Initial release
