@@ -7,14 +7,6 @@ require 'rake/contrib/rubyforgepublisher'
 
 require File.join(File.dirname(__FILE__), 'lib/etl', 'version')
 
-module AWETL
-  PKG_BUILD       = ENV['PKG_BUILD'] ? '.' + ENV['PKG_BUILD'] : ''
-  PKG_NAME        = 'activewarehouse-etl'
-  PKG_VERSION     = ETL::VERSION::STRING + PKG_BUILD
-  PKG_FILE_NAME   = "#{PKG_NAME}-#{PKG_VERSION}"
-  PKG_DESTINATION = ENV["PKG_DESTINATION"] || "../#{PKG_NAME}"
-end
-
 namespace :test do
 
   def run_tests(rvm, rails, database)
@@ -74,62 +66,6 @@ namespace :rcov do
     system("#{rcov} test/*_test.rb")
     # system("open coverage/index.html") if PLATFORM['darwin']
   end
-end
-
-# Gem Spec
-
-module AWETL
-  def self.package_files(package_prefix)
-    FileList[
-      "#{package_prefix}CHANGELOG",
-      "#{package_prefix}LICENSE",
-      "#{package_prefix}README",
-      "#{package_prefix}TODO",
-      "#{package_prefix}Rakefile",
-      "#{package_prefix}bin/**/*",
-      "#{package_prefix}doc/**/*",
-      "#{package_prefix}lib/**/*",
-      "#{package_prefix}examples/**/*",
-    ] - [ "#{package_prefix}test" ]
-  end
-
-  def self.spec(package_prefix = '')
-    Gem::Specification.new do |s|
-      s.name = 'activewarehouse-etl'
-      s.version = AWETL::PKG_VERSION
-      s.summary = "Pure Ruby ETL package."
-      s.description = <<-EOF
-        ActiveWarehouse ETL is a pure Ruby Extract-Transform-Load application for loading data into a database.
-      EOF
-
-      s.add_dependency('rake',                '>= 0.8.3')
-      s.add_dependency('activesupport',       '>= 2.1.0')
-      s.add_dependency('activerecord',        '>= 2.1.0')
-      s.add_dependency('fastercsv',           '>= 1.2.0')
-      s.add_dependency('adapter_extensions',  '>= 0.5.0')
-
-      s.rdoc_options << '--exclude' << '.'
-      s.has_rdoc = false
-
-      s.files = package_files(package_prefix).to_a.delete_if {|f| f.include?('.svn')}
-      s.require_path = 'lib'
-
-      s.bindir = "#{package_prefix}bin" # Use these for applications.
-      s.executables = ['etl']
-      s.default_executable = "etl"
-
-      s.author = "Anthony Eden"
-      s.email = "anthonyeden@gmail.com"
-      s.homepage = "http://activewarehouse.rubyforge.org/etl"
-      s.rubyforge_project = "activewarehouse"
-    end
-  end
-end
-
-Gem::PackageTask.new(AWETL.spec) do |pkg|
-  pkg.gem_spec = AWETL.spec
-  pkg.need_tar = true
-  pkg.need_zip = true
 end
 
 desc "Generate code statistics"
