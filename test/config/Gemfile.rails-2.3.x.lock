@@ -10,6 +10,9 @@ GEM
     net-sftp (2.0.5)
       net-ssh (>= 2.0.9)
     net-ssh (2.1.4)
+    nokogiri (1.4.4)
+    nokogiri (1.4.4-java)
+      weakling (>= 0.0.3)
     pg (0.11.0)
     rdoc (3.6.1)
     ruby-ole (1.2.11.1)
@@ -17,6 +20,7 @@ GEM
     spreadsheet (0.6.5.4)
       ruby-ole (>= 1.0)
     tmail (1.2.7.1)
+    weakling (0.0.4-java)
     zip (2.0.2)
 
 PLATFORMS
@@ -30,6 +34,7 @@ DEPENDENCIES
   flexmock (= 0.9.0)
   mysql (= 2.8.1)
   net-sftp (= 2.0.5)
+  nokogiri (= 1.4.4)
   pg (= 0.11.0)
   rdoc
   shoulda (= 2.11.3)

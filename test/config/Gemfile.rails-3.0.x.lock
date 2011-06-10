@@ -20,6 +20,7 @@ GEM
     net-sftp (2.0.5)
       net-ssh (>= 2.0.9)
     net-ssh (2.1.4)
+    nokogiri (1.4.4)
     pg (0.11.0)
     rdoc (3.6.1)
     ruby-ole (1.2.11.1)
@@ -41,6 +42,7 @@ DEPENDENCIES
   flexmock (= 0.9.0)
   mysql (= 2.8.1)
   net-sftp (= 2.0.5)
+  nokogiri (= 1.4.4)
   pg (= 0.11.0)
   rdoc
   shoulda (= 2.11.3)

@@ -16,7 +16,7 @@ namespace :test do
     puts
 
     sh <<-BASH
-    BUNDLE_GEMFILE=test/config/Gemfile.rails-#{rails} bundle install > null
+    BUNDLE_GEMFILE=test/config/Gemfile.rails-#{rails} bundle install
     BUNDLE_GEMFILE=test/config/Gemfile.rails-#{rails} rvm #{rvm} rake test
   BASH
   end
