@@ -2,8 +2,8 @@ require 'bundler/gem_tasks'
 
 require 'rake'
 require 'rake/testtask'
-#require 'rdoc'
-#require 'rdoc/task'
+require 'rdoc'
+require 'rdoc/task'
 
 namespace :test do
 
@@ -46,8 +46,6 @@ Rake::TestTask.new(:test) do |t|
   # TODO: reset the database
 end
 
-# TO BE TESTED
-=begin
 desc 'Generate documentation for the ETL application.'
 Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.rdoc_dir = 'rdoc'
@@ -56,9 +54,7 @@ Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.rdoc_files.include('README')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
-=end
 
-# TO BE TESTED
 namespace :rcov do
   desc 'Measures test coverage'
   task :test do
@@ -70,7 +66,6 @@ namespace :rcov do
   end
 end
 
-# TO BE TESTED
 desc "Generate code statistics"
 task :lines do
   lines, codelines, total_lines, total_codelines = 0, 0, 0, 0
@@ -96,7 +91,6 @@ task :lines do
   puts "Total: Lines #{total_lines}, LOC #{total_codelines}"
 end
 
-# TO BE TESTED
 desc "Publish the API documentation (UNTESTED CURRENTLY)"
 task :pdoc => [:rdoc] do 
   Rake::SshDirPublisher.new("aeden@rubyforge.org", "/var/www/gforge-projects/activewarehouse/etl/rdoc", "rdoc").upload
