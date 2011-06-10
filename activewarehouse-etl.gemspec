@@ -6,7 +6,7 @@ require 'etl/version'
 
 Gem::Specification.new do |s|
   s.name = %q{activewarehouse-etl}
-  s.version = ETL::VERSION::STRING + ".rc1"
+  s.version = ETL::VERSION
   s.platform = Gem::Platform::RUBY
   s.authors = ["Anthony Eden", "Thibaut Barrère"]
   s.email = ["thibaut.barrere@gmail.com"]
@@ -25,5 +25,5 @@ Gem::Specification.new do |s|
   s.files              = `git ls-files`.split("\n")
   s.test_files         = `git ls-files -- {test}/*`.split("\n")
   s.executables        = %w(etl)
-  s.require_paths      = ["lib"]
+  s.require_path       = "lib"
 end

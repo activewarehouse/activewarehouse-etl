@@ -1,9 +1,3 @@
 module ETL#:nodoc:
-  module VERSION #:nodoc:
-    MAJOR = 0
-    MINOR = 9
-    TINY  = 5
-
-    STRING = [MAJOR, MINOR, TINY].join('.')
-  end
+  VERSION = "0.9.5.rc1"
 end

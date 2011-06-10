@@ -1,11 +1,9 @@
+require 'bundler/gem_tasks'
+
 require 'rake'
 require 'rake/testtask'
-require 'rdoc/task'
-require 'rake/packagetask'
-require 'rubygems/package_task'
-require 'rake/contrib/rubyforgepublisher'
-
-require File.join(File.dirname(__FILE__), 'lib/etl', 'version')
+#require 'rdoc'
+#require 'rdoc/task'
 
 namespace :test do
 
@@ -48,6 +46,8 @@ Rake::TestTask.new(:test) do |t|
   # TODO: reset the database
 end
 
+# TO BE TESTED
+=begin
 desc 'Generate documentation for the ETL application.'
 Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.rdoc_dir = 'rdoc'
@@ -56,7 +56,9 @@ Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.rdoc_files.include('README')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
+=end
 
+# TO BE TESTED
 namespace :rcov do
   desc 'Measures test coverage'
   task :test do
@@ -68,6 +70,7 @@ namespace :rcov do
   end
 end
 
+# TO BE TESTED
 desc "Generate code statistics"
 task :lines do
   lines, codelines, total_lines, total_codelines = 0, 0, 0, 0
@@ -93,27 +96,8 @@ task :lines do
   puts "Total: Lines #{total_lines}, LOC #{total_codelines}"
 end
 
-desc "Publish the release files to RubyForge."
-task :release => [ :package ] do
-  `rubyforge login`
-
-  for ext in %w( gem tgz zip )
-    release_command = "rubyforge add_release activewarehouse #{AWETL::PKG_NAME} 'REL #{AWETL::PKG_VERSION}' pkg/#{AWETL::PKG_NAME}-#{AWETL::PKG_VERSION}.#{ext}"
-    puts release_command
-    system(release_command)
-  end
-end
-
-desc "Publish the API documentation"
+# TO BE TESTED
+desc "Publish the API documentation (UNTESTED CURRENTLY)"
 task :pdoc => [:rdoc] do 
   Rake::SshDirPublisher.new("aeden@rubyforge.org", "/var/www/gforge-projects/activewarehouse/etl/rdoc", "rdoc").upload
-end
-
-desc "Reinstall the gem from a local package copy"
-task :reinstall => [:package] do
-  windows = RUBY_PLATFORM =~ /mswin/
-  sudo = windows ? '' : 'sudo'
-  gem = windows ? 'gem.bat' : 'gem'
-  `#{sudo} #{gem} uninstall #{AWETL::PKG_NAME} -x`
-  `#{sudo} #{gem} install pkg/#{AWETL::PKG_NAME}-#{AWETL::PKG_VERSION}`
 end
