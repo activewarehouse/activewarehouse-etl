@@ -1,4 +1,5 @@
-rake release
-git tag release-x.y.z
-git push --tags
-rake pdoc
+* update lib/etl/version
+* push your changes
+* then use bundler to build + git tag + push to rubygems
+
+    rake release
