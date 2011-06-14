@@ -338,9 +338,9 @@ module ETL #:nodoc:
               control.after_read_processors.each do |processor|
                 processed_rows = []
                 rows.each do |row|
-                  processed_rows << processor.process(row)
+                  processed_rows << processor.process(row) unless empty_row?(row)
                 end
-                rows = processed_rows.flatten
+                rows = processed_rows.flatten.compact
               end
             rescue => e
               msg = "Error processing rows after read from #{Engine.current_source} on line #{Engine.current_source_row}: #{e}"
@@ -357,7 +357,7 @@ module ETL #:nodoc:
               Engine.logger.debug "Executing transforms"
               rows.each do |row|
                 # only do the transform if there is a row
-                if row && row.respond_to?(:[])
+                unless empty_row?(row)
                   control.transforms.each do |transform|
                     name = transform.name.to_sym
                     row[name] = transform.transform(name, row[name], row)
@@ -388,7 +388,9 @@ module ETL #:nodoc:
               Engine.logger.debug "Processing before write"
               control.before_write_processors.each do |processor|
                 processed_rows = []
-                rows.each { |row| processed_rows << processor.process(row) }
+                rows.each do |row|
+                  processed_rows << processor.process(row) unless empty_row?(row)
+                end
                 rows = processed_rows.flatten.compact
               end
             rescue => e
@@ -486,6 +488,11 @@ module ETL #:nodoc:
       ETL::Engine.job.completed_at = Time.now
       ETL::Engine.job.status = (errors.length > 0 ? 'completed with errors' : 'completed')
       ETL::Engine.job.save!
+    end
+    
+    def empty_row?(row)
+      # unsure about why it should respond to :[] - keeping it just in case for the moment
+      row.nil? || !row.respond_to?(:[])
     end
     
     private
