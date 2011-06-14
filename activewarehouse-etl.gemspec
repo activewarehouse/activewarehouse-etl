@@ -27,6 +27,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('net-sftp')
   s.add_runtime_dependency('zip')
   s.add_runtime_dependency('spreadsheet')
+  s.add_runtime_dependency('nokogiri')
   
   s.files              = `git ls-files`.split("\n")
   s.test_files         = `git ls-files -- {test}/*`.split("\n")
