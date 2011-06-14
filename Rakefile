@@ -1,6 +1,4 @@
 require 'bundler'
-Bundler::GemHelper.install_tasks
-
 require 'rake'
 require 'rake/testtask'
 require 'rdoc'
@@ -8,12 +6,6 @@ require 'rdoc/task'
 
 namespace :test do
 
-  task 'bundle:install' do
-    sh <<-BASH
-    BUNDLE_GEMFILE=test/config/Gemfile.rails-#{ENV['rails']} bundle install
-BASH
-  end
-  
   def run_tests(rvm, rails, database)
     database_yml = File.dirname(__FILE__) + "/test/config/database.#{database}.yml"
     FileUtils.cp(database_yml, 'test/config/database.yml')
@@ -21,11 +13,18 @@ BASH
     puts
     puts "============ Ruby #{rvm} - Rails #{rails} - Db #{database} ============="
     puts
-
+    
+    rvm_script = File.expand_path("~/.rvm/scripts/rvm")
+    
+    # a bit hackish - source rvm as described here
+    # https://rvm.beginrescueend.com/workflow/scripting/
     sh <<-BASH
-    BUNDLE_GEMFILE=test/config/Gemfile.rails-#{rails} rvm #{rvm} rake test:bundle:install rails=#{rails}
-    BUNDLE_GEMFILE=test/config/Gemfile.rails-#{rails} rvm #{rvm} rake test
-  BASH
+    source #{rvm_script}
+    export BUNDLE_GEMFILE=test/config/Gemfile.rails-#{rails}
+    rvm #{rvm}
+    bundle install
+    rake test
+BASH
   end
 
   desc 'Run the tests in all combinations described in test-matrix.yml'
@@ -47,7 +46,7 @@ task :default => :test
 
 desc 'Test the ETL application.'
 Rake::TestTask.new(:test) do |t|
-  t.libs << 'lib'
+  t.libs << 'lib' << '.'
   t.pattern = 'test/**/*_test.rb'
   t.verbose = true
   # TODO: reset the database
