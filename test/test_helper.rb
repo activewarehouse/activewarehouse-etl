@@ -12,12 +12,15 @@ require 'etl'
 require 'shoulda'
 require 'flexmock/test_unit'
 
-ETL::Engine.init(:config => File.dirname(__FILE__) + '/config/database.yml')
+database_yml = File.dirname(__FILE__) + '/config/database.yml'
+ETL::Engine.init(:config => database_yml)
 ETL::Engine.logger = Logger.new(STDOUT)
 # ETL::Engine.logger.level = Logger::DEBUG
 ETL::Engine.logger.level = Logger::FATAL
 
-db = ENV['DB'] ||= 'mysql'
+db = YAML::load(IO.read(database_yml))['operational_database']['adapter']
+raise unless ['mysql', 'postgresql'].include?(db)
+
 require "connection/#{db}/connection"
 ActiveRecord::Base.establish_connection :operational_database
 ETL::Execution::Job.delete_all

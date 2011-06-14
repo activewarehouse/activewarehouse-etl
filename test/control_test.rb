@@ -4,8 +4,8 @@ class ControlTest < Test::Unit::TestCase
   # Test the ability to parse control files.
   def test_parse
     assert_nothing_raised do
-      Dir.glob('*.ctl') do |f|
-        ETL::Control::Control.parse(File.join(File.dirname(__FILE__), f))
+      Dir.glob(File.join(File.dirname(__FILE__), '*.ctl')) do |f|
+        ETL::Control::Control.parse(f)
       end
     end
   end
