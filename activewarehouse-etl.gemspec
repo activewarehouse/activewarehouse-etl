@@ -21,8 +21,13 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('activerecord',        '>= 2.1.0')
   s.add_runtime_dependency('fastercsv',           '>= 1.2.0')
   s.add_runtime_dependency('adapter_extensions',  '>= 0.5.0')
-  s.add_runtime_dependency('spreadsheet')
 
+  # temporary work-around around issue #24
+  s.add_runtime_dependency('tmail')
+  s.add_runtime_dependency('net-sftp')
+  s.add_runtime_dependency('zip')
+  s.add_runtime_dependency('spreadsheet')
+  
   s.files              = `git ls-files`.split("\n")
   s.test_files         = `git ls-files -- {test}/*`.split("\n")
   s.executables        = %w(etl)
