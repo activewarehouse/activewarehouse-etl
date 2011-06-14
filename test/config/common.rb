@@ -1,3 +1,5 @@
+require 'rbconfig'
+
 def common_gemfile(rails_version)
   source :rubygems
 
@@ -20,4 +22,6 @@ def common_gemfile(rails_version)
   gem "nokogiri", "1.4.4"
   
   gem "rdoc"
+  
+  gem "jruby-openssl" if RUBY_PLATFORM == "java"
 end
