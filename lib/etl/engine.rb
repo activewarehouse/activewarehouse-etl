@@ -200,9 +200,11 @@ module ETL #:nodoc:
       
       # Establish the named connection and return the database specific connection
       def establish_connection(name)
+        raise ETL::ETLError, "Connection with no name requested. Is there a missing :target parameter somewhere?" if name.blank?
+        
         logger.debug "Establishing connection to #{name}"
         conn_config = ETL::Base.configurations[name.to_s]
-        raise ETL::ETLError, "No connection found for #{name}" unless conn_config
+        raise ETL::ETLError, "Cannot find connection named #{name.inspect}" unless conn_config
         connection_method = "#{conn_config['adapter']}_connection"
         ETL::Base.send(connection_method, conn_config)
       end
