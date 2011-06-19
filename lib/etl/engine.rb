@@ -257,15 +257,18 @@ module ETL #:nodoc:
     # * ETL::Batch::Batch instance
     def process(file)
       case file
-      when String
-        process(File.new(file))
-      when File
-        process_control(file) if file.path =~ /.ctl$/
-        process_batch(file) if file.path =~ /.ebf$/
-      when ETL::Control::Control
-        process_control(file)
-      when ETL::Batch::Batch
-        process_batch(file)
+        when String
+          process(File.new(file))
+        when File
+          case file.path
+            when /.ctl$/; process_control(file)
+            when /.ebf$/; process_batch(file)
+            else raise RuntimeError, "Unsupported file type - #{file.path}"
+          end
+        when ETL::Control::Control
+          process_control(file)
+        when ETL::Batch::Batch
+          process_batch(file)
       else
         raise RuntimeError, "Process object must be a String, File, Control 
         instance or Batch instance"

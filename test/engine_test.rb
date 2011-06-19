@@ -2,6 +2,26 @@ require File.dirname(__FILE__) + '/test_helper'
 
 class EngineTest < Test::Unit::TestCase
 
+  context 'process' do
+  
+    should 'raise an error when a file which does not exist is given' do
+      error = assert_raise(Errno::ENOENT) do
+        ETL::Engine.process('foo-bar.ctl')
+      end
+      
+      assert_equal "No such file or directory - foo-bar.ctl", error.message
+    end
+    
+    should 'raise an error when an unknown file type is given' do
+      error = assert_raise(RuntimeError) do
+        ETL::Engine.process(__FILE__)
+      end
+      
+      assert_match /Unsupported file type/, error.message
+    end
+    
+  end
+  
   context 'connection' do
   
     should 'return an ActiveRecord configuration by name' do
