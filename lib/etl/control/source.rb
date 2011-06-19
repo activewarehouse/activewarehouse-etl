@@ -86,9 +86,32 @@ module ETL #:nodoc:
         File.join(local_directory, File.basename(last_local_file_trigger, '.trig'))
       end
       
-      # Get the last local file trigger
+      # Get the last local file trigger filename using timestamp in filenames.
+      # Filename is in the format YYYYMMDDHHMMSS.csv.trig, but in the case of a
+      # file source there is an unpadded sequence number before the file
+      # extension.  This code may not return the correct "last" file in that
+      # case (in particular when there are 10 or more source files).  However,
+      # at this point only the database source calls the method, and it wouldn't
+      # make sense for a file source to use it if multiple files are expected
       def last_local_file_trigger
-        Dir.glob(File.join(local_directory, '*.trig')).last
+        trig_files = []
+        trig_ext = '.csv.trig'
+
+        # Store the basename (without extension) of all files that end in the
+        # desired extension
+        Dir.glob(File.join(local_directory, "*" + trig_ext)) do |f|
+            # Extract the basename of each file with the extension snipped off
+            trig_files << File.basename(f, trig_ext) if File.file?(f)
+        end
+
+        # Throw an exception if no trigger files are available
+        raise "Local cache trigger file not found" if trig_files.empty?
+
+        # Sort trigger file strings and get the last one
+        last_trig = trig_files.sort {|a,b| a <=> b}.last
+
+        # Return the file path including extension
+        File.join(local_directory, last_trig + trig_ext)
       end
       
       # Get the local trigger file that is used to indicate that the file has
