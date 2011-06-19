@@ -23,7 +23,11 @@ module ETL #:nodoc:
       
       # Process the row. This implementation will only return a row if it
       # it's key combination has not already been seen.
+      #
+      # An error will be raised if the row doesn't include the keys.
       def process(row)
+        ensure_columns_available_in_row!(row, keys, 'for unicity check')
+        
         key = (keys.collect { |k| row[k] }).join('|')
         unless compound_key_constraints[key]
           compound_key_constraints[key] = 1
