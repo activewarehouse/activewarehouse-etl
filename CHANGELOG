@@ -1,9 +1,10 @@
 0.9.5 - unreleased
+* BREAKING CHANGE: DelimitedParser has been renamed to CsvParser, to emphasize the fact that this parser relies on FasterCSV under the hood (which means it will choke on faulty data).
 * Fixes for Rails 3 (gkfabs)
 * Fixes for Ruby 1.9.2 (jlecour, byrnejb, thbar)
 * improvements on CalculationTransform (gkfabs)
 * batch can have children (gkfabs)
-* read all columns by default in DelimitedSource (smeyfroi)
+* read all columns by default in CsvParser (smeyfroi)
 * Turn db config into a HashWithIndifferentAccess (smeyfroi)
 * DatabaseJoinProcessor (gkfabs)
 * ImapattachmentDownloaderProcessor (gkfabs)
