@@ -2,7 +2,7 @@
 
 source :source1, {
   :file => 'data/multiple_delimited_*.txt',
-  :parser => :delimited
+  :parser => :csv
 }, 
 [ 
   :first_name,
@@ -16,7 +16,7 @@ source :source1, {
 
 source :source2, {
   :file => 'data/multiple_delimited_*.txt',
-  :parser => :delimited
+  :parser => :csv
 }, 
 [ 
   :first_name,

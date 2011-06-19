@@ -24,7 +24,7 @@ class SourceTest < Test::Unit::TestCase
         control = ETL::Control::Control.parse(File.dirname(__FILE__) + '/delimited.ctl')
         configuration = {
           :file => 'data/delimited.txt',
-          :parser => :delimited
+          :parser => :csv
         }
         definition = self.definition + [:sex]
     
@@ -42,7 +42,7 @@ class SourceTest < Test::Unit::TestCase
       control = ETL::Control::Control.parse(File.dirname(__FILE__) + '/multiple_delimited.ctl')
       configuration = {
         :file => 'data/multiple_delimited_*.txt',
-        :parser => :delimited
+        :parser => :csv
       }
 
       source = ETL::Control::FileSource.new(control, configuration, definition)
@@ -61,7 +61,7 @@ class SourceTest < Test::Unit::TestCase
         '/delimited_absolute.ctl')
       configuration = {
         :file => '/tmp/delimited_abs.txt',
-        :parser => :delimited
+        :parser => :csv
       }
       definition = self.definition + [:sex]
 

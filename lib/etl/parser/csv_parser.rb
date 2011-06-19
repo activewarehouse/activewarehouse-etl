@@ -1,7 +1,7 @@
 module ETL #:nodoc:
   module Parser #:nodoc:
-    # Parses delimited files
-    class DelimitedParser < ETL::Parser::Parser
+    # Parses CSV files
+    class CsvParser < ETL::Parser::Parser
       # Initialize the parser
       # * <tt>source</tt>: The Source object
       # * <tt>options</tt>: Hash of options for the parser, defaults to an empty hash

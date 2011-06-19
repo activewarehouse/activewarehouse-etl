@@ -1,8 +1,6 @@
-# puts "executing delimited.ctl"
-
 source :in, {
   :file => 'data/delimited.txt',
-  :parser => :delimited
+  :parser => :csv
 }, 
 [ 
   :id,

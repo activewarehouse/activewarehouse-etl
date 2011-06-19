@@ -1,6 +1,6 @@
 source :in, {
   :file => "scd/#{ENV['run_number']}.txt",
-  :parser => :delimited
+  :parser => :csv
 },
 [
   :first_name,

@@ -2,7 +2,7 @@
 
 source :in, {
   :file => 'delimited.txt',
-  :parser => :delimited
+  :parser => :csv
 }, 
 [ 
   :first_name,

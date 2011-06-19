@@ -4,7 +4,7 @@ outfile = 'output/people.txt'
 source :in, {
   :file => infile,
   :parser => {
-    :name => :delimited
+    :name => :csv
   }
 }, 
 [ 

@@ -1,7 +1,7 @@
 source :in, {
   :file => 'data/delimited.txt',
   :parser => {
-    :name => :delimited
+    :name => :csv
   }
 }, 
 [ 

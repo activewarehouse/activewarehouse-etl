@@ -3,9 +3,9 @@ require File.dirname(__FILE__) + '/test_helper'
 # Test the flat text parsers
 class ParserTest < Test::Unit::TestCase
   # Test parsing delimited data
-  def test_delimited_parser
+  def test_csv_parser
     control = ETL::Control::Control.resolve(File.dirname(__FILE__) + '/delimited.ctl')
-    parser = ETL::Parser::DelimitedParser.new(control.sources.first)
+    parser = ETL::Parser::CsvParser.new(control.sources.first)
     rows = parser.collect { |row| row }
     assert_equal 3, rows.length
     assert_equal({:first_name=>"Chris", :last_name=>"Smith", :ssn=>"111223333", :age=>"24", :sex => 'M'}, rows.first)
