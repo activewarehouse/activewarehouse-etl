@@ -58,6 +58,7 @@ module ETL #:nodoc:
         conn = ETL::Engine.connection(target)
         q = "SELECT * FROM #{table_name} WHERE "
         conditions = []
+        ensure_columns_available_in_row!(row)
         row.each do |k,v| 
           if columns.nil? || columns.include?(k.to_sym)
             conditions << "#{k} = #{conn.quote(v)}" unless skip?(k.to_sym)
@@ -66,12 +67,20 @@ module ETL #:nodoc:
         q << conditions.join(" AND ")
         q << " LIMIT 1"
       
-        #puts "query: #{q}"
         result = conn.select_one(q)
         return row if result.nil?
       end
       
-      private
+private
+
+      def ensure_columns_available_in_row!(row)
+        unless columns.nil?
+          columns.each do |k|
+            raise(ETL::ControlError, "Row missing required field #{k.inspect} for existence check") unless row.keys.include?(k)
+          end
+        end
+      end
+      
       def table_name
         ETL::Engine.table(table, ETL::Engine.connection(target))
       end
