@@ -12,6 +12,16 @@ module ETL #:nodoc:
       def process(row)
         raise "process_row is an abstract method"
       end
+
+      # Ensure a given row keys include all the provided columns
+      # and raise an error using the provided message if it doesn't
+      def ensure_columns_available_in_row!(row, columns, message)
+        unless columns.nil?
+          columns.each do |k|
+            raise(ETL::ControlError, "Row missing required field #{k.inspect} #{message}") unless row.keys.include?(k)
+          end
+        end
+      end
     end
   end
 end

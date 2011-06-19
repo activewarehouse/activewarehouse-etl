@@ -21,11 +21,10 @@ module ETL #:nodoc:
       
       # Initialize the processor
       # Configuration options:
-      # * <tt>:skip</tt>: A symbol or array of column names that should not 
-      #   be checked
+      # * <tt>:columns</tt>: An array of symbols for columns that should be included in the query conditions. If this option is not specified then all of the columns in the row will be included in the conditions (unless :skip is specified).
+      # * <tt>:skip</tt>: A symbol or array of symbols that should not be included in the existence check. If this option is not specified then all of the columns will be included in the existence check (unless :columns is specified).
+      # * <tt>:target</tt>: The target connection
       # * <tt>:table</tt>: The table name
-      # * <tt>:columns</tt>: An array of columns which represent the natural
-      #   key
       def initialize(control, configuration)
         super
         @skip = configuration[:skip] || []
@@ -58,7 +57,7 @@ module ETL #:nodoc:
         conn = ETL::Engine.connection(target)
         q = "SELECT * FROM #{table_name} WHERE "
         conditions = []
-        ensure_columns_available_in_row!(row)
+        ensure_columns_available_in_row!(row, columns, 'for existence check')
         row.each do |k,v| 
           if columns.nil? || columns.include?(k.to_sym)
             conditions << "#{k} = #{conn.quote(v)}" unless skip?(k.to_sym)
@@ -73,14 +72,6 @@ module ETL #:nodoc:
       
 private
 
-      def ensure_columns_available_in_row!(row)
-        unless columns.nil?
-          columns.each do |k|
-            raise(ETL::ControlError, "Row missing required field #{k.inspect} for existence check") unless row.keys.include?(k)
-          end
-        end
-      end
-      
       def table_name
         ETL::Engine.table(table, ETL::Engine.connection(target))
       end
