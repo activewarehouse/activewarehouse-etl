@@ -1,4 +1,4 @@
-require 'spreadsheet'
+optional_require 'spreadsheet'
 
 module ETL
   module Parser

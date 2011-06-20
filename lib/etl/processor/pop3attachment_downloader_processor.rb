@@ -1,5 +1,5 @@
-require 'net/pop'
-require 'tmail'
+optional_require 'net/pop'
+optional_require 'tmail'
 
 module ETL
   module Processor
