@@ -1,4 +1,4 @@
-require 'zip/zip'
+optional_require 'zip/zip'
 
 module ETL
   module Processor

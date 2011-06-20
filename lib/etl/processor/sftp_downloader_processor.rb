@@ -1,4 +1,4 @@
-require 'net/sftp'
+optional_require 'net/sftp'
 
 module ETL
   module Processor
