@@ -16,6 +16,7 @@ module ETL #:nodoc:
       #  for future use.
       # *<tt>:resolver</tt>: Object or Class which implements the method resolve(value)
       # *<tt>:default</tt>: A default foreign key to use if no foreign key is found
+      # *<tt>:cache</tt>: If true and the resolver responds to load_cache, load_cache will be called
       def initialize(control, name, configuration={})
         super
         
@@ -23,7 +24,10 @@ module ETL #:nodoc:
         @resolver = configuration[:resolver]
         @resolver = @resolver.new if @resolver.is_a?(Class)
         @default = configuration[:default]
-        if configuration[:cache] ||= true
+        
+        configuration[:cache] = true if configuration[:cache].nil?
+        
+        if configuration[:cache]
           if resolver.respond_to?(:load_cache)
             resolver.load_cache
           else
