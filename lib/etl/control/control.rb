@@ -283,7 +283,7 @@ module ETL #:nodoc:
         end
         
         def parse_text(text)
-          control = ETL::Control::Control.new(nil)
+          control = ETL::Control::Control.new('no-file')
           eval(text, Context.create(control), 'inline')
           control.validate
           control
