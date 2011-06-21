@@ -20,6 +20,20 @@ class EngineTest < Test::Unit::TestCase
       assert_match /Unsupported file type/, error.message
     end
     
+    should_eventually 'stop as soon as the error threshold is reached' do
+      engine = ETL::Engine.new
+
+      assert_equal 0, engine.errors.size
+      
+      engine.process ETL::Control::Control.parse_text <<CTL
+        set_error_threshold 1
+        source :in, { :type => :enumerable, :enumerable => (1..100) }
+        after_read { |row| raise "Failure" }
+CTL
+      
+      assert_equal 1, engine.errors.size
+    end
+    
   end
   
   context 'connection' do
