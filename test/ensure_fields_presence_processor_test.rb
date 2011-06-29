@@ -17,7 +17,7 @@ class EnsureFieldsPresenceProcessorTest < Test::Unit::TestCase
       processor.process(ETL::Row[])
     end
     
-    assert_match error.message, /missing required field\(s\)/
+    assert_match /missing required field\(s\)/, error.message
   end
   
   should 'return the row if the required fields are in the row' do
