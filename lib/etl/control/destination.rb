@@ -288,12 +288,10 @@ module ETL #:nodoc:
         statement = []
         values = []
         natural_key.each do |nk|
-          statement << "#{nk} = ?"
-          values << row[nk]
+          statement << "#{nk} = #{ActiveRecord::Base.send(:quote_bound_value, row[nk], connection)}"
         end
         statement = statement.join(" AND ")
-        x=ActiveRecord::Base.send(:sanitize_sql_array, [statement, *values])
-        return x
+        return statement
       end
       
       # Do all the steps required when a SCD *has* changed.  Exact steps
