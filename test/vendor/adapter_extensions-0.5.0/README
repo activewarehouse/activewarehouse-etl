@@ -1,7 +1,0 @@
-This library provides extensions to Rails' ActiveRecord adapters.
-
-As of version 0.5, adapter_extensions has dependencies on ActiveSupport and ActiveRecord 2.1.x or higher.
-
-To use the MySQL adapter extensions with Rails 2.x, you must patch the mysql_adapter with the mysql_adapter_opt_local_infile.patch.
-
-To execute the unit tests you must first construct a adapter_extensions_unittest database.

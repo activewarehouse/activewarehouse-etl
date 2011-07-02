@@ -1,3 +1,12 @@
+GIT
+  remote: git@github.com:activewarehouse/adapter_extensions.git
+  revision: 76e7aa2560e1b799c58e3d75ee0b0257a9a33850
+  specs:
+    adapter_extensions (0.9.5.rc1)
+      activerecord (>= 2.1.0)
+      activesupport (>= 2.1.0)
+      rake (>= 0.8.3)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -30,6 +39,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord (= 2.3.11)
   activesupport (= 2.3.11)
+  adapter_extensions!
   fastercsv (= 1.5.4)
   flexmock (= 0.9.0)
   mysql (= 2.8.1)

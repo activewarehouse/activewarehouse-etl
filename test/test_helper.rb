@@ -4,8 +4,6 @@ require 'bundler/setup'
 $:.unshift(File.dirname(__FILE__) + '/../lib')
 $:.unshift(File.dirname(__FILE__))
 
-Dir[File.dirname(__FILE__) + "/vendor/**/lib"].each { |lib| $:.unshift(lib) }
-
 require 'test/unit'
 require 'pp'
 require 'etl'
@@ -19,7 +17,9 @@ ETL::Engine.logger = Logger.new(STDOUT)
 ETL::Engine.logger.level = Logger::FATAL
 
 db = YAML::load(IO.read(database_yml))['operational_database']['adapter']
-raise unless ['mysql', 'postgresql'].include?(db)
+# allow both mysql2 and mysql adapters
+db = db.gsub('mysql2', 'mysql')
+raise "Unsupported test db '#{db}'" unless ['mysql', 'postgresql'].include?(db)
 
 require "connection/#{db}/connection"
 ActiveRecord::Base.establish_connection :operational_database

@@ -23,5 +23,7 @@ def common_gemfile(rails_version)
   
   gem "rdoc"
   
+  gem "adapter_extensions", :git => 'git@github.com:activewarehouse/adapter_extensions.git'
+  
   gem "jruby-openssl" if RUBY_PLATFORM == "java"
 end
