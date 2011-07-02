@@ -1,5 +1,6 @@
 0.9.5 - unreleased
 * New EnsureFieldsPresenceProcessor (thbar)
+* New CsvDestination based on FasterCSV (lgustafson)
 * Fix #41: Allow cache to be turned off on ForeignKeyLookupTransform
 * Fix #36: etl --read-locally picks wrong last file (lgustafson)
 * BREAKING CHANGE: DelimitedParser has been renamed to CsvParser, to emphasize the fact that this parser relies on FasterCSV under the hood (which means it will choke on faulty data).
