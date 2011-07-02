@@ -1,4 +1,5 @@
 0.9.5 - unreleased
+* BREAKING CHANGE: the TruncateProcessor will now RESTART IDENTITY when using postgres - this behaviour can be changed by passing :options => 'CONTINUE IDENTITY' (thbar)
 * New EnsureFieldsPresenceProcessor (thbar)
 * New CsvDestination based on FasterCSV (lgustafson)
 * Fix #41: Allow cache to be turned off on ForeignKeyLookupTransform

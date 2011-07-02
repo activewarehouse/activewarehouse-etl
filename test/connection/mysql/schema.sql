@@ -29,6 +29,7 @@ create table person_dimension (
 
 drop table if exists truncate_test;
 create table truncate_test (
+  id int not null primary key auto_increment,
 	x char(4)
 );
 insert into truncate_test (x) values ('a');

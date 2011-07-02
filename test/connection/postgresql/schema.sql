@@ -32,6 +32,7 @@ create table person_dimension (
 
 drop table truncate_test;
 create table truncate_test (
+  id SERIAL PRIMARY KEY,
 	x character varying(4)
 );
 insert into truncate_test (x) values ('a');
