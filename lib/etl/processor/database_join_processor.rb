@@ -21,6 +21,9 @@ module ETL
         @target = configuration[:target]
         @query = configuration[:query]
         @fields = configuration[:fields]
+        raise ControlError, ":target must be specified" unless @target
+        raise ControlError, ":query must be specified" unless @query
+        raise ControlError, ":fields must be specified" unless @fields
       end
       
       # Get a String identifier for the source
