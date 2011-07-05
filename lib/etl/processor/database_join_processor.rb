@@ -43,10 +43,21 @@ module ETL
         ETL::Engine.logger.debug("Executing select: #{q}")
         res = connection.execute(q)
 
-        res.each_hash do |r|
-          @fields.each do |field|
-            row[field.to_sym] = r[field]
-          end
+        case connection
+          when ActiveRecord::ConnectionAdapters::PostgreSQLAdapter;
+            res.each do |r|
+              @fields.each do |field|
+                row[field.to_sym] = r[field.to_s]
+              end
+            end
+          when ActiveRecord::ConnectionAdapters::MysqlAdapter;
+            res.each_hash do |r|
+              @fields.each do |field|
+                row[field.to_sym] = r[field.to_s]
+              end
+            end
+            res.free
+          else raise "Unsupported adapter #{connection.class} for this destination"
         end
 
         return row
