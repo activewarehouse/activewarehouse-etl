@@ -79,6 +79,7 @@ module ETL #:nodoc:
                 res.each { none = false }
               when ActiveRecord::ConnectionAdapters::MysqlAdapter;
                 res.each_hash { none = false }
+                res.free
               else raise "Unsupported adapter #{conn.class} for this destination"
             end
 
