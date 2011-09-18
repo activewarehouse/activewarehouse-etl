@@ -75,11 +75,13 @@ module ETL #:nodoc:
             none = true
             
             case conn
-              when ActiveRecord::ConnectionAdapters::PostgreSQLAdapter;
+              when ActiveRecord::ConnectionAdapters::PostgreSQLAdapter
                 res.each { none = false }
-              when ActiveRecord::ConnectionAdapters::MysqlAdapter;
+              when ActiveRecord::ConnectionAdapters::MysqlAdapter
                 res.each_hash { none = false }
                 res.free
+              when ActiveRecord::ConnectionAdapters::Mysql2Adapter
+                res.each { none = false }
               else raise "Unsupported adapter #{conn.class} for this destination"
             end
 
