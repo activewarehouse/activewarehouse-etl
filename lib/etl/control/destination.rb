@@ -249,7 +249,7 @@ module ETL #:nodoc:
             when Symbol
               generator = generators[key] ||= ETL::Generator::Generator.class_for_name(value).new(options)
               row[key] = generator.next
-            when Proc
+            when Proc, Method
               row[key] = value.call(row)
             else
               if value.is_a?(ETL::Generator::Generator)
