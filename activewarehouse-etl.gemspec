@@ -22,6 +22,13 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('fastercsv',           '>= 1.2.0')
   s.add_runtime_dependency('adapter_extensions',  '>= 0.9.5.rc1')
 
+  s.add_development_dependency('shoulda', '~>2.11.3')
+  s.add_development_dependency('flexmock', '~>0.9.0')
+  s.add_development_dependency('mysql', '~>2.8.1')
+  s.add_development_dependency('mysql2', '~>0.3.7')
+  s.add_development_dependency('rdoc')
+  s.add_development_dependency('spreadsheet', '~>0.6.5.4')
+
   s.files              = `git ls-files`.split("\n")
   s.test_files         = `git ls-files -- {test}/*`.split("\n")
   s.executables        = %w(etl)
