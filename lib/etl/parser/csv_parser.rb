@@ -12,7 +12,7 @@ module ETL #:nodoc:
       
       def get_fields_names(file)
         File.open(file) do |input|
-          fields = CSV.parse(input.readline).first
+          fields = CSV.parse(input.readline, options).first
           new_fields = []
           fields.each_with_index do |field,index|
             # compute the index of occurrence of this specific occurrence of the field (usually, will be 1)
