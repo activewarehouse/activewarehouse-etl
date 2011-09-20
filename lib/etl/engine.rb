@@ -26,6 +26,7 @@ module ETL #:nodoc:
           @skip_bulk_import = options[:skip_bulk_import]
           @read_locally = options[:read_locally]
           @rails_root = options[:rails_root]
+          @log_dir = options[:log_dir]
           
           require File.join(@rails_root, 'config/environment') if @rails_root
           options[:config] ||= 'database.yml'
@@ -36,7 +37,7 @@ module ETL #:nodoc:
           #puts "configurations in init: #{ActiveRecord::Base.configurations.inspect}"
           
           require 'etl/execution'
-          ETL::Execution::Base.establish_connection :etl_execution
+          ETL::Execution::Base.establish_connection(options[:execution_conf] || :etl_execution)
           ETL::Execution::Execution.migrate
 
           @initialized = true
@@ -69,9 +70,13 @@ module ETL #:nodoc:
       def logger #:nodoc:
         unless @logger
           if timestamped_log
-            @logger = Logger.new("etl_#{timestamp}.log")
+            logfile = File.join(*[@log_dir, "etl_#{timestamp}.log"].compact)
+
+            @logger = Logger.new(logfile)
           else
-            @logger = Logger.new(File.open('etl.log', log_write_mode))
+            logfile = File.join(*[@log_dir, '/etl.log'].compact)
+
+            @logger = Logger.new(File.open(logfile), log_write_mode)
           end
           @logger.level = Logger::WARN
           @logger.formatter = Logger::Formatter.new
