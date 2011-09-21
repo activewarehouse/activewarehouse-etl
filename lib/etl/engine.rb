@@ -76,7 +76,7 @@ module ETL #:nodoc:
           else
             logfile = File.join(*[@log_dir, '/etl.log'].compact)
 
-            @logger = Logger.new(File.open(logfile), log_write_mode)
+            @logger = Logger.new(File.open(logfile, log_write_mode))
           end
           @logger.level = Logger::WARN
           @logger.formatter = Logger::Formatter.new
