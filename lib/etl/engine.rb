@@ -266,9 +266,11 @@ module ETL #:nodoc:
           process(File.new(file))
         when File
           case file.path
-            when /.ctl$/; process_control(file)
-            when /.ebf$/; process_batch(file)
-            else raise RuntimeError, "Unsupported file type - #{file.path}"
+          when /.ctl/ then process_control(file)
+          when /.etl/ then process_control(file)
+          when /.ebf/ then process_batch(file)
+          else
+            raise RuntimeError, "Unsupported file type - #{file.path}"
           end
         when ETL::Control::Control
           process_control(file)
