@@ -6,4 +6,5 @@ rdoc
 .bundle
 *.gem
 Gemfile.lock
-
+*.rbc
+*.log
