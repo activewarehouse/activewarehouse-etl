@@ -35,9 +35,7 @@ require 'adapter_extensions'
 require 'etl/core_ext'
 require 'etl/csv'
 require 'etl/util'
-require 'etl/http_tools'
 require 'etl/builder'
-require 'etl/version'
 require 'etl/engine'
 require 'etl/control'
 require 'etl/batch'
@@ -46,9 +44,12 @@ require 'etl/parser'
 require 'etl/transform'
 require 'etl/processor'
 require 'etl/generator'
-require 'etl/screen'
 
 module ETL
+  autoload :VERSION,    'etl/version'
+  autoload :HttpTools,  'etl/http_tools'
+  autoload :Screen,     'etl/screen'
+
   class ETLError            < StandardError end
   class ControlError        < ETLError      end
   class DefinitionError     < ControlError  end
