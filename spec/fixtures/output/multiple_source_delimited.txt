@@ -1,0 +1,6 @@
+Chris,Smith,23cc5914d48b146f0fbb73c4,24,,12
+Jim,Foxworthy,596e3534978b8c2b47851e37,51,,14
+Brian,Collingsworth,535776974fbf28b1dfbab5bd,10,,83
+Chris,Smith,23cc5914d48b146f0fbb73c4,24,dude,
+Jim,Foxworthy,596e3534978b8c2b47851e37,51,broseph,
+Brian,Collingsworth,535776974fbf28b1dfbab5bd,10,maaan,
