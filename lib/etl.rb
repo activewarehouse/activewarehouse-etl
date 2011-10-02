@@ -21,13 +21,14 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 
+REXML::VERSION ||= begin
+  require 'rexml/rexml'
+  REXML::Version
+end
+
 require 'logger'
 require 'yaml'
 require 'erb'
-require 'rexml/rexml'
-
-REXML::VERSION ||= REXML::Version
-
 require 'active_support'
 require 'active_record'
 require 'adapter_extensions'
@@ -38,7 +39,6 @@ require 'etl/util'
 require 'etl/builder'
 require 'etl/engine'
 require 'etl/control'
-require 'etl/batch'
 require 'etl/row'
 require 'etl/parser'
 require 'etl/transform'
@@ -47,6 +47,7 @@ require 'etl/generator'
 
 module ETL
   autoload :VERSION,    'etl/version'
+  autoload :Batch,      'etl/batch'
   autoload :HttpTools,  'etl/http_tools'
   autoload :Screen,     'etl/screen'
 
