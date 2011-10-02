@@ -1,6 +1,6 @@
 require "spec_helper"
 
-IGNORE = /\.(gitmodules|png$|tar$|gz$|rbc$|gem$|pdf$)/
+IGNORE = /\.(gitmodules|txt$|png$|tar$|gz$|rbc$|gem$|pdf$)/
 
 describe "The application itself" do
   it "has no malformed whitespace" do
