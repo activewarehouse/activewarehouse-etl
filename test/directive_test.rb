@@ -14,7 +14,7 @@ class BatchTest < Test::Unit::TestCase
   end
   
   def test_directive_without_implementation_should_fail
-    batch = ETL::Batch::Batch.resolve(file, engine)
+    batch = ETL::Batch.resolve(file, engine)
     assert_raise RuntimeError do
       d = BadDirective.new(batch)
       d.execute

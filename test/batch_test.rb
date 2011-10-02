@@ -15,27 +15,27 @@ class BatchTest < Test::Unit::TestCase
   end
   def test_batch
     assert_nothing_raised do
-      batch = ETL::Batch::Batch.resolve(file, engine)
+      batch = ETL::Batch.resolve(file, engine)
       batch.execute
     end
   end
   def test_batch_with_file
     assert_nothing_raised do
-      batch = ETL::Batch::Batch.resolve(File.new(file), engine)
+      batch = ETL::Batch.resolve(File.new(file), engine)
       batch.execute
     end
   end
   def test_batch_with_batch_object
     assert_nothing_raised do
-      batch_instance = ETL::Batch::Batch.new(File.new(file))
+      batch_instance = ETL::Batch.new(File.new(file))
       batch_instance.engine = engine
-      batch = ETL::Batch::Batch.resolve(batch_instance, engine)
+      batch = ETL::Batch.resolve(batch_instance, engine)
       batch.execute
     end
   end
   def test_batch_with_object_should_fail
     assert_raise(RuntimeError) do
-      batch = ETL::Batch::Batch.resolve(0, engine)
+      batch = ETL::Batch.resolve(0, engine)
     end
   end
 end
