@@ -8,6 +8,7 @@ module CustomFixtures
   def fixture_for(name)
     fixtures[name.to_sym][:fixture]
   end
+  alias :fixture :fixture_for
 
   # @param [#to_sym]
   # @return [String]
