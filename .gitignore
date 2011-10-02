@@ -10,3 +10,4 @@ Gemfile.lock
 *.log
 doc
 .yardoc
+*.tmproj
