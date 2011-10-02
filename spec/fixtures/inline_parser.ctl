@@ -1,4 +1,4 @@
-class MyParser < ETL::Parser::Parser
+class MyParser < ETL::Parser
   def each
     [{:name => 'foo'},{:name => 'bar'},{:name => 'baz'}].each do |row|
       yield row

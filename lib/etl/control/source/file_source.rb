@@ -75,11 +75,11 @@ module ETL #:nodoc:
         when Class
           @parser = configuration[:parser].new(self)
         when String, Symbol
-          @parser = ETL::Parser::Parser.class_for_name(configuration[:parser]).new(self)
+          @parser = ETL::Parser.class_for_name(configuration[:parser]).new(self)
         when Hash
           name = configuration[:parser][:name]
           options = configuration[:parser][:options]
-          @parser = ETL::Parser::Parser.class_for_name(name).new(self, options)
+          @parser = ETL::Parser.class_for_name(name).new(self, options)
         else
           raise ControlError, "Configuration option :parser must be a Class, String or Symbol"
         end

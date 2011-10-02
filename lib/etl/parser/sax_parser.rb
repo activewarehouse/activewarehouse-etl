@@ -4,7 +4,7 @@ require 'rexml/sax2listener'
 module ETL #:nodoc:
   module Parser #:nodoc:
     # ETL parser implementation which uses SAX to parse XML files.
-    class SaxParser < ETL::Parser::Parser
+    class SaxParser < ETL::Parser
 
       # The write trigger causes whatever values are currently specified for the row to be returned.
       # After returning the values will not be cleared, thus allowing for values which are assigned
