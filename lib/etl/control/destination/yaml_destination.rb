@@ -51,7 +51,7 @@ module ETL #:nodoc:
 
             yaml[key] = value
           end
-         
+
           # write the values
           YAML.dump(yaml, f)
         end

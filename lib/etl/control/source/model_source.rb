@@ -3,8 +3,8 @@
 
 module ETL #:nodoc:
   module Control #:nodoc:
-    class ModelSource < Source   
-      
+    class ModelSource < Source
+
       def columns
         case definition
         when Array
@@ -15,15 +15,15 @@ module ETL #:nodoc:
           raise "Definition must be either an Array or a Hash"
         end
       end
-      
+
       def railsmodel
         configuration[:model]
       end
-      
+
       def order
         configuration[:order] || "id"
       end
-         
+
       def each(&block)
           railsmodel.to_s.camelize.constantize.find(:all,:order=>order).each do |row|
             result_row = ETL::Row.new

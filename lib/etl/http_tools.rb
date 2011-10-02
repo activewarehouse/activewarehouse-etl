@@ -11,7 +11,7 @@ module ETL
         #raise 'Invalid User Agent'
         #puts 'Invalid User Agent'
       end
-    
+
       browser, browser_version_major, browser_version_minor, ostype, os, os_version = nil
 
       # fix Opera
@@ -20,7 +20,7 @@ module ETL
 
       # grab all Agent/version strings as 'agents'
       agents = Array.new
-      user_agent.split(/\s+/).each {|string| 
+      user_agent.split(/\s+/).each {|string|
         if string =~ /\//
           agents<< string
         end
@@ -48,14 +48,14 @@ module ETL
       end
 
       # grab all of the properties (within parens)
-      # should be in relation to the agent if possible  
+      # should be in relation to the agent if possible
       detail = user_agent
       user_agent.gsub(/\((.*)\)/,'').split(/\s/).each {|part| detail = detail.gsub(part,'')}
       detail = detail.gsub('(','').gsub(')','').lstrip
       properties = detail.split(/;\s+/)
 
       # cycle through the properties to set known quantities
-      properties.each do |property| 
+      properties.each do |property|
         if property =~ /^Win/
           ostype = 'Windows'
           os = property
@@ -92,12 +92,12 @@ module ETL
           browser_version_major,browser_version_minor = browser_version.split('.')
         end
       end
-    
+
       result = {
-        :browser => browser, 
-        :browser_version_major => browser_version_major, 
-        :browser_version_minor => browser_version_minor, 
-        :ostype => ostype, 
+        :browser => browser,
+        :browser_version_major => browser_version_major,
+        :browser_version_minor => browser_version_minor,
+        :ostype => ostype,
         :os_version => os_version,
         :os => os,
       }
@@ -106,26 +106,26 @@ module ETL
       end
       result
     end
-  
+
     # Parse a URI. If options[:prefix] is set then prepend it to the keys for the hash that
     # is returned.
     def parse_uri(uri_string, options={})
       prefix = options[:prefix] ||= ''
       empty_hash = {
-        "#{prefix}scheme".to_sym => nil, 
-        "#{prefix}host".to_sym => nil, 
-        "#{prefix}port".to_sym => nil, 
-        "#{prefix}uri_path".to_sym => nil, 
+        "#{prefix}scheme".to_sym => nil,
+        "#{prefix}host".to_sym => nil,
+        "#{prefix}port".to_sym => nil,
+        "#{prefix}uri_path".to_sym => nil,
         "#{prefix}domain".to_sym => nil
       }
       if uri_string
         #attempt to parse uri --if it's a uri then catch the problem and set everything to nil
         begin
-          uri = URI.parse(uri_string)    
+          uri = URI.parse(uri_string)
           results = {
-            "#{prefix}scheme".to_sym => uri.scheme, 
-            "#{prefix}host".to_sym => uri.host, 
-            "#{prefix}port".to_sym => uri.port, 
+            "#{prefix}scheme".to_sym => uri.scheme,
+            "#{prefix}host".to_sym => uri.host,
+            "#{prefix}port".to_sym => uri.port,
             "#{prefix}uri_path".to_sym => uri.path
           }
           results["#{prefix}domain".to_sym] = $1 if uri.host =~ /\.?([^\.]+\.[^\.]+$)/

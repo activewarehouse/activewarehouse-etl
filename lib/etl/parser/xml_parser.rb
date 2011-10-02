@@ -10,7 +10,7 @@ module ETL
         super
         configure
       end
-      
+
       # Returns each row
       def each
         Dir.glob(file).each do |file|
@@ -29,17 +29,17 @@ module ETL
           end
         end
       end
-      
+
       # Get an array of defined fields
       def fields
         @fields ||= []
       end
-      
+
       private
       def configure
         @collection_xpath = source.definition[:collection]
         raise "Collection XPath is required" if @collection_xpath.nil?
-        
+
         source.definition[:fields].each do |options|
           case options
           when Symbol
@@ -52,7 +52,7 @@ module ETL
           end
         end
       end
-      
+
       class Field
         attr_reader :name, :xpath
         def initialize(name, xpath)

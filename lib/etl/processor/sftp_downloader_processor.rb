@@ -10,7 +10,7 @@ module ETL
       attr_reader :files
       attr_reader :username
       attr_reader :local_dir
-      
+
       # configuration options include:
       # * host - hostname or IP address of FTP server (required)
       # * port - port number for FTP server (default: 22)
@@ -19,12 +19,12 @@ module ETL
       # * username - username for FTP server authentication (default: anonymous)
       # * password - password for FTP server authentication (default: nil)
       # * local_dir - local output directory to save downloaded files (default: '')
-      # 
+      #
       # As an example you might write something like the following in your control process file:
       #  pre_process :sftp_downloader, {
       #    :host => 'sftp.sec.gov',
       #    :path => 'edgar/Feed/2007/QTR2',
-      #    :files => ['20070402.nc.tar.gz', '20070403.nc.tar.gz', '20070404.nc.tar.gz', 
+      #    :files => ['20070402.nc.tar.gz', '20070403.nc.tar.gz', '20070404.nc.tar.gz',
       #               '20070405.nc.tar.gz', '20070406.nc.tar.gz'],
       #    :local_dir => '/data/sec/2007/04',
       #  }
@@ -39,7 +39,7 @@ module ETL
         @password = configuration[:password]
         @local_dir = configuration[:local_dir] || ''
       end
-      
+
       def process
         Net::SFTP.start(@host, @username, {:port => @port, :password => @password}) do |conn|
           @files.each do |f|
@@ -47,14 +47,14 @@ module ETL
           end
         end
       end
-      
+
       private
       attr_accessor :password
-      
+
       def local_file(name)
         File.join(@local_dir, name)
       end
-      
+
       def remote_file(name)
         File.join(@remote_dir, name)
       end

@@ -4,35 +4,35 @@ module ETL #:nodoc:
     class Destination
       # Read-only accessor for the ETL::Control::Control instance
       attr_reader :control
-      
+
       # Read-only accessor for the configuration Hash
       attr_reader :configuration
-      
+
       # Read-only accessor for the destination mapping Hash
       attr_reader :mapping
-      
+
       # Accessor to the buffer size
       attr_accessor :buffer_size
-      
+
       # Unique flag.
       attr_accessor :unique
-      
+
       # A condition for writing
       attr_accessor :condition
-      
+
       # An array of rows to append to the destination
       attr_accessor :append_rows
-      
+
       class << self
         # Get the destination class for the specified name.
-        # 
-        # For example if name is :database or 'database' then the 
+        #
+        # For example if name is :database or 'database' then the
         # DatabaseDestination class is returned
         def class_for_name(name)
           ETL::Control.const_get("#{name.to_s.camelize}Destination")
         end
       end
-      
+
       # Initialize the destination
       #
       # Arguments:
@@ -42,7 +42,7 @@ module ETL #:nodoc:
       #
       # Options:
       # * <tt>:buffer_size</tt>: The output buffer size (default 1000 records)
-      # * <tt>:condition</tt>: A conditional proc that must return true for the 
+      # * <tt>:condition</tt>: A conditional proc that must return true for the
       #   row to be written
       # * <tt>:append_rows</tt>: An array of rows to append
       def initialize(control, configuration, mapping)
@@ -53,12 +53,12 @@ module ETL #:nodoc:
         @condition = configuration[:condition]
         @append_rows = configuration[:append_rows]
       end
-      
+
       # Get the current row number
       def current_row
         @current_row ||= 1
       end
-      
+
       # Write the given row
       def write(row)
         if @condition.nil? || @condition.call(row)
@@ -66,32 +66,32 @@ module ETL #:nodoc:
         end
         flush if buffer.length >= buffer_size
       end
-      
+
       # Abstract method
       def flush
         raise NotImplementedError, "flush method must be implemented by subclasses"
       end
-      
+
       # Abstract method
       def close
         raise NotImplementedError, "close method must be implemented by subclasses"
       end
-      
+
       def errors
         @errors ||= []
       end
-      
+
       protected
       # Access the buffer
       def buffer
         @buffer ||= []
       end
-      
+
       # Access the generators map
       def generators
         @generators ||= {}
       end
-      
+
       # Get the order of elements from the source order
       def order_from_source
         order = []
@@ -105,9 +105,9 @@ module ETL #:nodoc:
         end
         order
       end
-      
+
       # Return true if the row is allowed. The row will not be allowed if the
-      # :unique option is specified in the configuration and the compound key 
+      # :unique option is specified in the configuration and the compound key
       # already exists
       def row_allowed?(row)
         if unique
@@ -117,14 +117,14 @@ module ETL #:nodoc:
         end
         return true
       end
-      
+
       # Get a hash of compound key contraints. This is used to determine if a
       # row can be written when the unique option is specified
       def compound_key_constraints
         @compound_key_constraints ||= {}
       end
-      
-      # Return fields which are Slowly Changing Dimension fields. 
+
+      # Return fields which are Slowly Changing Dimension fields.
       # Uses the scd_fields specified in the configuration.  If that's
       # missing, uses all of the row's fields.
       def scd_fields(row)
@@ -141,74 +141,74 @@ module ETL #:nodoc:
          []
         end
       end
-      
+
       def non_scd_fields(row)
         @non_scd_fields ||= row.keys - natural_key - scd_fields(row) - [primary_key] - scd_required_fields
         ETL::Engine.logger.debug "@non_scd_fields is: #{@non_scd_fields.inspect}"
         @non_scd_fields
       end
-      
+
       def non_evolving_fields
         (Array(configuration[:scd][:non_evolving_fields]) << primary_key).uniq
       end
-      
+
       def scd?
         !configuration[:scd].nil?
       end
-      
+
       def scd_type
         scd? ? configuration[:scd][:type] : nil
       end
-      
+
       # Get the Slowly Changing Dimension effective date field. Defaults to
       # 'effective_date'.
       def scd_effective_date_field
         configuration[:scd][:effective_date_field] || :effective_date if scd?
       end
-      
-      # Get the Slowly Changing Dimension end date field. Defaults to 
+
+      # Get the Slowly Changing Dimension end date field. Defaults to
       # 'end_date'.
       def scd_end_date_field
         configuration[:scd][:end_date_field] || :end_date if scd?
       end
-      
+
       # Get the Slowly Changing Dimension latest version field. Defaults to
       # 'latest_version'.
       def scd_latest_version_field
         configuration[:scd][:latest_version_field] || :latest_version if scd?
       end
-      
+
       # Return the natural key field names, defaults to []
       def natural_key
         @natural_key ||= determine_natural_key
       end
-      
+
       # Get the dimension table if specified
       def dimension_table
         @dimension_table ||= if scd?
-          ETL::Engine.table(configuration[:scd][:dimension_table], dimension_target) or raise ConfigurationError, "dimension_table setting required" 
+          ETL::Engine.table(configuration[:scd][:dimension_table], dimension_target) or raise ConfigurationError, "dimension_table setting required"
         end
       end
-      
+
       # Get the dimension target if specified
       def dimension_target
         @dimension_target ||= if scd?
           configuration[:scd][:dimension_target] or raise ConfigurationError, "dimension_target setting required"
         end
       end
-      
+
       # Process a row to determine the change type
       def process_change(row)
         ETL::Engine.logger.debug "Processing row: #{row.inspect}"
         return unless row
-        
-        # Change processing can only occur if the natural key exists in the row 
+
+        # Change processing can only occur if the natural key exists in the row
         ETL::Engine.logger.debug "Checking for natural key existence"
         unless has_natural_key?(row)
           buffer << row
           return
         end
-        
+
         @timestamp = Time.now
 
         # See if the scd_fields of the current record have changed
@@ -227,12 +227,12 @@ module ETL #:nodoc:
           schedule_new_record(row)
         end
       end
-      
-      # Add any virtual fields to the row. Virtual rows will get their value 
+
+      # Add any virtual fields to the row. Virtual rows will get their value
       # from one of the following:
-      # * If the mapping is a Class, then an object which implements the next 
+      # * If the mapping is a Class, then an object which implements the next
       #   method
-      # * If the mapping is a Symbol, then the XGenerator where X is the 
+      # * If the mapping is a Symbol, then the XGenerator where X is the
       #   classified symbol
       # * If the mapping is a Proc, then it will be called with the row
       # * Otherwise the value itself will be assigned to the field
@@ -261,19 +261,19 @@ module ETL #:nodoc:
           end
         end
       end
-      
+
       private
-      
+
       # Determine the natural key. This method will always return an array
       # of symbols. The default value is [].
       def determine_natural_key
         Array(configuration[:natural_key]).collect(&:to_sym)
       end
-      
+
       # Check whether a natural key has been defined, and if so, whether
       # this row has enough information to do searches based on that natural
       # key.
-      # 
+      #
       # TODO: This should be factored out into
       # ETL::Row#has_all_fields?(field_array) But that's not possible
       # until *all* sources cast to ETL::Row, instead of sometimes
@@ -281,7 +281,7 @@ module ETL #:nodoc:
       def has_natural_key?(row)
         natural_key.any? && natural_key.all? { |key| row.has_key?(key) }
       end
-      
+
       # Helper for generating the SQL where clause that allows searching
       # by a natural key
       def natural_key_equality_for_row(row)
@@ -293,26 +293,26 @@ module ETL #:nodoc:
         statement = statement.join(" AND ")
         return statement
       end
-      
+
       # Do all the steps required when a SCD *has* changed.  Exact steps
       # depend on what type of SCD we're handling.
       def process_scd_change(row)
         ETL::Engine.logger.debug "SCD fields do not match"
-        
+
         if scd_type == 2
           # SCD Type 2: new row should be added and old row should be updated
           ETL::Engine.logger.debug "type 2 SCD"
-          
+
           # To update the old row, we delete the version in the database
           # and insert a new expired version
-          
+
           # If there is no truncate then the row will exist twice in the database
           delete_outdated_record
-          
+
           ETL::Engine.logger.debug "expiring original record"
           @existing_row[scd_end_date_field] = @timestamp
           @existing_row[scd_latest_version_field] = false
-          
+
           buffer << @existing_row
 
         elsif scd_type == 1
@@ -321,27 +321,27 @@ module ETL #:nodoc:
 
           # Copy primary key, and other non-evolving fields over from
           # original version of record
-          non_evolving_fields.each do |non_evolving_field|            
+          non_evolving_fields.each do |non_evolving_field|
             row[non_evolving_field] = @existing_row[non_evolving_field]
           end
-          
+
           # If there is no truncate then the row will exist twice in the database
           delete_outdated_record
         else
           # SCD Type 3: not supported
           ETL::Engine.logger.debug "SCD type #{scd_type} not supported"
         end
-        
+
         # In all cases, the latest, greatest version of the record
         # should go into the load
         schedule_new_record(row)
       end
-      
+
       # Do all the steps required when a SCD has *not* changed.  Exact
       # steps depend on what type of SCD we're handling.
       def process_scd_match(row)
         ETL::Engine.logger.debug "SCD fields match"
-        
+
         if scd_type == 2 && has_non_scd_field_changes?(row)
           ETL::Engine.logger.debug "Non-SCD field changes"
           # Copy important data over from original version of record
@@ -352,62 +352,62 @@ module ETL #:nodoc:
 
           # If there is no truncate then the row will exist twice in the database
           delete_outdated_record
-          
+
           buffer << row
         else
           # The record is totally the same, so skip it
         end
       end
-      
+
       # Find the version of this row that already exists in the datawarehouse.
       def preexisting_row(row)
         q = "SELECT * FROM #{dimension_table} WHERE #{natural_key_equality_for_row(row)}"
         q << " AND #{scd_latest_version_field}" if scd_type == 2
-        
+
         ETL::Engine.logger.debug "looking for original record"
         result = connection.select_one(q)
-        
+
         ETL::Engine.logger.debug "Result: #{result.inspect}"
-        
+
         result ? ETL::Row[result.symbolize_keys!] : nil
       end
-      
+
       # Check whether non-scd fields have changed since the last
       # load of this record.
       def has_scd_field_changes?(row)
-        scd_fields(row).any? { |csd_field| 
+        scd_fields(row).any? { |csd_field|
           ETL::Engine.logger.debug "Row: #{row.inspect}"
           ETL::Engine.logger.debug "Existing Row: #{@existing_row.inspect}"
           ETL::Engine.logger.debug "comparing: #{row[csd_field].to_s} != #{@existing_row[csd_field].to_s}"
-          x=row[csd_field].to_s != @existing_row[csd_field].to_s 
+          x=row[csd_field].to_s != @existing_row[csd_field].to_s
           ETL::Engine.logger.debug x
           x
         }
       end
-      
+
       # Check whether non-scd fields have changed since the last
       # load of this record.
       def has_non_scd_field_changes?(row)
         non_scd_fields(row).any? { |non_csd_field| row[non_csd_field].to_s != @existing_row[non_csd_field].to_s }
       end
-      
+
       # Grab, or re-use, a database connection for running queries directly
       # during the destination processing.
       def connection
         @conn ||= ETL::Engine.connection(dimension_target)
       end
-      
+
       # Utility for removing a row that has outdated information.  Note
       # that this deletes directly from the database, even if this is a file
-      # destination.  It needs to do this because you can't do deletes in a 
+      # destination.  It needs to do this because you can't do deletes in a
       # bulk load.
       def delete_outdated_record
         ETL::Engine.logger.debug "deleting old row"
-        
+
         q = "DELETE FROM #{dimension_table} WHERE #{primary_key} = #{@existing_row[primary_key]}"
         connection.delete(q)
       end
-      
+
       # Schedule the latest, greatest version of the row for insertion
       # into the database
       def schedule_new_record(row)
@@ -419,9 +419,9 @@ module ETL #:nodoc:
         end
         buffer << row
       end
-      
+
       # Get the name of the primary key for this table.  Asks the dimension
-      # model class for this information, but if that class hasn't been 
+      # model class for this information, but if that class hasn't been
       # defined, just defaults to :id.
       def primary_key
         return @primary_key if @primary_key

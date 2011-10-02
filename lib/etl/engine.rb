@@ -1,15 +1,15 @@
 module ETL #:nodoc:
-  
+
   class Base < ActiveRecord::Base
   end
-  
+
   # The main ETL engine clas
   class Engine
     include ETL::Util
-    
+
     class << self
       # Initialization that is run when a job is executed.
-      # 
+      #
       # Options:
       # * <tt>:limit</tt>: Limit the number of records returned from sources
       # * <tt>:offset</tt>: Specify the records for data from sources
@@ -27,7 +27,7 @@ module ETL #:nodoc:
           @read_locally = options[:read_locally]
           @rails_root = options[:rails_root]
           @log_dir = options[:log_dir]
-          
+
           require File.join(@rails_root, 'config/environment') if @rails_root
           options[:config] ||= 'database.yml'
           options[:config] = 'config/database.yml' unless File.exist?(options[:config])
@@ -35,7 +35,7 @@ module ETL #:nodoc:
           ActiveRecord::Base.configurations.merge!(database_configuration)
           ETL::Base.configurations = HashWithIndifferentAccess.new(database_configuration)
           #puts "configurations in init: #{ActiveRecord::Base.configurations.inspect}"
-          
+
           require 'etl/execution'
           ETL::Execution::Base.establish_connection(options[:execution_conf] || :etl_execution)
           ETL::Execution::Execution.migrate
@@ -43,7 +43,7 @@ module ETL #:nodoc:
           @initialized = true
         end
       end
-      
+
       # Process the specified file. Acceptable values for file are:
       # * Path to a file
       # * File object
@@ -55,18 +55,18 @@ module ETL #:nodoc:
       def process(file)
         new().process(file)
       end
-      
+
       attr_accessor :timestamped_log
-      
+
       # Accessor for the log write mode. Default is 'a' for append.
       attr_accessor :log_write_mode
       def log_write_mode
         @log_write_mode ||= 'a'
       end
-      
+
       # A logger for the engine
       attr_accessor :logger
-      
+
       def logger #:nodoc:
         unless @logger
           if timestamped_log
@@ -83,7 +83,7 @@ module ETL #:nodoc:
         end
         @logger
       end
-      
+
       # Get a timestamp value as a string
       def timestamp
         Time.now.strftime("%Y%m%d%H%M%S")
@@ -94,51 +94,51 @@ module ETL #:nodoc:
 
       # The current source row
       attr_accessor :current_source_row
-      
+
       # The current destination
       attr_accessor :current_destination
-      
-      # Set to true to activate realtime activity. This will cause certain 
+
+      # Set to true to activate realtime activity. This will cause certain
       # information messages to be printed to STDOUT
       attr_accessor :realtime_activity
-      
+
       # Accessor for the total number of rows read from sources
       attr_accessor :rows_read
       def rows_read
         @rows_read ||= 0
       end
-      
+
       # Accessor for the total number of rows processed
       attr_accessor :rows_written
       def rows_written
         @rows_written ||= 0
       end
-      
+
       # Access the current ETL::Execution::Job instance
       attr_accessor :job
-      
+
       # Access the current ETL::Execution::Batch instance
       attr_accessor :batch
-      
+
       # The limit on rows to load from the source, useful for testing the ETL
-      # process prior to executing the entire batch. Default value is nil and 
+      # process prior to executing the entire batch. Default value is nil and
       # indicates that there is no limit
       attr_accessor :limit
-      
+
       # The offset for the source to begin at, useful for testing the ETL
       # process prior to executing the entire batch. Default value is nil and
       # indicates that there is no offset
       attr_accessor :offset
-      
+
       # Set to true to skip all bulk importing
       attr_accessor :skip_bulk_import
-      
+
       # Set to true to read locally from the last source cache files
       attr_accessor :read_locally
-      
+
       # Accessor for the average rows per second processed
       attr_accessor :average_rows_per_second
-      
+
       # Get a named connection
       def connection(name)
         logger.debug "Retrieving connection #{name}"
@@ -147,15 +147,15 @@ module ETL #:nodoc:
         conn.reconnect! unless conn.active?
         conn
       end
-      
+
       # Set to true to use temp tables
       attr_accessor :use_temp_tables
-      
+
       # Get a registry of temp tables
       def temp_tables
         @temp_tables ||= {}
       end
-      
+
       # Called when a batch job finishes, allowing for cleanup to occur
       def finish
         temp_tables.each do |temp_table, mapping|
@@ -169,12 +169,12 @@ module ETL #:nodoc:
           end
         end
       end
-      
+
       # Return true if using temp tables
       def use_temp_tables?
         use_temp_tables ? true : false
       end
-      
+
       # Modify the table name if necessary
       def table(table_name, connection)
         if use_temp_tables?
@@ -195,18 +195,18 @@ module ETL #:nodoc:
           table_name
         end
       end
-      
+
       protected
-      # Hash of database connections that can be used throughout the ETL 
+      # Hash of database connections that can be used throughout the ETL
       # process
       def connections
         @connections ||= {}
       end
-      
+
       # Establish the named connection and return the database specific connection
       def establish_connection(name)
         raise ETL::ETLError, "Connection with no name requested. Is there a missing :target parameter somewhere?" if name.blank?
-        
+
         logger.debug "Establishing connection to #{name}"
         conn_config = ETL::Base.configurations[name.to_s]
         raise ETL::ETLError, "Cannot find connection named #{name.inspect}" unless conn_config
@@ -214,12 +214,12 @@ module ETL #:nodoc:
         ETL::Base.send(connection_method, conn_config)
       end
     end # class << self
-    
+
     # Say the specified message, with a newline
     def say(message)
       say_without_newline(message + "\n")
     end
-    
+
     # Say the specified message without a newline
     def say_without_newline(message)
       if ETL::Engine.realtime_activity
@@ -227,17 +227,17 @@ module ETL #:nodoc:
         $stdout.flush
       end
     end
-    
+
     # Say the message on its own line
     def say_on_own_line(message)
       say("\n" + message)
     end
-    
+
     # Array of errors encountered during execution of the ETL process
     def errors
       @errors ||= []
     end
-    
+
     # Get a Hash of benchmark values where each value represents the total
     # amount of time in seconds spent processing in that portion of the ETL
     # pipeline. Keys include:
@@ -253,8 +253,8 @@ module ETL #:nodoc:
         :writes => 0,
       }
     end
-  
-    # Process a file, control object or batch object. Acceptable values for 
+
+    # Process a file, control object or batch object. Acceptable values for
     # file are:
     # * Path to a file
     # * File object
@@ -277,49 +277,49 @@ module ETL #:nodoc:
         when ETL::Batch::Batch
           process_batch(file)
       else
-        raise RuntimeError, "Process object must be a String, File, Control 
+        raise RuntimeError, "Process object must be a String, File, Control
         instance or Batch instance"
       end
     end
-    
+
     protected
     # Process the specified batch file
     def process_batch(batch)
       batch = ETL::Batch::Batch.resolve(batch, self)
       say "Processing batch #{batch.file}"
-    
+
       ETL::Engine.batch = ETL::Execution::Batch.create!(
         :batch_file => batch.file,
         :status => 'executing'
       )
-      
+
       batch.execute
-      
+
       ETL::Engine.batch.completed_at = Time.now
       ETL::Engine.batch.status = (errors.length > 0 ? 'completed with errors' : 'completed')
       ETL::Engine.batch.save!
     end
-    
+
     # Process the specified control file
     def process_control(control)
       control = ETL::Control::Control.resolve(control)
       say_on_own_line "Processing control #{control.file}"
-      
+
       ETL::Engine.job = ETL::Execution::Job.create!(
-        :control_file => control.file, 
+        :control_file => control.file,
         :status => 'executing',
         :batch_id => ETL::Engine.batch ? ETL::Engine.batch.id : nil
       )
-      
+
       execute_dependencies(control)
-      
+
       start_time = Time.now
       pre_process(control)
       sources = control.sources
       destinations = control.destinations
-      
+
       say "Skipping bulk import" if Engine.skip_bulk_import
-      
+
       sources.each do |source|
         Engine.current_source = source
         Engine.logger.debug "Processing source #{source.inspect}"
@@ -327,23 +327,23 @@ module ETL #:nodoc:
         say "Limiting enabled: #{Engine.limit}" if Engine.limit != nil
         say "Offset enabled: #{Engine.offset}" if Engine.offset != nil
         source.each_with_index do |row, index|
-          # Break out of the row loop if the +Engine.limit+ is specified and 
+          # Break out of the row loop if the +Engine.limit+ is specified and
           # the number of rows read exceeds that value.
           if Engine.limit != nil && Engine.rows_read >= Engine.limit
             puts "Reached limit of #{Engine.limit}"
             break
           end
-          
+
           Engine.logger.debug "Row #{index}: #{row.inspect}"
           Engine.rows_read += 1
           Engine.current_source_row = index + 1
           say_without_newline "." if Engine.realtime_activity && index > 0 && index % 1000 == 0
-          
-          # At this point a single row may be turned into multiple rows via row 
-          # processors all code after this line should work with the array of 
+
+          # At this point a single row may be turned into multiple rows via row
+          # processors all code after this line should work with the array of
           # rows rather than the single row
           rows = [row]
-          
+
           t = Benchmark.realtime do
             begin
               Engine.logger.debug "Processing after read"
@@ -363,7 +363,7 @@ module ETL #:nodoc:
             end
           end
           benchmarks[:after_reads] += t unless t.nil?
-          
+
           t = Benchmark.realtime do
             begin
               Engine.logger.debug "Executing transforms"
@@ -393,7 +393,7 @@ module ETL #:nodoc:
             end
           end
           benchmarks[:transforms] += t unless t.nil?
-          
+
           t = Benchmark.realtime do
             begin
               # execute row-level "before write" processing
@@ -414,7 +414,7 @@ module ETL #:nodoc:
             end
           end
           benchmarks[:before_writes] += t unless t.nil?
-          
+
           t = Benchmark.realtime do
             begin
               # write the row to the destination
@@ -435,18 +435,18 @@ module ETL #:nodoc:
           end
           benchmarks[:writes] += t unless t.nil?
         end
-        
+
         if exceeded_error_threshold?(control)
           say_on_own_line "Exiting due to exceeding error threshold: #{control.error_threshold}"
           return
         end
-        
+
       end
-      
+
       destinations.each do |destination|
         destination.close
       end
-      
+
       say_on_own_line "Executing before post-process screens"
       begin
         execute_screens(control)
@@ -459,9 +459,9 @@ module ETL #:nodoc:
       else
         say "Screens passed"
       end
-      
+
       post_process(control)
-      
+
       if sources.length > 0
         say_on_own_line "Read #{Engine.rows_read} lines from sources"
       end
@@ -484,14 +484,14 @@ module ETL #:nodoc:
 
       say_on_own_line "Completed #{control.file} in #{distance_of_time_in_words(start_time)} with #{errors.length} errors."
       say "Processing average: #{Engine.average_rows_per_second} rows/sec)"
-      
+
       say "Avg after_reads: #{Engine.rows_read/benchmarks[:after_reads]} rows/sec" if benchmarks[:after_reads] > 0
       say "Avg before_writes: #{Engine.rows_read/benchmarks[:before_writes]} rows/sec" if benchmarks[:before_writes] > 0
       say "Avg transforms: #{Engine.rows_read/benchmarks[:transforms]} rows/sec" if benchmarks[:transforms] > 0
       say "Avg writes: #{Engine.rows_read/benchmarks[:writes]} rows/sec" if benchmarks[:writes] > 0
 
       # say "Avg time writing execution records: #{ETL::Execution::Record.average_time_spent}"
-      # 
+      #
       # ETL::Transform::Transform.benchmarks.each do |klass, t|
 #         say "Avg #{klass}: #{Engine.rows_read/t} rows/sec"
 #       end
@@ -501,18 +501,18 @@ module ETL #:nodoc:
       ETL::Engine.job.status = (errors.length > 0 ? 'completed with errors' : 'completed')
       ETL::Engine.job.save!
     end
-    
+
     def empty_row?(row)
       # unsure about why it should respond to :[] - keeping it just in case for the moment
       row.nil? || !row.respond_to?(:[])
     end
-    
+
     private
     # Return true if the error threshold is exceeded
     def exceeded_error_threshold?(control)
       errors.length > control.error_threshold
     end
-    
+
     # Execute all preprocessors
     def pre_process(control)
       Engine.logger.debug "Pre-processing #{control.file}"
@@ -521,7 +521,7 @@ module ETL #:nodoc:
       end
       Engine.logger.debug "Pre-processing complete"
     end
-    
+
     # Execute all postprocessors
     def post_process(control)
       say_on_own_line "Executing post processes"
@@ -532,7 +532,7 @@ module ETL #:nodoc:
       Engine.logger.debug "Post-processing complete"
       say "Post-processing complete"
     end
-    
+
     # Execute all dependencies
     def execute_dependencies(control)
       Engine.logger.debug "Executing dependencies"
@@ -552,7 +552,7 @@ module ETL #:nodoc:
         end
       end
     end
-    
+
     # Execute all screens
     def execute_screens(control, timing = :before_post_process)
       screens = case timing

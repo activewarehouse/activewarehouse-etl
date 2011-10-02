@@ -7,18 +7,18 @@ module ETL #:nodoc:
     class DatabaseDestination < Destination
       # The target connection
       attr_reader :target
-      
+
       # The table
       attr_reader :table
-      
+
       # Specify the order from the source
       attr_reader :order
-      
+
       # Set to true to truncate the destination table first
       attr_reader :truncate
-      
+
       # Initialize the database destination
-      # 
+      #
       # * <tt>control</tt>: The ETL::Control::Control instance
       # * <tt>configuration</tt>: The configuration Hash
       # * <tt>mapping</tt>: The mapping
@@ -46,7 +46,7 @@ module ETL #:nodoc:
         raise ControlError, "Table required" unless @table
         raise ControlError, "Target required" unless @target
       end
-      
+
       # Flush the currently buffered data
       def flush
         conn.transaction do
@@ -57,7 +57,7 @@ module ETL #:nodoc:
 
             # add any virtual fields
             add_virtuals!(row)
-            
+
             names = []
             values = []
             order.each do |name|
@@ -72,13 +72,13 @@ module ETL #:nodoc:
           buffer.clear
         end
       end
-      
+
       # Close the connection
       def close
         buffer << append_rows if append_rows
         flush
       end
-      
+
       private
       def conn
         @conn ||= begin
@@ -87,11 +87,11 @@ module ETL #:nodoc:
           conn
         end
       end
-      
+
       def table_name
         ETL::Engine.table(table, ETL::Engine.connection(target))
       end
-      
+
     end
   end
 end

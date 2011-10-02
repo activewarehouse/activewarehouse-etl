@@ -9,7 +9,7 @@ module ETL
         @fields = configuration[:fields]
         super
       end
-      
+
       def transform(name, value, row)
         return nil if row.nil?
         return nil if row[@fields[0]].nil?

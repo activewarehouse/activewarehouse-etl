@@ -11,7 +11,7 @@ module ETL
         @outfalse = configuration[:outfalse]
         super
       end
-      
+
       def process(row)
         return nil if row.nil?
 

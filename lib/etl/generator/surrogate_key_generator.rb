@@ -8,14 +8,14 @@ module ETL #:nodoc:
       attr_reader :target
       attr_reader :column
       attr_reader :query
-      
+
       # Initialize the generator
       def initialize(options={})
         @table = options[:table]
         @target = options[:target]
         @column = options[:column] || 'id'
         @query = options[:query]
-        
+
         if table
           @surrogate_key = ETL::Engine.connection(target).select_value("SELECT max(#{column}) FROM #{table_name}")
         elsif query
@@ -30,7 +30,7 @@ module ETL #:nodoc:
         @surrogate_key ||= 0
         @surrogate_key += 1
       end
-      
+
       def table_name
         ETL::Engine.table(table, ETL::Engine.connection(target))
       end

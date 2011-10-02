@@ -7,7 +7,7 @@ module ETL#:nodoc:
     # A simple transform has two arguments, the field to transform and the name of the transform:
     #
     #   transform :ssn, :sha1
-    # 
+    #
     # Transforms can also be blocks:
     #
     #   transform(:ssn){ |v| v[0,24] }
@@ -37,22 +37,22 @@ module ETL#:nodoc:
           end
           value
         end
-        
+
         def benchmarks
           @benchmarks ||= {}
         end
       end
-      
+
       attr_reader :control, :name, :configuration
-      
-      # Initialize the transform object with the given control object, field name and 
+
+      # Initialize the transform object with the given control object, field name and
       # configuration hash
       def initialize(control, name, configuration={})
         @control = control
         @name = name
         @configuration = configuration
       end
-      
+
       def transform(name, value, row)
         raise "transform is an abstract method"
       end

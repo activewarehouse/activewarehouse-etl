@@ -10,7 +10,7 @@ module ETL #:nodoc:
           ETL::Generator.const_get("#{name.to_s.camelize}Generator")
         end
       end
-      
+
       # Generate the next value. This method must be implemented by subclasses
       def next
         raise "Must be implemented by a subclass"

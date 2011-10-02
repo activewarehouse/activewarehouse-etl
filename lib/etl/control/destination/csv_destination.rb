@@ -6,27 +6,27 @@ module ETL #:nodoc:
     class CsvDestination < Destination
       # The File to write to
       attr_reader :file
-      
+
       # The output order
       attr_reader :order
-      
+
       # Flag which indicates to append (default is to overwrite)
       attr_accessor :append
-      
+
       # The separator
       attr_accessor :separator
-      
+
       # The end of line marker
       attr_accessor :eol
-      
+
       # The enclosure character
       attr_accessor :enclose
-      
+
       # Initialize the object.
       # * <tt>control</tt>: The Control object
       # * <tt>configuration</tt>: The configuration map
       # * <tt>mapping</tt>: The output mapping
-      # 
+      #
       # Configuration options:
       # * <tt>:file<tt>: The file to write to (REQUIRED)
       # * <tt>:append</tt>: Set to true to append to the file (default is to overwrite)
@@ -35,7 +35,7 @@ module ETL #:nodoc:
       # * <tt>:enclose</tt>: Set to true of false
       # * <tt>:unique</tt>: Set to true to only write unique records
       # * <tt>:append_rows</tt>: Array of rows to append
-      # 
+      #
       # Mapping options:
       # * <tt>:order</tt>: The order array
       def initialize(control, configuration, mapping={})
@@ -52,14 +52,14 @@ module ETL #:nodoc:
         @order.uniq! unless @order.nil?
         raise ControlError, "Order required in mapping" unless @order
       end
-      
+
       # Close the destination. This will flush the buffer and close the underlying stream or connection.
       def close
         buffer << append_rows if append_rows
         flush
         f.close
       end
-      
+
       # Flush the destination buffer
       def flush
         #puts "Flushing buffer (#{file}) with #{buffer.length} rows"
@@ -68,10 +68,10 @@ module ETL #:nodoc:
           # check to see if this row's compound key constraint already exists
           # note that the compound key constraint may not utilize virtual fields
           next unless row_allowed?(row)
-          
+
           # add any virtual fields
           add_virtuals!(row)
-          
+
           # collect all of the values using the order designated in the configuration
           values = order.collect do |name|
             value = row[name]
@@ -82,20 +82,20 @@ module ETL #:nodoc:
               value.to_s
             end
           end
-          
+
           f << values
         end
         f.flush
         buffer.clear
         #puts "After flush there are #{buffer.length} rows"
       end
-      
+
       private
       # Get the open file stream
       def f
         @f ||= FasterCSV.open(file, mode, options)
       end
-      
+
       def options
         @options ||= {
           :col_sep => separator,
@@ -103,7 +103,7 @@ module ETL #:nodoc:
           :force_quotes => enclose
         }
       end
-      
+
       # Get the appropriate mode to open the file stream
       def mode
         append ? 'a' : 'w'

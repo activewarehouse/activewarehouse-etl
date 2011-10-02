@@ -6,11 +6,11 @@ module ETL #:nodoc:
       attr_accessor :table
       attr_accessor :column
       attr_accessor :target
-      
+
       # Initialize the surrogate key generator
       #
       # Configuration options
-      # * <tt>:query</tt>: If specified it contains a query to be used to 
+      # * <tt>:query</tt>: If specified it contains a query to be used to
       #   locate the last surrogate key. If this is specified then :target
       #   must also be specified.
       # * <tt>:target</tt>: The target connection
@@ -32,7 +32,7 @@ module ETL #:nodoc:
         #puts "surrogate key: #{@surrogate_key}"
         @destination = configuration[:destination] || :id
       end
-      
+
       # Add a surrogate key to the row
       def process(row)
         if row
@@ -43,7 +43,7 @@ module ETL #:nodoc:
           row
         end
       end
-      
+
       private
       def table_name
         ETL::Engine.table(table, ETL::Engine.connection(target))

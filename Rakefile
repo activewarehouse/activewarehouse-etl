@@ -29,9 +29,9 @@ namespace :test do
     puts
     puts "============ Ruby #{rvm} - Rails #{rails} - Db #{database} ============="
     puts
-    
+
     rvm_script = File.expand_path("~/.rvm/scripts/rvm")
-    
+
     # a bit hackish - source rvm as described here
     # https://rvm.beginrescueend.com/workflow/scripting/
     sh <<-BASH

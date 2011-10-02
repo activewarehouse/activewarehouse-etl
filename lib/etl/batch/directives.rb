@@ -4,36 +4,36 @@ module ETL #:nodoc:
     class Directive
       # Method to access the batch object
       attr_reader :batch
-      
+
       # Initialize the directive with the given batch object
       def initialize(batch)
         @batch = batch
       end
-      
+
       # Execute the directive
       def execute
         do_execute
       end
-      
+
       protected
       # Implemented by subclasses
       def do_execute
         raise RuntimeError, "Directive must implement do_execute method"
       end
     end
-    
-    # Directive indicating that the specified ETL control file should be 
+
+    # Directive indicating that the specified ETL control file should be
     # run
     class Run < Directive
       # The file to execute
       attr_reader :file
-      
+
       # Initialize the directive with the given batch object and file
       def initialize(batch, file)
         super(batch)
         @file = file
       end
-      
+
       protected
       # Execute the process
       def do_execute
@@ -50,7 +50,7 @@ module ETL #:nodoc:
         ETL::Engine.batch = current_batch
       end
     end
-    
+
     # Directive indicating temp tables should be used.
     class UseTempTables < Directive
       def initialize(batch)
@@ -60,6 +60,6 @@ module ETL #:nodoc:
       def do_execute
         ETL::Engine.use_temp_tables = true
       end
-    end 
+    end
   end
 end

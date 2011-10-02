@@ -4,7 +4,7 @@ module ETL #:nodoc:
     # underlying database driver from ActiveRecord must support the methods
     # +bulk_load+ method.
     class BulkImportProcessor < ETL::Processor::Processor
-      
+
       # The file to load from
       attr_reader :file
       # The target database
@@ -27,7 +27,7 @@ module ETL #:nodoc:
       attr_accessor :disable_keys
       # replace existing records, not just insert
       attr_accessor :replace
-       
+
       # Initialize the processor.
       #
       # Configuration options:
@@ -56,25 +56,25 @@ module ETL #:nodoc:
         @field_enclosure = configuration[:field_enclosure]
         @disable_keys = configuration[:disable_keys] || false
         @replace = configuration[:replace] || false
-        
+
         raise ControlError, "Target must be specified" unless @target
         raise ControlError, "Table must be specified" unless @table
       end
-      
+
       # Execute the processor
       def process
         return if ETL::Engine.skip_bulk_import
         return if File.size(file) == 0
-        
+
         conn = ETL::Engine.connection(target)
         conn.transaction do
           conn.truncate(table_name) if truncate
           options = {}
           options[:columns] = columns
-          
+
           options[:disable_keys] = true if disable_keys
           options[:replace] = true if replace
-          
+
           if field_separator || field_enclosure || line_separator || null_string
             options[:fields] = {}
             options[:fields][:null_string] = null_string if null_string
@@ -85,7 +85,7 @@ module ETL #:nodoc:
           conn.bulk_load(file, table_name, options)
         end
       end
-      
+
       def table_name
         ETL::Engine.table(table, ETL::Engine.connection(target))
       end

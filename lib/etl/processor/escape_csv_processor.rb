@@ -3,7 +3,7 @@ require 'fileutils'
 module ETL #:nodoc:
   module Processor #:nodoc:
     class EscapeCsvProcessor < ETL::Processor::Processor
-      
+
       # The file to load from
       attr_reader :source_file
       # The file to write to
@@ -37,7 +37,7 @@ module ETL #:nodoc:
         raise ControlError, "Target file must be specified" if @target_file.nil?
         raise ControlError, "Source and target file cannot currently point to the same file" if @source_file == @target_file
       end
-      
+
       # Execute the processor
       def process
         reader = File.open(@source_file, 'r')

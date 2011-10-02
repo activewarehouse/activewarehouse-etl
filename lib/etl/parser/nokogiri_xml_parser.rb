@@ -12,7 +12,7 @@ module ETL
         super
         configure
       end
-      
+
       # Returns each row
       def each
         Dir.glob(file).each do |source|
@@ -31,7 +31,7 @@ module ETL
           else
             doc = Nokogiri::XML(open(source))
           end
-          
+
           doc.xpath(@collection_xpath).each do |nodeset|
             row = {}
 
@@ -44,12 +44,12 @@ module ETL
 
         end
       end
-      
+
       # Get an array of defined fields
       def fields
         @fields ||= []
       end
-      
+
       private
       def configure
         @collection_xpath = source.definition[:collection]
@@ -64,13 +64,13 @@ module ETL
             options[:xpath] ||= options[:name]
             fields << Field.new(options[:name], options[:xpath].to_s)
           else
-            raise DefinitionError, 
+            raise DefinitionError,
               "Each field definition must either be an symbol " +
               "or a hash of options for the field"
           end
         end
       end
-      
+
       class Field
         attr_reader :name, :xpath
         def initialize(name, xpath)

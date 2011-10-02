@@ -4,40 +4,40 @@ module ETL #:nodoc:
     class FileSource < Source
       # The number of lines to skip, default is 0
       attr_accessor :skip_lines
-      
+
       # Accessor for the underlying parser
       attr_accessor :parser
-      
+
       # The source file
       attr_accessor :file
-      
+
       # Initialize the source
       #
       # Configuration options:
       # * <tt>:file</tt>: The source file
       # * <tt>:parser</tt>: One of the following: a parser name as a String or
-      #   symbol, a class which extends from Parser, a Hash with :name and 
-      #   optionally an :options key. Whether or not the parser uses the 
-      #   options is dependent on which parser is used. See the documentation 
+      #   symbol, a class which extends from Parser, a Hash with :name and
+      #   optionally an :options key. Whether or not the parser uses the
+      #   options is dependent on which parser is used. See the documentation
       #   for each parser for information on what options it accepts.
       # * <tt>:skip_lines</tt>: The number of lines to skip (defaults to 0)
-      # * <tt>:store_locally</tt>: Set to false to not store a copy of the 
+      # * <tt>:store_locally</tt>: Set to false to not store a copy of the
       #   source data locally for archival
       def initialize(control, configuration, definition)
         super
         configure
       end
-      
+
       # Get a String identifier for the source
       def to_s
         file
       end
-      
+
       # Get the local storage directory
       def local_directory
         File.join(local_base, File.basename(file, File.extname(file)))
       end
-      
+
       # Returns each row from the source
       def each
         count = 0
@@ -52,7 +52,7 @@ module ETL #:nodoc:
           end
         end
       end
-      
+
       private
       # Copy source data to a local directory structure
       def copy_sources
@@ -67,7 +67,7 @@ module ETL #:nodoc:
           sequence += 1
         end
       end
-      
+
       # Configure the source
       def configure
         @file = configuration[:file]

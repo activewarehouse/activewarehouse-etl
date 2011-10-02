@@ -5,10 +5,10 @@ module ETL #:nodoc:
     class TruncateProcessor < ETL::Processor::Processor
       # Defines the table to truncate
       attr_reader :table
-      
+
       # Defines the database connection to use
       attr_reader :target
-      
+
       # Initialize the processor
       #
       # Options:
@@ -20,9 +20,9 @@ module ETL #:nodoc:
         #@file = File.join(File.dirname(control.file), configuration[:file])
         @target = configuration[:target] || {}
         @table = configuration[:table]
-        @options = configuration[:options] 
+        @options = configuration[:options]
       end
-      
+
       def process
         conn = ETL::Engine.connection(target)
         if conn.is_a?(ActiveRecord::ConnectionAdapters::PostgreSQLAdapter)
@@ -30,7 +30,7 @@ module ETL #:nodoc:
         end
         conn.truncate(table_name, @options)
       end
-      
+
       private
       def table_name
         ETL::Engine.table(table, ETL::Engine.connection(target))

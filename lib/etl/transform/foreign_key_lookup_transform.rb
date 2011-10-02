@@ -4,10 +4,10 @@ module ETL #:nodoc:
     class ForeignKeyLookupTransform < ETL::Transform::Transform
       # The resolver to use if the foreign key is not found in the collection
       attr_accessor :resolver
-      
+
       # The default foreign key to use if none is found.
       attr_accessor :default
-      
+
       # Initialize the foreign key lookup transform.
       #
       # Configuration options:
@@ -19,14 +19,14 @@ module ETL #:nodoc:
       # *<tt>:cache</tt>: If true and the resolver responds to load_cache, load_cache will be called
       def initialize(control, name, configuration={})
         super
-        
+
         @collection = (configuration[:collection] || {})
         @resolver = configuration[:resolver]
         @resolver = @resolver.new if @resolver.is_a?(Class)
         @default = configuration[:default]
-        
+
         configuration[:cache] = true if configuration[:cache].nil?
-        
+
         if configuration[:cache]
           if resolver.respond_to?(:load_cache)
             resolver.load_cache
@@ -35,7 +35,7 @@ module ETL #:nodoc:
           end
         end
       end
-      
+
       # Transform the value by resolving it to a foriegn key
       def transform(name, value, row)
         fk = @collection[value]
@@ -59,14 +59,14 @@ end
 class ActiveRecordResolver
   # The ActiveRecord class to use
   attr_accessor :ar_class
-  
+
   # The find method to use (as a symbol)
   attr_accessor :find_method
-  
-  # Initialize the resolver. The ar_class argument should extend from 
-  # ActiveRecord::Base. The find_method argument must be a symbol for the 
+
+  # Initialize the resolver. The ar_class argument should extend from
+  # ActiveRecord::Base. The find_method argument must be a symbol for the
   # finder method used. For example:
-  # 
+  #
   # ActiveRecordResolver.new(Person, :find_by_name)
   #
   # Note that the find method defined must only take a single argument.
@@ -74,7 +74,7 @@ class ActiveRecordResolver
     @ar_class = ar_class
     @find_method = find_method
   end
-  
+
   # Resolve the value
   def resolve(value)
     rec = ar_class.__send__(find_method, value)
@@ -98,7 +98,7 @@ class SQLResolver
     @connection = (connection.respond_to?(:quote) ? connection : ETL::Engine.connection(connection)) if connection
     @connection ||= ActiveRecord::Base.connection
   end
-  
+
   def resolve(value)
     return nil if value.nil?
     r = nil
@@ -112,15 +112,15 @@ class SQLResolver
     end
     r
   end
-  
+
   def table_name
     ETL::Engine.table(@table, @connection)
   end
-  
+
   def cache
     @cache ||= {}
   end
-  
+
   def load_cache
     q = "SELECT id, #{field.join(', ')} FROM #{table_name}"
     # puts q
@@ -157,7 +157,7 @@ class IncrementalCacheSQLResolver < SQLResolver
   def initialize(atable, afield, connection=nil)
     super
   end
-  
+
   def resolve(value)
     return nil if value.nil?
     r = cache[value]
@@ -178,7 +178,7 @@ class IncrementalCacheSQLResolver < SQLResolver
 end
 
 class FlatFileResolver
-  # Initialize the flat file resolver. Expects to open a comma-delimited file. 
+  # Initialize the flat file resolver. Expects to open a comma-delimited file.
   # Returns the column with the given result_field_index.
   #
   # The matches argument is a Hash with the key as the column index to search and
@@ -189,14 +189,14 @@ class FlatFileResolver
     @match_index = match_index
     @result_field_index = result_field_index
   end
-  
+
   # Get the rows from the file specified in the initializer.
   def rows
     @rows ||= CSV.read(@file)
   end
   protected :rows
-  
-  # Match the row field from the column indicated by the match_index with the given 
+
+  # Match the row field from the column indicated by the match_index with the given
   # value and return the field value from the column identified by the result_field_index.
   def resolve(value)
     rows.each do |row|

@@ -3,7 +3,7 @@ module ETL #:nodoc:
     # Transform from one type to another
     class TypeTransform < ETL::Transform::Transform
       # Initialize the transformer.
-      # 
+      #
       # Configuration options:
       # * <tt>:type</tt>: The type to convert to. Supported types:
       # ** :string
