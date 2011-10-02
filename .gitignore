@@ -11,3 +11,4 @@ Gemfile.lock
 doc
 .yardoc
 *.tmproj
+*.sqlite3
