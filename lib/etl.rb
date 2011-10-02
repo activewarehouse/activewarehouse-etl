@@ -1,7 +1,3 @@
-# This source file requires all of the necessary gems and source files for ActiveWarehouse ETL. If you
-# load this source file all of the other required files and gems will also be brought into the 
-# runtime.
-
 #--
 # Copyright (c) 2006-2007 Anthony Eden
 #
@@ -29,13 +25,9 @@ require 'logger'
 require 'yaml'
 require 'erb'
 
-require 'rubygems'
-
 unless defined?(REXML::VERSION)
   require 'rexml/rexml'
-  unless defined?(REXML::VERSION)
-    REXML::VERSION = REXML::Version
-  end
+  REXML::VERSION ||= REXML::Version
 end
 
 require 'active_support'
@@ -48,19 +40,6 @@ if RUBY_VERSION < '1.9'
 else
   require 'csv'
 end
-
-# patch for https://github.com/activewarehouse/activewarehouse-etl/issues/24
-# allow components to require optional gems
-class Object
-  def optional_require(feature)
-    begin
-      require feature
-    rescue LoadError
-    end
-  end
-end
-
-$:.unshift(File.dirname(__FILE__))
 
 require 'etl/core_ext'
 require 'etl/util'
@@ -77,21 +56,13 @@ require 'etl/processor'
 require 'etl/generator'
 require 'etl/screen'
 
-module ETL #:nodoc:
-  class ETLError < StandardError #:nodoc:
-  end
-  class ControlError < ETLError #:nodoc:
-  end
-  class DefinitionError < ControlError #:nodoc:
-  end
-  class ConfigurationError < ControlError #:nodoc:
-  end
-  class MismatchError < ETLError #:nodoc:
-  end
-  class ResolverError < ETLError #:nodoc:
-  end
-  class ScreenError < ETLError #:nodoc:
-  end
-  class FatalScreenError < ScreenError #:nodoc:
-  end
+module ETL
+  class ETLError            < StandardError end
+  class ControlError        < ETLError      end
+  class DefinitionError     < ControlError  end
+  class ConfigurationError  < ControlError  end
+  class MismatchError       < ETLError      end
+  class ResolverError       < ETLError      end
+  class ScreenError         < ETLError      end
+  class FatalScreenError    < ScreenError   end
 end
