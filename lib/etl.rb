@@ -34,14 +34,8 @@ require 'active_support'
 require 'active_record'
 require 'adapter_extensions'
 
-if RUBY_VERSION < '1.9'
-  require 'faster_csv'
-  CSV = FasterCSV unless defined?(CSV)
-else
-  require 'csv'
-end
-
 require 'etl/core_ext'
+require 'etl/csv'
 require 'etl/util'
 require 'etl/http_tools'
 require 'etl/builder'
