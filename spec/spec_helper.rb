@@ -1,6 +1,6 @@
 require 'bundler/setup'
 
-Bundler.require :default, :test
+Bundler.require :default, :development, :test
 
 Dir[ Bundler.root.join("spec/support/**/*.rb") ].each{|f| require f}
 
