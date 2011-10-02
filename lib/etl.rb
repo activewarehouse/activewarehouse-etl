@@ -24,11 +24,9 @@
 require 'logger'
 require 'yaml'
 require 'erb'
+require 'rexml/rexml'
 
-unless defined?(REXML::VERSION)
-  require 'rexml/rexml'
-  REXML::VERSION ||= REXML::Version
-end
+REXML::VERSION ||= REXML::Version
 
 require 'active_support'
 require 'active_record'
