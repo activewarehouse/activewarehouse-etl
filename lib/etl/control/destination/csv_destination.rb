@@ -48,10 +48,13 @@ module ETL #:nodoc:
         @enclose = true & configuration[:enclose]
         @unique = configuration[:unique] ? configuration[:unique] + scd_required_fields : configuration[:unique]
         @unique.uniq! unless @unique.nil?
-        @order = mapping[:order] ? mapping[:order] + scd_required_fields : order_from_source
         @write_header = configuration[:write_header]
+        @order = mapping[:order] + scd_required_fields if mapping[:order]
         @order.uniq! unless @order.nil?
-        raise ControlError, "Order required in mapping" unless @order
+      end
+
+      def order
+        @order ||= order_from_source
       end
       
       # Close the destination. This will flush the buffer and close the underlying stream or connection.
