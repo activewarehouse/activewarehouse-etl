@@ -3,27 +3,30 @@ require 'bundler'
 module CustomFixtures
   attr_reader :fixtures
 
+  Hash_of_Hashes = Hash.new { |k,v| k[v] = {} }
+
   # @param [#to_sym]
   # @return [String]
   def fixture_for(name)
-    file_fixtures[name][:fixture]
+    file_fixtures[name][:fixture] || file_fixtures![name][:fixture]
   end
   alias :fixture :fixture_for
 
   # @param [#to_sym]
   # @return [String]
   def path_for(name)
-    file_fixtures[name][:path]
+    file_fixtures[name][:path] || file_fixtures![name][:path]
   end
   alias :path         :path_for
   alias :fixture_path :path_for
 
   # @see ConfigFixtures#create_fixture_hash
   def file_fixtures
-    @file_fixtures ||= begin
-      hash = Hash.new {|k,v| k[v] = {}}
-      hash.merge!(create_fixture_hash)
-    end
+    @file_fixtures ||= file_fixtures!
+  end
+
+  def file_fixtures!
+    @file_fixtures = Hash_of_Hashes.merge create_fixture_hash
   end
 
   # @return [Hash{Symbol => String}]
@@ -39,10 +42,8 @@ module CustomFixtures
 
   # @return [Array<String>]
   def find_fixtures
-    @find_fixtures ||= begin
-      files = Dir[ fixture_root.join('**/*') ]
+    Dir[ fixture_root.join('**/*') ].tap do |files|
       files.reject! { |fi| File.directory?(fi) }
-      files
     end
   end
 
