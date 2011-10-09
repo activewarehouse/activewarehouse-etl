@@ -1,5 +1,6 @@
 module ETL #:nodoc:
-  module Batch #:nodoc:
+  class Batch #:nodoc:
+
     # Abstract base class for directives
     class Directive
       # Method to access the batch object
@@ -61,5 +62,6 @@ module ETL #:nodoc:
         ETL::Engine.use_temp_tables = true
       end
     end
+
   end
 end
