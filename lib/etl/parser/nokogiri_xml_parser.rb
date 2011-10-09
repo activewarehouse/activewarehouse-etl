@@ -1,6 +1,6 @@
-optional_require 'nokogiri'
+require 'nokogiri'
 require 'open-uri'
-optional_require 'zlib'
+require 'zlib'
 
 module ETL
   class Parser
