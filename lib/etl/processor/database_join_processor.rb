@@ -8,7 +8,7 @@ module ETL
       # Initialize the procesor.
       #
       # Arguments:
-      # * <tt>control</tt>: The ETL::Control::Control instance
+      # * <tt>control</tt>: The ETL::Control instance
       # * <tt>configuration</tt>: The configuration Hash
       # * <tt>definition</tt>: The source definition
       #

@@ -8,11 +8,11 @@ module ETL #:nodoc:
     attr_accessor :engine
 
     class << self
-      # Resolve the given object to an ETL::Control::Control instance. Acceptable arguments
+      # Resolve the given object to an ETL::Control instance. Acceptable arguments
       # are:
       # * The path to a control file as a String
       # * A File object referencing the control file
-      # * The ETL::Control::Control object (which will just be returned)
+      # * The ETL::Control object (which will just be returned)
       #
       # Raises a ControlError if any other type is given
       def resolve(batch, engine)

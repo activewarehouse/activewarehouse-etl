@@ -5,20 +5,20 @@ class ControlTest < Test::Unit::TestCase
   def test_parse
     assert_nothing_raised do
       Dir.glob(File.join(File.dirname(__FILE__), '*.ctl')) do |f|
-        ETL::Control::Control.parse(f)
+        ETL::Control.parse(f)
       end
     end
   end
   
   def test_bad_control_raises_error
     assert_raise ETL::ControlError do
-      ETL::Control::Control.resolve(0)
+      ETL::Control.resolve(0)
     end
   end
   
   def test_resolve_control_object
     assert_nothing_raised do
-      ETL::Control::Control.resolve(ETL::Control::Control.parse(File.join(File.dirname(__FILE__), 'delimited.ctl')))
+      ETL::Control.resolve(ETL::Control.parse(File.join(File.dirname(__FILE__), 'delimited.ctl')))
     end
   end
   
@@ -31,13 +31,13 @@ class ControlTest < Test::Unit::TestCase
   def test_bad_processor_name
     assert_raise ETL::ControlError do
       s = "before_write :chunky_monkey"
-      ETL::Control::Control.parse_text(s)
+      ETL::Control.parse_text(s)
     end
   end
   
   def test_dependencies
     s = "depends_on 'foo', 'bar'"
-    control = ETL::Control::Control.parse_text(s)
+    control = ETL::Control.parse_text(s)
     assert_equal control.dependencies, ['foo','bar']
   end
 end

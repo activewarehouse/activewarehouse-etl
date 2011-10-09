@@ -4,7 +4,7 @@ require File.dirname(__FILE__) + '/test_helper'
 class ParserTest < Test::Unit::TestCase
   # Test parsing delimited data
   def test_csv_parser
-    control = ETL::Control::Control.resolve(File.dirname(__FILE__) + '/delimited.ctl')
+    control = ETL::Control.resolve(File.dirname(__FILE__) + '/delimited.ctl')
     parser = ETL::Parser::CsvParser.new(control.sources.first)
     rows = parser.collect { |row| row }
     assert_equal 3, rows.length
@@ -13,7 +13,7 @@ class ParserTest < Test::Unit::TestCase
   
   # Test parsing fixed-width data
   def test_fixed_width_parser
-    control = ETL::Control::Control.resolve(File.dirname(__FILE__) + '/fixed_width.ctl')
+    control = ETL::Control.resolve(File.dirname(__FILE__) + '/fixed_width.ctl')
     parser = ETL::Parser::FixedWidthParser.new(control.sources.first)
     rows = parser.collect { |row| row }
     assert_equal 3, rows.length
@@ -23,7 +23,7 @@ class ParserTest < Test::Unit::TestCase
   # Test the DOM-based XML parser. Note that the DOM parser is slow and should
   # probably be removed.
   def test_xml_parser
-    control = ETL::Control::Control.resolve(File.dirname(__FILE__) + '/xml.ctl')
+    control = ETL::Control.resolve(File.dirname(__FILE__) + '/xml.ctl')
     parser = ETL::Parser::XmlParser.new(control.sources.first)
     rows = parser.collect { |row| row }
     assert_equal 2, rows.length
@@ -39,7 +39,7 @@ class ParserTest < Test::Unit::TestCase
   
   # Test the SAX parser (preferred for XML parsing)
   def test_sax_parser
-    control = ETL::Control::Control.resolve(File.dirname(__FILE__) + '/sax.ctl')
+    control = ETL::Control.resolve(File.dirname(__FILE__) + '/sax.ctl')
     parser = control.sources.first.parser
     rows = parser.collect { |row| row }
     assert_equal 2, rows.length
@@ -48,7 +48,7 @@ class ParserTest < Test::Unit::TestCase
 
   # Test the Excel parser
   def test_excel_parser
-    control = ETL::Control::Control.resolve(File.dirname(__FILE__) + '/excel.ctl')
+    control = ETL::Control.resolve(File.dirname(__FILE__) + '/excel.ctl')
     parser = control.sources.first.parser
     rows = parser.collect { |row| row }
     assert_equal 2, rows.length
@@ -57,7 +57,7 @@ class ParserTest < Test::Unit::TestCase
   
   # Test 2 the Excel parser
   def test_excel2_parser
-    control = ETL::Control::Control.resolve(File.dirname(__FILE__) + '/excel2.ctl')
+    control = ETL::Control.resolve(File.dirname(__FILE__) + '/excel2.ctl')
     parser = control.sources.first.parser
     rows = parser.collect { |row| row }
     assert_equal 2, rows.length
@@ -66,7 +66,7 @@ class ParserTest < Test::Unit::TestCase
   
   # Test the Apache combined log format parser
   def test_apache_combined_log_parser
-    control = ETL::Control::Control.resolve(File.dirname(__FILE__) + '/apache_combined_log.ctl')
+    control = ETL::Control.resolve(File.dirname(__FILE__) + '/apache_combined_log.ctl')
     parser = ETL::Parser::ApacheCombinedLogParser.new(control.sources.first)
     # first test the parse method
     line = %Q(127.0.0.1 - frank [10/Oct/2000:13:55:36 -0700] "GET /apache_pb.gif HTTP/1.0" 200 2326 "http://www.example.com/start.html" "Mozilla/4.08 [en] (Win98; I ;Nav)")
@@ -166,7 +166,7 @@ class ParserTest < Test::Unit::TestCase
     AGENTS
     agents = agents.split("\n").collect { |s| s.strip }
 
-    control = ETL::Control::Control.resolve(File.dirname(__FILE__) + '/apache_combined_log.ctl')
+    control = ETL::Control.resolve(File.dirname(__FILE__) + '/apache_combined_log.ctl')
     parser = ETL::Parser::ApacheCombinedLogParser.new(control.sources.first)
     rows = parser.collect { |row| row }
     

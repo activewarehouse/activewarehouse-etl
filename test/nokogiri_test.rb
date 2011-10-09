@@ -5,7 +5,7 @@ class ParserTest < Test::Unit::TestCase
 
   # Test the DOM-based Nokogiri XML parser. .
   def test_nokogiri_xml_parser_for_all_nodes
-    control = ETL::Control::Control.resolve(
+    control = ETL::Control.resolve(
       File.dirname(__FILE__) + '/nokogiri_all.ctl')
     parser = ETL::Parser::NokogiriXmlParser.new(control.sources.first)
     rows = parser.collect { |row| row }
@@ -19,7 +19,7 @@ class ParserTest < Test::Unit::TestCase
 
   # Test the DOM-based Nokogiri XML parser. .
   def test_nokogiri_xml_parser_for_selected_nodes
-    control = ETL::Control::Control.resolve(
+    control = ETL::Control.resolve(
       File.dirname(__FILE__) + '/nokogiri_select.ctl')
     parser = ETL::Parser::NokogiriXmlParser.new(control.sources.first)
     rows = parser.collect { |row| row }

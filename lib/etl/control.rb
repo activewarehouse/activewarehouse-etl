@@ -15,7 +15,7 @@ module ETL #:nodoc:
       # Parse a control file and return a Control instance
       def parse(control_file)
         control_file = control_file.path if control_file.instance_of?(File)
-        control = ETL::Control::Control.new(control_file)
+        control = ETL::Control.new(control_file)
         # TODO: better handling of parser errors. Return the line in the control file where the error occurs.
         eval(IO.readlines(control_file).join("\n"), Context.create(control), control_file)
         control.validate
@@ -23,26 +23,26 @@ module ETL #:nodoc:
       end
 
       def parse_text(text)
-        control = ETL::Control::Control.new('no-file')
+        control = ETL::Control.new('no-file')
         eval(text, Context.create(control), 'inline')
         control.validate
         control
       end
 
-      # Resolve the given object to an ETL::Control::Control instance. Acceptable arguments
+      # Resolve the given object to an ETL::Control instance. Acceptable arguments
       # are:
       # * The path to a control file as a String
       # * A File object referencing the control file
-      # * The ETL::Control::Control object (which will just be returned)
+      # * The ETL::Control object (which will just be returned)
       #
       # Raises a ControlError if any other type is given
       def resolve(control)
         case control
         when String
-          ETL::Control::Control.parse(File.new(control))
+          ETL::Control.parse(File.new(control))
         when File
-          ETL::Control::Control.parse(control)
-        when ETL::Control::Control
+          ETL::Control.parse(control)
+        when ETL::Control
           control
         else
           raise ControlError, "Control must be a String, File or Control object"

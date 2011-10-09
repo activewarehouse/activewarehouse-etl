@@ -2,7 +2,7 @@ module ETL #:nodoc:
   class Control #:nodoc:
     # Base class for destinations.
     class Destination
-      # Read-only accessor for the ETL::Control::Control instance
+      # Read-only accessor for the ETL::Control instance
       attr_reader :control
 
       # Read-only accessor for the configuration Hash
@@ -36,7 +36,7 @@ module ETL #:nodoc:
       # Initialize the destination
       #
       # Arguments:
-      # * <tt>control</tt>: The ETL::Control::Control instance
+      # * <tt>control</tt>: The ETL::Control instance
       # * <tt>configuration</tt>: The configuration Hash
       # * <tt>mapping</tt>: The mapping Hash
       #

@@ -25,7 +25,7 @@ class EngineTest < Test::Unit::TestCase
 
       assert_equal 0, engine.errors.size
       
-      engine.process ETL::Control::Control.parse_text <<CTL
+      engine.process ETL::Control.parse_text <<CTL
         set_error_threshold 1
         source :in, { :type => :enumerable, :enumerable => (1..100) }
         after_read { |row| raise "Failure" }

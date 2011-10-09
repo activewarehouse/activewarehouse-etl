@@ -21,7 +21,7 @@ class SourceTest < Test::Unit::TestCase
   context "a file source" do
     context "with delimited data" do
       setup do
-        control = ETL::Control::Control.parse(File.dirname(__FILE__) + '/delimited.ctl')
+        control = ETL::Control.parse(File.dirname(__FILE__) + '/delimited.ctl')
         configuration = {
           :file => 'data/delimited.txt',
           :parser => :csv
@@ -39,7 +39,7 @@ class SourceTest < Test::Unit::TestCase
   
   context "a file source with a glob" do
     setup do
-      control = ETL::Control::Control.parse(File.dirname(__FILE__) + '/multiple_delimited.ctl')
+      control = ETL::Control.parse(File.dirname(__FILE__) + '/multiple_delimited.ctl')
       configuration = {
         :file => 'data/multiple_delimited_*.txt',
         :parser => :csv
@@ -57,7 +57,7 @@ class SourceTest < Test::Unit::TestCase
     setup do
       FileUtils.cp(File.dirname(__FILE__) + '/data/delimited.txt', '/tmp/delimited_abs.txt')
 
-      control = ETL::Control::Control.parse(File.dirname(__FILE__) + 
+      control = ETL::Control.parse(File.dirname(__FILE__) + 
         '/delimited_absolute.ctl')
       configuration = {
         :file => '/tmp/delimited_abs.txt',
@@ -75,7 +75,7 @@ class SourceTest < Test::Unit::TestCase
   
   context "multiple sources" do
     setup do
-      control = ETL::Control::Control.parse(File.dirname(__FILE__) + 
+      control = ETL::Control.parse(File.dirname(__FILE__) + 
         '/multiple_source_delimited.ctl')
       @rows = control.sources.collect { |source| source.collect { |row| row }}.flatten!
     end
@@ -86,7 +86,7 @@ class SourceTest < Test::Unit::TestCase
   
   context "a database source" do
     setup do
-      control = ETL::Control::Control.parse(File.dirname(__FILE__) + '/delimited.ctl')
+      control = ETL::Control.parse(File.dirname(__FILE__) + '/delimited.ctl')
       configuration = {
         :database => 'etl_unittest',
         :target => :operational_database,
@@ -114,7 +114,7 @@ class SourceTest < Test::Unit::TestCase
   
   context "a file source with an xml parser" do
     setup do
-      control = ETL::Control::Control.parse(File.dirname(__FILE__) + 
+      control = ETL::Control.parse(File.dirname(__FILE__) + 
         '/xml.ctl')
       @rows = control.sources.collect{ |source| source.collect { |row| row }}.flatten!
     end
@@ -125,7 +125,7 @@ class SourceTest < Test::Unit::TestCase
 
   context "a model source" do
     setup do
-      control = ETL::Control::Control.parse(File.dirname(__FILE__) + '/model_source.ctl')
+      control = ETL::Control.parse(File.dirname(__FILE__) + '/model_source.ctl')
       configuration = {
 
       }

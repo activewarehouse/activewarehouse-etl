@@ -21,7 +21,7 @@ class DestinationTest < Test::Unit::TestCase
       :state => 'Florida', :country => 'United States' ]
     row_needs_escape = ETL::Row[ :address => "Allen's Way", 
       :city => 'Some City', :state => 'Some State', :country => 'Mexico' ]
-    control = ETL::Control::Control.parse(File.dirname(__FILE__) + 
+    control = ETL::Control.parse(File.dirname(__FILE__) + 
       '/delimited.ctl')
 
     # First define a basic configuration to check defaults
@@ -69,7 +69,7 @@ class DestinationTest < Test::Unit::TestCase
   def test_database_destination
     row = ETL::Row[:id => 1, :first_name => 'Bob', :last_name => 'Smith', :ssn => '111234444']
     row_needs_escape = ETL::Row[:id => 2, :first_name => "Foo's", :last_name => "Bar", :ssn => '000000000' ]
-    control = ETL::Control::Control.parse(File.dirname(__FILE__) + 
+    control = ETL::Control.parse(File.dirname(__FILE__) + 
       '/delimited.ctl')
     
     Person.delete_all
@@ -92,7 +92,7 @@ class DestinationTest < Test::Unit::TestCase
   
   def test_database_destination_with_control
     row = ETL::Row[:id => 1, :first_name => 'Bob', :last_name => 'Smith', :ssn => '111234444']
-    control = ETL::Control::Control.parse(File.dirname(__FILE__) + 
+    control = ETL::Control.parse(File.dirname(__FILE__) + 
       '/delimited_destination_db.ctl')
     Person.delete_all
     assert_equal 0, Person.count
@@ -109,7 +109,7 @@ class DestinationTest < Test::Unit::TestCase
     row3 = ETL::Row[:id => 3, :first_name => 'John', :last_name => 'Smith', :ssn => '000112222']
          
     outfile = 'output/test_unique.txt'
-    control = ETL::Control::Control.parse(File.dirname(__FILE__) + '/delimited.ctl')
+    control = ETL::Control.parse(File.dirname(__FILE__) + '/delimited.ctl')
 
     # First define a basic configuration to check defaults
     configuration = { :file => outfile, :buffer_size => 0, :unique => [:ssn]}
@@ -136,7 +136,7 @@ class DestinationTest < Test::Unit::TestCase
     row3 = ETL::Row[:id => 3, :first_name => 'Bob', :last_name => 'Smith', :ssn => '000112222']
     
     outfile = 'output/test_multiple_unique.txt'
-    control = ETL::Control::Control.parse(File.dirname(__FILE__) + '/delimited.ctl')
+    control = ETL::Control.parse(File.dirname(__FILE__) + '/delimited.ctl')
 
     # First define a basic configuration to check defaults
     configuration = { :file => outfile, :buffer_size => 0, :unique => [:last_name,:first_name]}
@@ -158,7 +158,7 @@ class DestinationTest < Test::Unit::TestCase
   end
 
   def test_bad_destination
-    control = ETL::Control::Control.parse_text('')
+    control = ETL::Control.parse_text('')
     configuration = {}
     mapping = {}
     dest = BadDestination.new(control, configuration, mapping)
@@ -175,7 +175,7 @@ class DestinationTest < Test::Unit::TestCase
     outfile = 'output/test_excel_destination.xls'
     row = ETL::Row[ :address => '123 SW 1st Street', :city => 'Melbourne', 
       :state => 'Florida', :country => 'United States' ]
-    control = ETL::Control::Control.parse(File.dirname(__FILE__) + 
+    control = ETL::Control.parse(File.dirname(__FILE__) + 
       '/delimited_excel.ctl')
 
     # First define a basic configuration to check defaults
@@ -213,7 +213,7 @@ class DestinationTest < Test::Unit::TestCase
   # Test a update database destination
   def test_update_database_destination
     row = ETL::Row[:id => 1, :first_name => 'Bob', :last_name => 'Smith', :ssn => '111234444']
-    control = ETL::Control::Control.parse(File.dirname(__FILE__) + 
+    control = ETL::Control.parse(File.dirname(__FILE__) + 
       '/delimited_update.ctl')
     
     Person.delete_all
@@ -245,7 +245,7 @@ class DestinationTest < Test::Unit::TestCase
     row = ETL::Row[:id => 1, :first_name => 'Bob', :last_name => 'Smith', :ssn => '111234444']
     row_needs_escape = ETL::Row[:id => 2, :first_name => "Foo's", :last_name => "Bar", :ssn => '000000000' ]
     row_needs_update = ETL::Row[:id => 1, :first_name => "Sean", :last_name => "Toon", :ssn => '000000000' ]
-    control = ETL::Control::Control.parse(File.dirname(__FILE__) + 
+    control = ETL::Control.parse(File.dirname(__FILE__) + 
       '/delimited_insert_update.ctl')
     
     Person.delete_all

@@ -47,7 +47,7 @@ module ETL #:nodoc:
       # Process the specified file. Acceptable values for file are:
       # * Path to a file
       # * File object
-      # * ETL::Control::Control instance
+      # * ETL::Control instance
       # * ETL::Batch instance
       #
       # The process command will accept either a .ctl Control file or a .ebf
@@ -258,7 +258,7 @@ module ETL #:nodoc:
     # file are:
     # * Path to a file
     # * File object
-    # * ETL::Control::Control instance
+    # * ETL::Control instance
     # * ETL::Batch instance
     def process(file)
       case file
@@ -272,7 +272,7 @@ module ETL #:nodoc:
           else
             raise RuntimeError, "Unsupported file type - #{file.path}"
           end
-        when ETL::Control::Control
+        when ETL::Control
           process_control(file)
         when ETL::Batch
           process_batch(file)
@@ -302,7 +302,7 @@ module ETL #:nodoc:
 
     # Process the specified control file
     def process_control(control)
-      control = ETL::Control::Control.resolve(control)
+      control = ETL::Control.resolve(control)
       say_on_own_line "Processing control #{control.file}"
 
       ETL::Engine.job = ETL::Execution::Job.create!(

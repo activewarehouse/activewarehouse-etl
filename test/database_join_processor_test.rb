@@ -13,7 +13,7 @@ class DatabaseJoinProcessorTest < Test::Unit::TestCase
 
   should 'return the row and the database result' do
     row = ETL::Row[:id => 1, :first_name => 'Bob', :last_name => 'Smith', :ssn => '111234444']
-    control = ETL::Control::Control.parse(File.dirname(__FILE__) + 
+    control = ETL::Control.parse(File.dirname(__FILE__) + 
       '/delimited.ctl')
 
     Person.delete_all
