@@ -1,4 +1,5 @@
 require 'bundler/setup'
+require 'fileutils'
 
 Bundler.require :default, :development, :test
 
@@ -22,5 +23,9 @@ RSpec.configure do |c|
 
     ETL::Engine.logger = Logger.new(STDOUT)
     ETL::Engine.logger.level = Logger::FATAL
+  end
+
+  c.before(:each) do
+    FileUtils.rm Dir[ fixture_root.join('output/*') ]
   end
 end
