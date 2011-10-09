@@ -1,0 +1,7 @@
+infinity_test do
+  notifications :growl do
+    show_images :mode => :fuuu
+  end
+
+  use :test_framework => :rspec
+end
