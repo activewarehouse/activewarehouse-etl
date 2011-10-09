@@ -26,6 +26,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency('RedCloth')
   s.add_development_dependency('rspec', '~>2.6.0')
   s.add_development_dependency('infinity_test')
+  s.add_development_dependency('nokogiri')
   s.add_development_dependency('mysql', '~>2.8.1')
   s.add_development_dependency('mysql2', '~>0.3.7')
   s.add_development_dependency('sqlite3', '~>1.3.4')
