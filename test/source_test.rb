@@ -4,20 +4,6 @@ class Person < ActiveRecord::Base
 end
 class SourceTest < Test::Unit::TestCase
   
-  context "source" do
-    should "set store_locally to true by default" do
-      assert_equal true, Source.new(nil, { :store_locally => true }, nil).store_locally
-    end
-    
-    should "let the user set store_locally to true" do
-      assert_equal true, Source.new(nil, { :store_locally => true }, nil).store_locally
-    end
-
-    should "let the user set store_locally to false" do
-      assert_equal false, Source.new(nil, { :store_locally => false }, nil).store_locally
-    end
-  end
-  
   context "a file source" do
     context "with delimited data" do
       setup do
