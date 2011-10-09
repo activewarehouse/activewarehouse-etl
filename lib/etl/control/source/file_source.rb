@@ -1,6 +1,7 @@
 module ETL #:nodoc:
   class Control #:nodoc:
     # A File source.
+    # @todo: Fix namespace structure. Should be ETL::Control::Source::FileSource
     class FileSource < Source
       # The number of lines to skip, default is 0
       attr_accessor :skip_lines

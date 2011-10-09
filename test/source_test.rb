@@ -3,73 +3,6 @@ require File.dirname(__FILE__) + '/test_helper'
 class Person < ActiveRecord::Base
 end
 class SourceTest < Test::Unit::TestCase
-  
-  context "a file source" do
-    context "with delimited data" do
-      setup do
-        control = ETL::Control.parse(File.dirname(__FILE__) + '/delimited.ctl')
-        configuration = {
-          :file => 'data/delimited.txt',
-          :parser => :csv
-        }
-        definition = self.definition + [:sex]
-    
-        source = ETL::Control::FileSource.new(control, configuration, definition)
-        @rows = source.collect { |row| row }
-      end
-      should "find 3 rows in the delimited file" do
-        assert_equal 3, @rows.length
-      end
-    end
-  end
-  
-  context "a file source with a glob" do
-    setup do
-      control = ETL::Control.parse(File.dirname(__FILE__) + '/multiple_delimited.ctl')
-      configuration = {
-        :file => 'data/multiple_delimited_*.txt',
-        :parser => :csv
-      }
-
-      source = ETL::Control::FileSource.new(control, configuration, definition)
-      @rows = source.collect { |row| row }
-    end
-    should "find 6 rows in total" do
-      assert_equal 6, @rows.length
-    end
-  end
-  
-  context "a file source with an absolute path" do
-    setup do
-      FileUtils.cp(File.dirname(__FILE__) + '/data/delimited.txt', '/tmp/delimited_abs.txt')
-
-      control = ETL::Control.parse(File.dirname(__FILE__) + 
-        '/delimited_absolute.ctl')
-      configuration = {
-        :file => '/tmp/delimited_abs.txt',
-        :parser => :csv
-      }
-      definition = self.definition + [:sex]
-
-      source = ETL::Control::FileSource.new(control, configuration, definition)
-      @rows = source.collect { |row| row }
-    end
-    should "find 3 rows" do
-      assert_equal 3, @rows.length
-    end
-  end
-  
-  context "multiple sources" do
-    setup do
-      control = ETL::Control.parse(File.dirname(__FILE__) + 
-        '/multiple_source_delimited.ctl')
-      @rows = control.sources.collect { |source| source.collect { |row| row }}.flatten!
-    end
-    should "find 12 rows" do
-      assert_equal 12, @rows.length
-    end
-  end
-  
   context "a database source" do
     setup do
       control = ETL::Control.parse(File.dirname(__FILE__) + '/delimited.ctl')
@@ -97,17 +30,6 @@ class SourceTest < Test::Unit::TestCase
       assert_equal 1, rows.length
     end
   end
-  
-  context "a file source with an xml parser" do
-    setup do
-      control = ETL::Control.parse(File.dirname(__FILE__) + 
-        '/xml.ctl')
-      @rows = control.sources.collect{ |source| source.collect { |row| row }}.flatten!
-    end
-    should "find 2 rows" do
-      assert_equal 2, @rows.length
-    end
-  end
 
   context "a model source" do
     setup do
@@ -124,17 +46,5 @@ class SourceTest < Test::Unit::TestCase
     should_eventually "find n rows" do
       
     end
-  end
-  
-  def definition
-    [ 
-      :first_name,
-      :last_name,
-      :ssn,
-      {
-        :name => :age,
-        :type => :integer
-      }
-    ]
   end
 end
