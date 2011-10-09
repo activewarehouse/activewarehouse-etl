@@ -12,3 +12,4 @@ doc
 .yardoc
 *.tmproj
 *.sqlite3
+spec/fixtures/output
