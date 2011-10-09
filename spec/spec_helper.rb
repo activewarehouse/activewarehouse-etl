@@ -5,7 +5,12 @@ Bundler.require :default, :development, :test
 require 'etl'
 
 spec_path = Bundler.root.join("spec")
+
+# Pull in the support files
 Dir[ spec_path.join("support/**/*.rb") ].each{|f| require f}
+
+# Pull in the shared examples
+Dir[ spec_path.join("shared_examples/**/*.rb") ].each{|f| require f}
 
 RSpec.configure do |c|
   c.include CustomMatchers
