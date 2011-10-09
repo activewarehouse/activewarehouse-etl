@@ -94,16 +94,7 @@ module ETL #:nodoc:
       
       # Get the order of elements from the source order
       def order_from_source
-        order = []
-        control.sources.first.definition.each do |item|
-          case item
-          when Hash
-            order << item[:name]
-          else
-            order << item
-          end
-        end
-        order
+        control.sources.first.order
       end
       
       # Return true if the row is allowed. The row will not be allowed if the

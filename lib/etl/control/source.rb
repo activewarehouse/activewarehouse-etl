@@ -125,6 +125,19 @@ module ETL #:nodoc:
         Engine.read_locally
       end
       
+      # Get the order of fields that this source will present to the pipeline
+      def order
+        order = []
+        definition.each do |item|
+          case item
+          when Hash
+            order << item[:name]
+          else
+            order << item
+          end
+        end
+        order
+      end
     end
   end
 end
