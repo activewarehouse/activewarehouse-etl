@@ -5,7 +5,7 @@ $:.unshift lib unless $:.include?(lib)
 require 'etl/version'
 
 Gem::Specification.new do |s|
-  s.name = %q{activewarehouse-etl}
+  s.name = %q{etl}
   s.version = ETL::VERSION
   s.platform = Gem::Platform::RUBY
   s.authors = ["Anthony Eden", "Thibaut Barrère"]
