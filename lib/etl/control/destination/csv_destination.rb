@@ -48,9 +48,13 @@ module ETL #:nodoc:
         @enclose = true & configuration[:enclose]
         @unique = configuration[:unique] ? configuration[:unique] + scd_required_fields : configuration[:unique]
         @unique.uniq! unless @unique.nil?
-        @order = mapping[:order] ? mapping[:order] + scd_required_fields : order_from_source
+        @write_header = configuration[:write_header]
+        @order = mapping[:order] + scd_required_fields if mapping[:order]
         @order.uniq! unless @order.nil?
-        raise ControlError, "Order required in mapping" unless @order
+      end
+
+      def order
+        @order ||= order_from_source
       end
       
       # Close the destination. This will flush the buffer and close the underlying stream or connection.
@@ -63,6 +67,11 @@ module ETL #:nodoc:
       # Flush the destination buffer
       def flush
         #puts "Flushing buffer (#{file}) with #{buffer.length} rows"
+        if @write_header && !@header_written
+          f << order
+          @header_written = true
+        end
+
         buffer.flatten.each do |row|
           #puts "row change type: #{row.change_type}"
           # check to see if this row's compound key constraint already exists
