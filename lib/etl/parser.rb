@@ -6,7 +6,13 @@ module ETL #:nodoc:
   class Parser
     include Enumerable
 
-    autoload :ApacheCombinedLogParser, 'etl/parser/apache_combined_log_parser'
+    autoload :ApacheCombinedLogParser,  'etl/parser/apache_combined_log_parser'
+    autoload :CsvParser,                'etl/parser/csv_parser'
+    autoload :ExcelParser,              'etl/parser/excel_parser'
+    autoload :FixedWidthParser,         'etl/parser/fixed_width_parser'
+    autoload :NokogiriXmlParser,        'etl/parser/nokogiri_xml_parser'
+    autoload :SaxParser,                'etl/parser/sax_parser'
+    autoload :XmlParser,                'etl/parser/xml_parser'
 
     # The Source object for the data
     attr_reader :source
