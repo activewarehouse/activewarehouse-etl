@@ -1,0 +1,17 @@
+operational_database:
+  adapter: sqlite3
+  database: operational_database.sqlite3
+  pool: 5
+  timeout: 5000
+
+data_warehouse:
+  adapter: sqlite3
+  database: data_warehouse.sqlite3
+  pool: 5
+  timeout: 5000
+
+etl_execution:
+  adapter: sqlite3
+  database: etl_execution.sqlite3
+  pool: 5
+  timeout: 5000
