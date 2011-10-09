@@ -2,68 +2,13 @@ require File.dirname(__FILE__) + '/test_helper'
 
 # Test the flat text parsers
 class ParserTest < Test::Unit::TestCase
-  # Test parsing delimited data
-  def test_csv_parser
-    control = ETL::Control.resolve(File.dirname(__FILE__) + '/delimited.ctl')
-    parser = ETL::Parser::CsvParser.new(control.sources.first)
-    rows = parser.collect { |row| row }
-    assert_equal 3, rows.length
-    assert_equal({:first_name=>"Chris", :last_name=>"Smith", :ssn=>"111223333", :age=>"24", :sex => 'M'}, rows.first)
-  end
-  
-  # Test parsing fixed-width data
-  def test_fixed_width_parser
-    control = ETL::Control.resolve(File.dirname(__FILE__) + '/fixed_width.ctl')
-    parser = ETL::Parser::FixedWidthParser.new(control.sources.first)
-    rows = parser.collect { |row| row }
-    assert_equal 3, rows.length
-    assert_equal({:first_name=>"Bob", :last_name=>"Smith", :ssn=>"123445555", :age=>"23"}, rows.first)
-  end
-  
-  # Test the DOM-based XML parser. Note that the DOM parser is slow and should
-  # probably be removed.
-  def test_xml_parser
-    control = ETL::Control.resolve(File.dirname(__FILE__) + '/xml.ctl')
-    parser = ETL::Parser::XmlParser.new(control.sources.first)
-    rows = parser.collect { |row| row }
-    assert_equal 2, rows.length
-    assert_equal({:first_name=>"Bob", :last_name=>"Smith", :ssn=>"123456789", :age=>"24"}, rows.first)
-  end
-  
   # Test an inline parser
   def test_inline_parser
     ETL::Engine.process(File.dirname(__FILE__) + '/inline_parser.ctl')
     lines = open(File.dirname(__FILE__) + '/output/inline_parser.txt').readlines
     assert_equal 3, lines.length
   end
-  
-  # Test the SAX parser (preferred for XML parsing)
-  def test_sax_parser
-    control = ETL::Control.resolve(File.dirname(__FILE__) + '/sax.ctl')
-    parser = control.sources.first.parser
-    rows = parser.collect { |row| row }
-    assert_equal 2, rows.length
-    assert_equal({:first_name=>"Bob", :last_name=>"Smith", :ssn=>"123456789", :age=>"24"}, rows.first)
-  end
 
-  # Test the Excel parser
-  def test_excel_parser
-    control = ETL::Control.resolve(File.dirname(__FILE__) + '/excel.ctl')
-    parser = control.sources.first.parser
-    rows = parser.collect { |row| row }
-    assert_equal 2, rows.length
-    assert_equal({:first_name=>"Bob", :last_name=>"Smith", :ssn=>123456789, :age=>24}, rows.first)
-  end
-  
-  # Test 2 the Excel parser
-  def test_excel2_parser
-    control = ETL::Control.resolve(File.dirname(__FILE__) + '/excel2.ctl')
-    parser = control.sources.first.parser
-    rows = parser.collect { |row| row }
-    assert_equal 2, rows.length
-    assert_equal({:first_name=>"John", :last_name=>"Doe", :ssn=>222114545, :age=>31}, rows[1])
-  end
-  
   # Test the Apache combined log format parser
   def test_apache_combined_log_parser
     control = ETL::Control.resolve(File.dirname(__FILE__) + '/apache_combined_log.ctl')
