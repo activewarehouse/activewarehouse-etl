@@ -21,10 +21,9 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 
-REXML::VERSION ||= begin
-  require 'rexml/rexml'
-  REXML::Version
-end
+require 'rexml/rexml'
+
+REXML::VERSION = REXML::Version unless defined?(REXML::VERSION)
 
 require 'logger'
 require 'yaml'
@@ -44,6 +43,7 @@ require 'etl/parser'
 require 'etl/transform'
 require 'etl/processor'
 require 'etl/generator'
+require 'etl/execution'
 
 module ETL
   autoload :VERSION,    'etl/version'
@@ -51,12 +51,12 @@ module ETL
   autoload :HttpTools,  'etl/http_tools'
   autoload :Screen,     'etl/screen'
 
-  class ETLError            < StandardError end
-  class ControlError        < ETLError      end
-  class DefinitionError     < ControlError  end
-  class ConfigurationError  < ControlError  end
-  class MismatchError       < ETLError      end
-  class ResolverError       < ETLError      end
-  class ScreenError         < ETLError      end
-  class FatalScreenError    < ScreenError   end
+  class ETLError            < StandardError;  end
+  class ControlError        < ETLError;       end
+  class DefinitionError     < ControlError;   end
+  class ConfigurationError  < ControlError;   end
+  class MismatchError       < ETLError;       end
+  class ResolverError       < ETLError;       end
+  class ScreenError         < ETLError;       end
+  class FatalScreenError    < ScreenError;    end
 end
