@@ -1,8 +1,4 @@
 module ETL #:nodoc:
-
-  class Base < ActiveRecord::Base
-  end
-
   # The main ETL engine clas
   class Engine
     include ETL::Util

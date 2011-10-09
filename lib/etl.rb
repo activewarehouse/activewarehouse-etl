@@ -47,6 +47,7 @@ require 'etl/execution'
 
 module ETL
   autoload :VERSION,    'etl/version'
+  autoload :Base,       'etl/base'
   autoload :Batch,      'etl/batch'
   autoload :HttpTools,  'etl/http_tools'
   autoload :Screen,     'etl/screen'
