@@ -5,7 +5,7 @@ module ETL #:nodoc:
     # Connection for database sources
   end
 
-  module Control #:nodoc:
+  class Control #:nodoc:
     # Source object which extracts data from a database using ActiveRecord.
     class DatabaseSource < Source
       attr_accessor :target

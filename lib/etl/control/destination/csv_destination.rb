@@ -1,7 +1,7 @@
 # This source file contains the ETL::Control::CsvDestination
 
 module ETL #:nodoc:
-  module Control #:nodoc:
+  class Control #:nodoc:
     # CSV File as the final destination.
     class CsvDestination < Destination
       # The File to write to

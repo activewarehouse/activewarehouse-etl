@@ -1,5 +1,5 @@
 module ETL #:nodoc:
-  module Control #:nodoc:
+  class Control #:nodoc:
     # Base class for destinations.
     class Destination
       # Read-only accessor for the ETL::Control::Control instance

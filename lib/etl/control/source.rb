@@ -1,5 +1,5 @@
 module ETL #:nodoc:
-  module Control #:nodoc:
+  class Control #:nodoc:
     # ETL source. Subclasses must implement the <tt>each</tt> method.
     class Source
       include Enumerable

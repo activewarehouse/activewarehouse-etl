@@ -1,5 +1,5 @@
 module ETL #:nodoc:
-  module Control #:nodoc:
+  class Control #:nodoc:
     # A File source.
     class FileSource < Source
       # The number of lines to skip, default is 0

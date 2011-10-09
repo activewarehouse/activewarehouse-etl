@@ -1,5 +1,5 @@
 module ETL #:nodoc:
-  module Control #:nodoc:
+  class Control #:nodoc:
     # Destination which writes directly to a database. This is useful when you are dealing with
     # a small amount of data. For larger amounts of data you should probably use the bulk
     # loader if it is supported with your target database as it will use a much faster load

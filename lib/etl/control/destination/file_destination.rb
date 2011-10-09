@@ -1,7 +1,7 @@
 # This source file contains the ETL::Control::FileDestination
 
 module ETL #:nodoc:
-  module Control #:nodoc:
+  class Control #:nodoc:
     # File as the final destination.
     class FileDestination < Destination
       # The File to write to

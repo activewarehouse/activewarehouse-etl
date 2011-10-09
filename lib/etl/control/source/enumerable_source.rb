@@ -1,5 +1,5 @@
 module ETL #:nodoc:
-  module Control #:nodoc:
+  class Control #:nodoc:
     # Use an Enumerable as a source
     class EnumerableSource < ETL::Control::Source
       # Iterate through the enumerable
