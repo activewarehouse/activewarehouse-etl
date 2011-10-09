@@ -37,7 +37,7 @@ describe ETL::Batch do
       end
     end
 
-    context "Invalid arguments" do
+    context "Invalid Arguments" do
       it "should raise an exception" do
         expect {
           ETL::Batch.resolve(0, engine)
