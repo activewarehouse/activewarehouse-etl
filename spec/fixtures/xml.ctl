@@ -16,7 +16,8 @@ source :in, {
     {
       :name => :age,
       :type => :integer
-    }
+    },
+    :sex,
   ]
 }
 
@@ -24,7 +25,7 @@ destination :out, {
   :file => 'output/xml.txt'
 }, 
 {
-  :order => [:first_name, :last_name, :ssn]
+  :order => [:first_name, :last_name, :ssn, :age, :sex]
 }
 
 transform :ssn, :sha1

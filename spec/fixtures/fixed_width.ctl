@@ -21,6 +21,10 @@ source :in, {
     :start => 31,
     :length => 2,
     :type => :integer
+  },
+  :sex => {
+    :start => 34,
+    :length => 1
   }
 }
 
@@ -31,5 +35,5 @@ destination :out, {
   :file => 'output/fixed_width.txt'
 }, 
 {
-  :order => [:first_name, :last_name, :ssn, :age]
+  :order => [:first_name, :last_name, :ssn, :age, :sex]
 }

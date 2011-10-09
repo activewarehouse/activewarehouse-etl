@@ -10,7 +10,8 @@ source :in, {
     :first_name => 'people/person/first_name',
     :last_name => 'people/person/last_name',
     :ssn => 'people/person/social_security_number',
-    :age => 'people/person[age]'
+    :age => 'people/person[age]',
+    :sex => 'people/person/sex'
   }
 }
 
@@ -22,5 +23,5 @@ destination :out, {
   :file => 'output/sax.out.txt'
 }, 
 {
-  :order => [:first_name, :last_name, :ssn, :age]
+  :order => [:first_name, :last_name, :ssn, :age, :sex]
 }

@@ -8,7 +8,8 @@ source :in, {
       :first_name,
       :last_name,
       :ssn,
-      :age
+      :age,
+      :sex
   ]
 }
 
@@ -20,5 +21,5 @@ destination :out, {
   :file => 'output/excel.out.txt'
 }, 
 {
-  :order => [:first_name, :last_name, :ssn, :age]
+  :order => [:first_name, :last_name, :ssn, :age, :sex]
 }

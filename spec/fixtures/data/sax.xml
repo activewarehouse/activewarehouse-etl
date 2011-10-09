@@ -2,13 +2,21 @@
 
 <people>
   <person age="24">
-    <first_name>Bob</first_name>
+    <first_name>Chris</first_name>
     <last_name>Smith</last_name>
-    <social_security_number>123456789</social_security_number>
+    <social_security_number>111223333</social_security_number>
+    <sex>M</sex>
   </person>
   <person age="31">
     <first_name>John</first_name>
     <last_name>Doe</last_name>
     <social_security_number>222114545</social_security_number>
+    <sex>M</sex>
+  </person>
+  <person age="35">
+    <first_name>Brian</first_name>
+    <last_name>Collingsworth</last_name>
+    <social_security_number>1234434</social_security_number>
+    <sex>M</sex>
   </person>
 </people>
