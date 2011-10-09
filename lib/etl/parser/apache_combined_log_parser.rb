@@ -1,5 +1,5 @@
 module ETL #:nodoc:
-  module Parser #:nodoc:
+  class Parser #:nodoc:
     # Parser which can parser the Apache Combined Log Format as defined at
     # http://httpd.apache.org/docs/2.2/logs.html
     class ApacheCombinedLogParser < ETL::Parser

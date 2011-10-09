@@ -3,7 +3,7 @@ require 'open-uri'
 optional_require 'zlib'
 
 module ETL
-  module Parser
+  class Parser
     class NokogiriXmlParser < ETL::Parser
       # Initialize the parser
       # * <tt>source</tt>: The Source object
