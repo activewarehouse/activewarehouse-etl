@@ -1,19 +1,15 @@
 module ETL #:nodoc
   # Classes which store information about ETL execution
-  module Execution
-    # Execution management
-    class Execution
-      class << self
-        # Migrate the data store
-        def migrate
-          ETL::Execution::Migration.migrate
-        end
-      end
+  # Execution management
+  class Execution
+    autoload :Base,       'etl/execution/base'
+    autoload :Batch,      'etl/execution/batch'
+    autoload :Job,        'etl/execution/job'
+    autoload :Migration,  'etl/execution/migration'
+
+    # Migrate the data store
+    def self.migrate
+      ETL::Execution::Migration.migrate
     end
   end
 end
-
-require 'etl/execution/base'
-require 'etl/execution/batch'
-require 'etl/execution/job'
-require 'etl/execution/migration'
