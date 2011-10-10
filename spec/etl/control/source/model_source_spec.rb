@@ -7,7 +7,7 @@ describe ETL::Control::ModelSource do
   let(:db_config)   {{ }}
   let(:definition)  { [:first_name, :last_name, :ssn] }
 
-  pending it "should find n rows" do
+  pending "should find n rows" do
     
   end
 end

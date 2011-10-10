@@ -25,7 +25,7 @@ describe ETL::Control::DatabaseSource do
     end
 
     context "When store locally is false" do
-      pending it 'should not set a local file for extraction storage'
+      pending 'should not set a local file for extraction storage'
     end
   end
 
