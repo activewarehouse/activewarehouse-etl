@@ -13,3 +13,4 @@ doc
 *.tmproj
 *.sqlite3
 spec/fixtures/output
+.rbx
