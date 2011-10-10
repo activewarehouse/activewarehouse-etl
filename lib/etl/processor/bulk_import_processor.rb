@@ -1,9 +1,9 @@
 module ETL #:nodoc:
-  module Processor #:nodoc:
+  class Processor #:nodoc:
     # Processor which is used to bulk import data into a target database. The
     # underlying database driver from ActiveRecord must support the methods
     # +bulk_load+ method.
-    class BulkImportProcessor < ETL::Processor::Processor
+    class BulkImportProcessor < ETL::Processor
 
       # The file to load from
       attr_reader :file

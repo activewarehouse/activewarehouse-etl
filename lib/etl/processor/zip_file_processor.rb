@@ -1,9 +1,9 @@
 optional_require 'zip/zip'
 
 module ETL
-  module Processor
+  class Processor
     # Custom processor to zip files
-    class ZipFileProcessor < ETL::Processor::Processor
+    class ZipFileProcessor < ETL::Processor
       attr_reader :infile
       attr_reader :destination
 

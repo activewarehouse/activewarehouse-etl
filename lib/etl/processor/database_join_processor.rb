@@ -1,5 +1,5 @@
 module ETL
-  module Processor
+  class Processor
     class DatabaseJoinProcessor < ETL::Processor::RowProcessor
       attr_reader :target
       attr_reader :query

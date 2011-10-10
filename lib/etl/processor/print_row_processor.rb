@@ -1,5 +1,5 @@
 module ETL #:nodoc:
-  module Processor #:nodoc:
+  class Processor #:nodoc:
     # Debugging processor for printing the current row
     class PrintRowProcessor < ETL::Processor::RowProcessor
       # Process the row

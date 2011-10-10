@@ -1,5 +1,5 @@
 module ETL #:nodoc:
-  module Processor #:nodoc:
+  class Processor #:nodoc:
     # Row processor that will copy one field to another
     #
     # Configuration options:

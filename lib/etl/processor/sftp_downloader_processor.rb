@@ -1,9 +1,9 @@
 optional_require 'net/sftp'
 
 module ETL
-  module Processor
+  class Processor
     # Custom processor to download files via SFTP
-    class SftpDownloaderProcessor < ETL::Processor::Processor
+    class SftpDownloaderProcessor < ETL::Processor
       attr_reader :host
       attr_reader :port
       attr_reader :remote_dir

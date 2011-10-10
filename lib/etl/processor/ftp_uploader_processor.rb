@@ -1,9 +1,9 @@
 require 'net/ftp'
 
 module ETL
-  module Processor
+  class Processor
     # Custom processor to download files via FTP
-    class FtpUploaderProcessor < ETL::Processor::Processor
+    class FtpUploaderProcessor < ETL::Processor
       attr_reader :host
       attr_reader :port
       attr_reader :remote_dir

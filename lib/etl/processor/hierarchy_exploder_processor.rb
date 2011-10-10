@@ -1,5 +1,5 @@
 module ETL #:nodoc:
-  module Processor #:nodoc:
+  class Processor #:nodoc:
     # Row-level processor that will convert a single row into multiple rows designed to be inserted
     # into a hierarchy bridge table.
     class HierarchyExploderProcessor < ETL::Processor::RowProcessor

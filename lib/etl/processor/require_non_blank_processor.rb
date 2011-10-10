@@ -1,5 +1,5 @@
 module ETL #:nodoc:
-  module Processor #:nodoc:
+  class Processor #:nodoc:
     # A processor which requires that the particular fields are non-blank in
     # order for the row to be retained.
     class RequireNonBlankProcessor < ETL::Processor::RowProcessor

@@ -1,8 +1,8 @@
 require 'fileutils'
 
 module ETL #:nodoc:
-  module Processor #:nodoc:
-    class EscapeCsvProcessor < ETL::Processor::Processor
+  class Processor #:nodoc:
+    class EscapeCsvProcessor < ETL::Processor
 
       # The file to load from
       attr_reader :source_file

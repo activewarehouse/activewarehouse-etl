@@ -1,5 +1,5 @@
 module ETL #:nodoc:
-  module Processor #:nodoc:
+  class Processor #:nodoc:
     # Row level processor to generate a sequence.
     #
     # Configuration options:

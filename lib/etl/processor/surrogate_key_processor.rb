@@ -1,5 +1,5 @@
 module ETL #:nodoc:
-  module Processor #:nodoc:
+  class Processor #:nodoc:
     # A row level processor that provides surrogate keys
     class SurrogateKeyProcessor < ETL::Processor::RowProcessor
       attr_accessor :destination

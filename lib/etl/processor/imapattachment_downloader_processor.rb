@@ -2,9 +2,9 @@ optional_require 'net/imap'
 optional_require 'tmail'
 
 module ETL
-  module Processor
+  class Processor
     # Custom processor to download files via Imap Attachment
-    class ImapattachmentDownloaderProcessor < ETL::Processor::Processor
+    class ImapattachmentDownloaderProcessor < ETL::Processor
       attr_reader :host
       attr_reader :ssl
       attr_reader :port
