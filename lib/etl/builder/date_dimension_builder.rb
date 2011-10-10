@@ -24,10 +24,10 @@ module ETL #:nodoc:
       # * <tt>start_date</tt>: The start date. Defaults to 5 years ago from today.
       # * <tt>end_date</tt>: The end date. Defaults to now.
       def initialize(start_date=Time.now.years_ago(5), end_date=Time.now, fiscal_year_offset_month=10)
-        @start_date = start_date.to_date
-        @end_date = end_date.to_date
-        @fiscal_year_offset_month = fiscal_year_offset_month.to_i
-        @holiday_indicators = []
+        self.start_date = start_date.to_date
+        self.end_date = end_date.to_date
+        self.fiscal_year_offset_month = fiscal_year_offset_month.to_i
+        self.holiday_indicators = []
       end
 
       # Returns an array of hashes representing records in the dimension.
@@ -37,8 +37,8 @@ module ETL #:nodoc:
 
       private
 
-      # Returns a hash representing a record in the dimension. The values for each record are
-      # accessed by name.
+      # Returns a hash representing a record in the dimension. The values for each record are accessed by name.
+      # @todo: Carve this turkey. Wow. Make it a class, where each symbol calls an internal method. Eesh.
       def record_from_date(date)
         time = date.to_time # need methods only available in Time
         record = {}
