@@ -53,6 +53,10 @@ module ETL #:nodoc:
           end
         end
       end
+      
+      def order
+        @parser.fields.collect {|field| field.name}
+      end
 
       private
       # Copy source data to a local directory structure
