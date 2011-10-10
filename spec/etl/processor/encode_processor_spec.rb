@@ -26,8 +26,8 @@ describe ETL::Processor::EncodeProcessor do
       end
 
       context "When the source / target files have fully-qualified paths" do
-        let(:source) { fixture_path       source_file }
-        let(:target) { fixture_root.join  target_file }
+        let(:source) { fixture_path(source_file) }
+        let(:target) { fixture_root(target_file) }
 
         before(:each) { control.stub(:file) { fail 'control.file should not be called' } }
 

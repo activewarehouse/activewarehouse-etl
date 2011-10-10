@@ -42,17 +42,23 @@ module CustomFixtures
 
   # @return [Array<String>]
   def find_fixtures
-    Dir[ fixture_root.join('**/*') ].tap do |files|
+    Dir[ fixture_root('**/*') ].tap do |files|
       files.reject! { |fi| File.directory?(fi) }
     end
   end
 
-  def fixture_root
+  def fixture_root(join_str=nil)
+    return project_root.join(join_str) if join_str
+
+    project_root
+  end
+
+  def project_root
     @project_root ||= Bundler.root.join('spec/fixtures/')
   end
 
   def relative_path(from_path)
-    from_path.gsub(fixture_root.to_s, '')
+    from_path.gsub(project_root.to_s, '')
   end
 
   # @param [String]
