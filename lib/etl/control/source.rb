@@ -1,5 +1,12 @@
 module ETL #:nodoc:
   class Control #:nodoc:
+    # File Sources.
+    #   @todo: Move these to ETL::Control::Source:: Namespace
+    autoload :DatabaseSource,   'etl/control/source/database_source'
+    autoload :EnumerableSource, 'etl/control/source/enumerable_source'
+    autoload :FileSource,       'etl/control/source/file_source'
+    autoload :ModelSource,      'etl/control/source/model_source'
+
     # ETL source. Subclasses must implement the <tt>each</tt> method.
     class Source
       include Enumerable
@@ -128,5 +135,3 @@ module ETL #:nodoc:
     end
   end
 end
-
-Dir[File.dirname(__FILE__) + "/source/*.rb"].each { |file| require(file) }

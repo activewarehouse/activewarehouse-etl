@@ -1,5 +1,15 @@
 module ETL #:nodoc:
   class Control #:nodoc:
+    # File Destinations.
+    #   @todo: Move these to ETL::Control::Destination:: Namespace
+    autoload :CsvDestination,                   'etl/control/destination/csv_destination'
+    autoload :DatabaseDestination,              'etl/control/destination/database_destination'
+    autoload :ExcelDestination,                 'etl/control/destination/excel_destination'
+    autoload :FileDestination,                  'etl/control/destination/file_destination'
+    autoload :InsertUpdateDatabaseDestination,  'etl/control/destination/insert_update_database_destination'
+    autoload :UpdateDatabaseDestination,        'etl/control/destination/update_database_destination'
+    autoload :YamlDestination,                  'etl/control/destination/yaml_destination'
+
     # Base class for destinations.
     class Destination
       # Read-only accessor for the ETL::Control instance
@@ -434,5 +444,3 @@ module ETL #:nodoc:
     end
   end
 end
-
-Dir[File.dirname(__FILE__) + "/destination/*.rb"].each { |file| require(file) }
