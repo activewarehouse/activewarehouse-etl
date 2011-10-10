@@ -43,7 +43,7 @@ module ETL #:nodoc:
       def each
         count = 0
         copy_sources if @store_locally
-        @parser.each do |row|
+        parser.each do |row|
           if ETL::Engine.offset && count < ETL::Engine.offset
             count += 1
           else
@@ -55,7 +55,7 @@ module ETL #:nodoc:
       end
       
       def order
-        @parser.fields.collect {|field| field.name}
+        parser.fields.collect {|field| field.name}
       end
 
       private
@@ -75,20 +75,22 @@ module ETL #:nodoc:
 
       # Configure the source
       def configure
-        @file = configuration[:file]
+        self.file = configuration[:file]
+
         case configuration[:parser]
         when Class
-          @parser = configuration[:parser].new(self)
+          self.parser = configuration[:parser].new(self)
         when String, Symbol
-          @parser = ETL::Parser.class_for_name(configuration[:parser]).new(self)
+          self.parser = ETL::Parser.class_for_name(configuration[:parser]).new(self)
         when Hash
           name = configuration[:parser][:name]
           options = configuration[:parser][:options]
-          @parser = ETL::Parser.class_for_name(name).new(self, options)
+          self.parser = ETL::Parser.class_for_name(name).new(self, options)
         else
           raise ControlError, "Configuration option :parser must be a Class, String or Symbol"
         end
-        @skip_lines = configuration[:skip_lines] ||= 0
+
+        self.skip_lines = configuration[:skip_lines] ||= 0
       end
     end
   end
