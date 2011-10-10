@@ -8,7 +8,7 @@ module CustomFixtures
   # @param [#to_sym]
   # @return [String]
   def fixture_for(name)
-    file_fixtures[name][:fixture] || file_fixtures![name][:fixture]
+    read_file path_for(name)
   end
   alias :fixture :fixture_for
 
@@ -37,7 +37,7 @@ module CustomFixtures
   # @param [String]
   # @return [Array<Symbol, String>]
   def map_fixture(fpath)
-    [relative_path(fpath), {:path => fpath, :fixture => read_file(fpath)}]
+    [ relative_path(fpath), {:path => fpath} ]
   end
 
   # @return [Array<String>]
