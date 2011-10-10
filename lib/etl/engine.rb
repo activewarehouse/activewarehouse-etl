@@ -1,3 +1,5 @@
+require 'fileutils'
+
 module ETL #:nodoc:
   # The main ETL engine clas
   class Engine
@@ -22,7 +24,7 @@ module ETL #:nodoc:
           @skip_bulk_import = options[:skip_bulk_import]
           @read_locally = options[:read_locally]
           @rails_root = options[:rails_root]
-          @log_dir = options[:log_dir]
+          @log_dir = options[:log_dir] || File.expand_path(FileUtils.pwd)
 
           require File.join(@rails_root, 'config/environment') if @rails_root
           options[:config] ||= 'database.yml'
