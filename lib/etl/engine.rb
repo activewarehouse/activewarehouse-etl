@@ -64,20 +64,28 @@ module ETL #:nodoc:
       attr_accessor :logger
 
       def logger #:nodoc:
-        unless @logger
-          if timestamped_log
-            logfile = File.join(*[@log_dir, "etl_#{timestamp}.log"].compact)
+        @logger ||= begin
+          log   = timestamped_logger if timestamped_log
+          log ||= default_logger
 
-            @logger = Logger.new(logfile)
-          else
-            logfile = File.join(*[@log_dir, '/etl.log'].compact)
-
-            @logger = Logger.new(File.open(logfile, log_write_mode))
-          end
-          @logger.level = Logger::WARN
-          @logger.formatter = Logger::Formatter.new
+          log.level      = Logger::WARN
+          log.formatter  = Logger::Formatter.new
+          log
         end
-        @logger
+      end
+
+      def timestamped_logger
+        @timestamped_logger ||= begin
+          logfile = File.join(*[@log_dir, "etl_#{timestamp}.log"].compact)
+          Logger.new(logfile)
+        end
+      end
+
+      def default_logger
+        @default_logger ||= begin
+          logfile = File.join(*[@log_dir, '/etl.log'].compact)
+          Logger.new(File.open(logfile, log_write_mode))
+        end
       end
 
       # Get a timestamp value as a string
