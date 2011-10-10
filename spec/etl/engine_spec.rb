@@ -12,11 +12,13 @@ describe ETL::Engine do
     end
 
     # @todo: This spec is not useful.
-    # it 'should raise an error when an unknown file type is given' do
-    #   expect {
-    #     ETL::Engine.process(fixture_path('data/delimited.txt'))
-    #   }.to raise_exception(RuntimeError)
-    # end
+    # @todo: If we are going to enforce requirements on file extension, it should allow .rb.
+    #         ie, permit either *.ctl.rb or *.ctl, etc. Or just don't care, and allow any file.
+    pending 'should raise an error when an unknown file type is given' do
+      expect {
+        ETL::Engine.process(fixture_path('data/delimited.txt'))
+      }.to raise_exception(RuntimeError)
+    end
 
     its(:errors) { should have(0).items }
 
