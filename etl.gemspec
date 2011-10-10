@@ -14,8 +14,6 @@ Gem::Specification.new do |s|
   s.summary = %q{Pure Ruby ETL package.}
   s.description = %q{ActiveWarehouse ETL is a pure Ruby Extract-Transform-Load application for loading data into a database.}
 
-  s.required_rubygems_version = ">= 1.3.6"
-
   s.add_runtime_dependency('activesupport',       '>= 2.1.0')
   s.add_runtime_dependency('activerecord',        '>= 2.1.0')
   s.add_runtime_dependency('fastercsv',           '>= 1.2.0')
@@ -27,9 +25,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency('rspec', '~>2.6.0')
   s.add_development_dependency('infinity_test')
   s.add_development_dependency('nokogiri')
-  s.add_development_dependency('mysql', '~>2.8.1')
-  s.add_development_dependency('mysql2', '~>0.3.7')
-  s.add_development_dependency('sqlite3', '~>1.3.4')
   s.add_development_dependency('spreadsheet', '~>0.6.5.4')
 
   s.files         = `git ls-files`.split("\n")
