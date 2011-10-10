@@ -1,12 +1,16 @@
 require 'fileutils'
 
+# @todo: Get rid of "DatabaseSource" or have it be abstract,
+#   and require you to supply an etl- database extension.
 module ETL #:nodoc:
+  # @todo: What the hell? Get this thing out of here.
   class Source < ::ActiveRecord::Base #:nodoc:
     # Connection for database sources
   end
 
   class Control #:nodoc:
     # Source object which extracts data from a database using ActiveRecord.
+    # @todo: Fix namespace structure. Should be ETL::Control::Source::DatabaseSource
     class DatabaseSource < Source
       attr_accessor :target
       attr_accessor :table
