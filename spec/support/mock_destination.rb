@@ -1,5 +1,5 @@
 module ETL
-  module Control
+  class Control
     # Usage:
     # - declare in the ctl file:
     #   destination :out, { :type => :mock, :name => :my_mock_output  }
