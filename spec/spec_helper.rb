@@ -17,6 +17,9 @@ RSpec.configure do |c|
   c.include CustomMatchers
   c.include CustomFixtures
 
+  MockSource = ETL::Control::MockSource
+  MockDestination = ETL::Control::MockDestination
+
   c.before(:all) do
     db_config = spec_path.join('db/database.sqlite3.yml')
     ETL::Engine.init({:config => db_config})
@@ -27,5 +30,8 @@ RSpec.configure do |c|
 
   c.before(:each) do
     FileUtils.rm Dir[ fixture_root.join('output/*') ]
+    MockSource.registry.clear
+    MockDestination.registry.clear
   end
+
 end
