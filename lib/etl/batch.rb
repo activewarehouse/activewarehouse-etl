@@ -1,11 +1,14 @@
 require 'etl/batch/context'
 require 'etl/batch/directive'
+require 'etl/batch/run'
 
 module ETL #:nodoc:
 
   class Batch
     attr_accessor :file
     attr_accessor :engine
+
+    autoload :UseTempTables, 'etl/batch/use_temp_tables'
 
     class << self
       # Resolve the given object to an ETL::Control instance. Acceptable arguments
