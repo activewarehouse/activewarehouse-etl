@@ -4,7 +4,7 @@ source "http://rubygems.org"
 gemspec
 
 group :development, :test do
-  platforms :mri do
+  platforms :mri, :rbx do
     gem 'mysql',    '~>2.8.1'
     gem 'mysql2',   '~>0.3.7'
     gem 'sqlite3',  '~>1.3.4'
