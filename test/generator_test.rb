@@ -4,7 +4,7 @@ require File.dirname(__FILE__) + '/test_helper'
 class GeneratorTest < Test::Unit::TestCase
   # Test the surrogate key generator
   def test_surrogate_key_generator
-    generator_class = ETL::Generator::Generator.class_for_name(:surrogate_key)
+    generator_class = ETL::Generator.class_for_name(:surrogate_key)
     assert_equal ETL::Generator::SurrogateKeyGenerator, generator_class
     generator = generator_class.new
     1.upto(10) do |i|
