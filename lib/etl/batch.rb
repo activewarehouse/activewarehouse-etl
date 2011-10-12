@@ -1,5 +1,5 @@
 require 'etl/batch/context'
-require 'etl/batch/directives'
+require 'etl/batch/directive'
 
 module ETL #:nodoc:
 
