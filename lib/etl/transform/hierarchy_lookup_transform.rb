@@ -1,11 +1,11 @@
 module ETL #:nodoc:
-  module Transform #:nodoc:
+  class Transform #:nodoc:
     # Transform which walks up the hierarchy tree to find a value of the current level's value
     # is nil.
     #
     # TODO: Let the resolver be implemented in a class so different resolution methods are
     # possible.
-    class HierarchyLookupTransform < ETL::Transform::Transform
+    class HierarchyLookupTransform < ETL::Transform
       # The name of the field to use for the parent ID
       attr_accessor :parent_id_field
 

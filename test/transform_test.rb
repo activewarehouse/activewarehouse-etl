@@ -16,7 +16,7 @@ class TransformTest < Test::Unit::TestCase
   end
   def test_block_transform
     #transforms = [Proc.new(){|name, value, row| value[0,2]}]
-    #assert_equal '11', ETL::Transform::Transform.transform(:ssn, '1111223333', [], transforms)
+    #assert_equal '11', ETL::Transform.transform(:ssn, '1111223333', [], transforms)
   end
   def test_decode_transform
     control = ETL::Control.parse(File.dirname(__FILE__) + '/delimited.ctl')

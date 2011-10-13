@@ -1,7 +1,7 @@
 module ETL #:nodoc:
-  module Transform #:nodoc:
+  class Transform #:nodoc:
     # Transform a String representation of a date to a DateTime instance
-    class StringToDateTimeTransform < ETL::Transform::Transform
+    class StringToDateTimeTransform < ETL::Transform
       # Transform the value using DateTime.parse.
       #
       # WARNING: This transform is slow (due to the Ruby implementation), but if you need to

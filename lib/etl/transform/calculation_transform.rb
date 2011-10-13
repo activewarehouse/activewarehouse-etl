@@ -1,6 +1,6 @@
 module ETL
-  module Transform
-    class CalculationTransform < ETL::Transform::Transform
+  class Transform
+    class CalculationTransform < ETL::Transform
       attr_reader :function
       attr_reader :fields
 

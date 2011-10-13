@@ -1,7 +1,7 @@
 module ETL #:nodoc:
-  module Transform #:nodoc:
+  class Transform #:nodoc:
     # Transform from one type to another
-    class TypeTransform < ETL::Transform::Transform
+    class TypeTransform < ETL::Transform
       # Initialize the transformer.
       #
       # Configuration options:

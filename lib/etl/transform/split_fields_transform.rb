@@ -1,6 +1,6 @@
 module ETL
-  module Transform
-    class SplitFieldsTransform < ETL::Transform::Transform
+  class Transform
+    class SplitFieldsTransform < ETL::Transform
       attr_reader :delimiter
       attr_reader :new_fields
 

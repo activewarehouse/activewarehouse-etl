@@ -1,6 +1,6 @@
 module ETL
-  module Transform
-    class BlockTransform < ETL::Transform::Transform
+  class Transform
+    class BlockTransform < ETL::Transform
       def initialize(control, name, configuration)
         super
         @block = configuration[:block]

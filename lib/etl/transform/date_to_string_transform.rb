@@ -1,7 +1,7 @@
 module ETL #:nodoc:
-  module Transform #:nodoc:
+  class Transform #:nodoc:
     # Transform a Date or Time to a formatted string instance
-    class DateToStringTransform < ETL::Transform::Transform
+    class DateToStringTransform < ETL::Transform
       # Initialize the transformer.
       #
       # Configuration options:
