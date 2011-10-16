@@ -1,8 +1,8 @@
 optional_require 'spreadsheet'
 
 module ETL
-  class Parser
-    class ExcelParser < ETL::Parser
+  module Parser
+    class ExcelParser < ETL::Parser::Parser
 
       attr_accessor :ignore_blank_line
 

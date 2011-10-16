@@ -1,7 +1,7 @@
 module ETL #:nodoc:
   class Parser #:nodoc:
     # Parser for fixed with files
-    class FixedWidthParser < ETL::Parser
+    class FixedWidthParser < ETL::Parser::Parser
       # Initialize the parser
       # * <tt>source</tt>: The source object
       # * <tt>options</tt>: Parser options Hash

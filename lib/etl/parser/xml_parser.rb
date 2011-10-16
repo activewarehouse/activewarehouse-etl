@@ -1,8 +1,8 @@
 require 'rexml/document'
 
 module ETL
-  class Parser
-    class XmlParser < ETL::Parser
+  module Parser
+    class XmlParser < ETL::Parser::Parser
       # Initialize the parser
       # * <tt>source</tt>: The Source object
       # * <tt>options</tt>: Parser options Hash

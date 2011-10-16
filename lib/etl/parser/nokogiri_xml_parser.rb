@@ -3,8 +3,8 @@ require 'open-uri'
 require 'zlib'
 
 module ETL
-  class Parser
-    class NokogiriXmlParser < ETL::Parser
+  module Parser
+    class NokogiriXmlParser < ETL::Parser::Parser
       # Initialize the parser
       # * <tt>source</tt>: The Source object
       # * <tt>options</tt>: Parser options Hash

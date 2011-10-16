@@ -3,6 +3,7 @@
 
 module ETL #:nodoc:
   # The ETL::Parser module provides various text parsers.
+<<<<<<< HEAD
   class Parser
     include Enumerable
 
@@ -46,5 +47,11 @@ module ETL #:nodoc:
       raise error, "#{message} (line #{line} in #{file})"
     end
 
+=======
+  module Parser
+>>>>>>> parent of 0cffffb... Flattened the ETL::Parser::Parser into ETL::Parser.
   end
 end
+
+require 'etl/parser/parser'
+Dir[File.dirname(__FILE__) + "/parser/*.rb"].each { |file| require(file) }

@@ -2,7 +2,7 @@ module ETL #:nodoc:
   class Parser #:nodoc:
     # Parser which can parser the Apache Combined Log Format as defined at
     # http://httpd.apache.org/docs/2.2/logs.html
-    class ApacheCombinedLogParser < ETL::Parser
+    class ApacheCombinedLogParser < ETL::Parser::Parser
       include HttpTools
       def initialize(source, options={})
         super
@@ -30,7 +30,6 @@ module ETL #:nodoc:
           :referrer => $8,
           :user_agent => $9,
         }
-
         #fields[:timestamp] =~ r%{(\d\d)/(\w\w\w)/(\d\d\d\d):(\d\d):(\d\d):(\d\d) -(\d\d\d\d)}
         d = Date._strptime(fields[:timestamp], '%d/%b/%Y:%H:%M:%S') unless fields[:timestamp].nil?
         fields[:timestamp] = Time.mktime(d[:year], d[:mon], d[:mday], d[:hour], d[:min], d[:sec], d[:sec_fraction]) unless d.nil?
