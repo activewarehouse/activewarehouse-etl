@@ -2,13 +2,6 @@ require File.dirname(__FILE__) + '/test_helper'
 
 # Test the flat text parsers
 class ParserTest < Test::Unit::TestCase
-  # Test an inline parser
-  def test_inline_parser
-    ETL::Engine.process(File.dirname(__FILE__) + '/inline_parser.ctl')
-    lines = open(File.dirname(__FILE__) + '/output/inline_parser.txt').readlines
-    assert_equal 3, lines.length
-  end
-
   # Test the Apache combined log format parser
   def test_apache_combined_log_parser
     control = ETL::Control.resolve(File.dirname(__FILE__) + '/apache_combined_log.ctl')
