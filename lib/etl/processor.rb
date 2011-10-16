@@ -43,3 +43,6 @@ module ETL #:nodoc:
     end
   end
 end
+
+# @todo: Autoload this and spit out a deprecation warning.
+ETL::Processor::Processor = ETL::Processor

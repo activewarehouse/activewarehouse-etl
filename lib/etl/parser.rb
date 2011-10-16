@@ -48,3 +48,6 @@ module ETL #:nodoc:
 
   end
 end
+
+# @todo: Autoload this and spit out a deprecation warning.
+ETL::Parser::Parser = ETL::Parser

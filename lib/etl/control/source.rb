@@ -149,3 +149,6 @@ module ETL #:nodoc:
     end
   end
 end
+
+# @todo: Autoload this and spit out a deprecation warning.
+ETL::Control::Source::Source = ETL::Control::Source
