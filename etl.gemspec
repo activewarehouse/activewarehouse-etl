@@ -21,7 +21,6 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency('rake')
   s.add_development_dependency('yard')
-  s.add_development_dependency('RedCloth')
   s.add_development_dependency('rspec', '~>2.6.0')
   s.add_development_dependency('infinity_test')
   s.add_development_dependency('nokogiri')
