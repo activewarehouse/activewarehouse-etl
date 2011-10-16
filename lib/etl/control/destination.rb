@@ -1,7 +1,7 @@
 module ETL #:nodoc:
   class Control #:nodoc:
     # File Destinations.
-    #   @todo: Move these to ETL::Control::Destination:: Namespace (or, ETL::Destination)
+    #   @todo: Move these to ETL::Control::Destination:: Namespace
     autoload :CsvDestination,                   'etl/control/destination/csv_destination'
     autoload :DatabaseDestination,              'etl/control/destination/database_destination'
     autoload :ExcelDestination,                 'etl/control/destination/excel_destination'
@@ -435,6 +435,3 @@ module ETL #:nodoc:
     end
   end
 end
-
-# @todo: Autoload this and spit out a deprecation warning.
-ETL::Control::Destination::Destination = ETL::Control::Destination

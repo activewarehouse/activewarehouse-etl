@@ -59,6 +59,3 @@ module ETL#:nodoc:
     end
   end
 end
-
-# @todo: Autoload this and spit out a deprecation warning.
-ETL::Transform::Transform = ETL::Transform
