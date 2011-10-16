@@ -45,8 +45,8 @@ module ETL #:nodoc:
       # Process the specified file. Acceptable values for file are:
       # * Path to a file
       # * File object
-      # * ETL::Control instance
-      # * ETL::Batch instance
+      # * ETL::Control::Control instance
+      # * ETL::Batch::Batch instance
       #
       # The process command will accept either a .ctl Control file or a .ebf
       # ETL Batch File.
@@ -264,8 +264,8 @@ module ETL #:nodoc:
     # file are:
     # * Path to a file
     # * File object
-    # * ETL::Control instance
-    # * ETL::Batch instance
+    # * ETL::Control::Control instance
+    # * ETL::Batch::Batch instance
     def process(file)
       case file
         when String
@@ -280,7 +280,7 @@ module ETL #:nodoc:
           end
         when ETL::Control
           process_control(file)
-        when ETL::Batch
+        when ETL::Batch::Batch
           process_batch(file)
       else
         raise RuntimeError, "Process object must be a String, File, Control
@@ -291,7 +291,7 @@ module ETL #:nodoc:
     protected
     # Process the specified batch file
     def process_batch(batch)
-      batch = ETL::Batch.resolve(batch, self)
+      batch = ETL::Batch::Batch.resolve(batch, self)
       say "Processing batch #{batch.file}"
 
       ETL::Engine.batch = ETL::Execution::Batch.create!(
