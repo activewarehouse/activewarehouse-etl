@@ -8,7 +8,7 @@ module ETL #:nodoc:
     # Connection for database sources
   end
 
-  class Control #:nodoc:
+  module Control #:nodoc:
     # Source object which extracts data from a database using ActiveRecord.
     # @todo: Fix namespace structure. Should be ETL::Control::Source::DatabaseSource
     class DatabaseSource < Source

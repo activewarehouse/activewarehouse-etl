@@ -1,7 +1,7 @@
 require 'yaml'
 
 module ETL #:nodoc:
-  class Control #:nodoc:
+  module Control #:nodoc:
     class YamlDestination < Destination
       attr_reader :file, :append, :only, :except
       # Initialize the object.

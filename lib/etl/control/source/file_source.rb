@@ -1,5 +1,5 @@
 module ETL #:nodoc:
-  class Control #:nodoc:
+  module Control #:nodoc:
     # A File source.
     # @todo: Fix namespace structure. Should be ETL::Control::Source::FileSource
     class FileSource < Source

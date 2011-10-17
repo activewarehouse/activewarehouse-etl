@@ -1,5 +1,5 @@
 module ETL #:nodoc:
-  class Control #:nodoc:
+  module Control #:nodoc:
     # File Sources.
     #   @todo: Move these to ETL::Control::Source:: Namespace
     autoload :DatabaseSource,   'etl/control/source/database_source'

@@ -1,7 +1,7 @@
 optional_require 'spreadsheet'
 
 module ETL
-  class Control
+  module Control
     # Excel as the final destination.
     class ExcelDestination < Destination
       # The File to write to

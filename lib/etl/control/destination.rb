@@ -1,5 +1,5 @@
 module ETL #:nodoc:
-  class Control #:nodoc:
+  module Control #:nodoc:
     # File Destinations.
     #   @todo: Move these to ETL::Control::Destination:: Namespace
     autoload :CsvDestination,                   'etl/control/destination/csv_destination'

@@ -2,7 +2,7 @@
 #require '../config/environment'
 
 module ETL #:nodoc:
-  class Control #:nodoc:
+  module Control #:nodoc:
     class ModelSource < Source
 
       def columns
