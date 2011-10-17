@@ -1,5 +1,5 @@
 module ETL #:nodoc:
-  class Execution #:nodoc:
+  module Execution #:nodoc:
     # Persistent class representing an ETL batch
     class Batch < Base
       belongs_to :batch

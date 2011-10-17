@@ -36,7 +36,7 @@ module ETL #:nodoc:
 
           require 'etl/execution'
           ETL::Execution::Base.establish_connection(options[:execution_conf] || :etl_execution)
-          ETL::Execution.migrate
+          ETL::Execution::Execution.migrate
 
           @initialized = true
         end

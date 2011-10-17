@@ -1,5 +1,5 @@
 module ETL #:nodoc:
-  class Execution #:nodoc
+  module Execution #:nodoc
     # Handles migration of tables required for persistent storage of meta data
     # for the ETL engine
     class Migration
