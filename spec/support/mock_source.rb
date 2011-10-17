@@ -1,5 +1,5 @@
 module ETL
-  class Control
+  module Control
     # Usage:
     # - first set the data in your test setup
     #   MockSource[:my_input] = [ { :first_name => 'John', :last_name => 'Barry' }, { ...} ]
