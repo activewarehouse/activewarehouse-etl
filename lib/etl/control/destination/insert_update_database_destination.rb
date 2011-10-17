@@ -22,7 +22,7 @@ module ETL #:nodoc:
 
       # Initialize the database destination
       #
-      # * <tt>control</tt>: The ETL::Control instance
+      # * <tt>control</tt>: The ETL::Control::Control instance
       # * <tt>configuration</tt>: The configuration Hash
       # * <tt>mapping</tt>: The mapping
       #

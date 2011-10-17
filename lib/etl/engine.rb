@@ -278,7 +278,7 @@ module ETL #:nodoc:
           else
             raise RuntimeError, "Unsupported file type - #{file.path}"
           end
-        when ETL::Control
+        when ETL::Control::Control
           process_control(file)
         when ETL::Batch::Batch
           process_batch(file)
@@ -308,7 +308,7 @@ module ETL #:nodoc:
 
     # Process the specified control file
     def process_control(control)
-      control = ETL::Control.resolve(control)
+      control = ETL::Control::Control.resolve(control)
       say_on_own_line "Processing control #{control.file}"
 
       ETL::Engine.job = ETL::Execution::Job.create!(

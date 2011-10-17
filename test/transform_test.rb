@@ -8,7 +8,7 @@ end
 
 class TransformTest < Test::Unit::TestCase
   def test_foreign_key_lookup_transform
-    control = ETL::Control.parse(File.dirname(__FILE__) + '/delimited.ctl')
+    control = ETL::Control::Control.parse(File.dirname(__FILE__) + '/delimited.ctl')
     configuration = {:collection => {'foo' => 1, 'bar' => 2, 'baz' => 3}}
     t = ETL::Transform::ForeignKeyLookupTransform.new(control, nil, configuration)
     

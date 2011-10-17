@@ -18,7 +18,7 @@ module ETL #:nodoc:
       # Initialize the source.
       #
       # Arguments:
-      # * <tt>control</tt>: The ETL::Control instance
+      # * <tt>control</tt>: The ETL::Control::Control instance
       # * <tt>configuration</tt>: The configuration Hash
       # * <tt>definition</tt>: The source definition
       #
