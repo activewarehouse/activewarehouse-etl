@@ -1,5 +1,5 @@
 module ETL #:nodoc:
-  class Batch #:nodoc:
+  module Batch #:nodoc:
 
     # Directive indicating that the specified ETL control file should be run
     class Run < Directive

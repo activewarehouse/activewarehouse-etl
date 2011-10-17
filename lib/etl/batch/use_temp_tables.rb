@@ -1,5 +1,5 @@
 module ETL #:nodoc:
-  class Batch #:nodoc:
+  module Batch #:nodoc:
 
     # Directive indicating temp tables should be used.
     class UseTempTables < Directive

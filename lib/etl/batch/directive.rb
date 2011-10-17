@@ -1,5 +1,5 @@
 module ETL #:nodoc:
-  class Batch #:nodoc:
+  module Batch #:nodoc:
 
     # Abstract base class for directives
     class Directive
