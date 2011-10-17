@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe ETL::Transform::StringToDateTransform do
   let(:ctl_file) { fixture_path('delimited.ctl') }
-  let(:control) { ETL::Control.parse(ctl_file) }
+  let(:control) { ETL::Control::Control.parse(ctl_file) }
 
   let(:transform) { ETL::Transform::StringToDateTransform.new(control, nil) }
 

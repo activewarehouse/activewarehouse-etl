@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe ETL::Control::ExcelDestination do
   let(:ctl_file){ fixture_path 'delimited_excel.ctl' }
-  let(:control) { ETL::Control.parse(ctl_file) }
+  let(:control) { ETL::Control::Control.parse(ctl_file) }
   let(:mapping) do
     country_codes = { 'United States' => 'US', 'Mexico' => 'MX' }
     cc_proc = proc {|r| country_codes[r[:country]]}

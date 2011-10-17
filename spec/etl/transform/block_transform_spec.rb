@@ -5,7 +5,7 @@ describe ETL::Transform::BlockTransform do
 
   describe '#transform' do
     it "should execute the block and pass on its return value" do
-      ETL::Transform.transform(:ssn, '1111223333', [], [transform]).should == '11'
+      ETL::Transform::Transform.transform(:ssn, '1111223333', [], [transform]).should == '11'
     end
   end
 

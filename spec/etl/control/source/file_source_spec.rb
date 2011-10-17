@@ -5,7 +5,7 @@ describe ETL::Control::FileSource do
   let(:ctl_file)    { fail "ctl_file must first be defined, at line -#{__LINE__}- in the file #{__FILE__}." }
   let(:src_config)  { fail "src_config must first be defined, at line -#{__LINE__}- in the file #{__FILE__}." }
 
-  let(:control)     { ETL::Control.parse(ctl_file) }
+  let(:control)     { ETL::Control::Control.parse(ctl_file) }
   let(:definition)  { [ :first_name, :last_name, :ssn, { :name => :age, :type => :integer } ] }
 
   context "When using a single file source" do

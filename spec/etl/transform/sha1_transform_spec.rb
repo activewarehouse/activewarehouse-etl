@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe ETL::Transform::Sha1Transform do
   let(:ctl_file) { fixture_path('delimited.ctl') }
-  let(:control) { ETL::Control.parse(ctl_file) }
+  let(:control) { ETL::Control::Control.parse(ctl_file) }
 
   let(:sha1_transform) { ETL::Transform::Sha1Transform.new(control, nil) }
 

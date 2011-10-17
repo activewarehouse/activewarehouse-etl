@@ -11,7 +11,7 @@ describe ETL::Control::DatabaseSource do
   let(:target_cfg)  { ETL::Base.configurations[target] }
   let(:database)    { target_cfg['database'] }
 
-  let(:control) { ETL::Control.parse(ctl_file) }
+  let(:control) { ETL::Control::Control.parse(ctl_file) }
   let(:source)  { ETL::Control::DatabaseSource.new(control, db_config, definition) }
 
   describe '#local_file' do

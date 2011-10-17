@@ -23,7 +23,7 @@ describe ETL::Engine do
     its(:errors) { should have(0).items }
 
     pending 'should stop as soon as the error threshold is reached' do
-      engine.process ETL::Control.parse_text(<<-CTL)
+      engine.process ETL::Control::Control.parse_text(<<-CTL)
         set_error_threshold 1
         source :in, { :type => :enumerable, :enumerable => (1..100) }
         after_read { |row| raise "Failure" }

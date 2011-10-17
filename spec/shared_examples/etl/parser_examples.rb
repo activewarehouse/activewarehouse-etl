@@ -2,7 +2,7 @@ require 'spec_helper'
 
 shared_examples_for 'ETL::Parser' do |fixture_file|
   let(:ctl_file)  { fixture_path(fixture_file) }
-  let(:control)   { ETL::Control.resolve(ctl_file) }
+  let(:control)   { ETL::Control::Control.resolve(ctl_file) }
   let(:parser)    { described_class.new(control.sources.first) }
 
   describe '#initialize' do

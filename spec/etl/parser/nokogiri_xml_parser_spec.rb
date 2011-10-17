@@ -4,7 +4,7 @@ describe ETL::Parser::NokogiriXmlParser do
   it_should_behave_like 'ETL::Parser', 'xml.ctl'
 
   context "Parsing Nodes in an XML document" do
-    let(:control) { ETL::Control.resolve(ctl_file) }
+    let(:control) { ETL::Control::Control.resolve(ctl_file) }
     let(:parser)  { ETL::Parser::NokogiriXmlParser.new(control.sources.first) }
     let(:rows)    { parser.collect { |row| row } }
 

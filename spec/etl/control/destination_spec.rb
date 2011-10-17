@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe ETL::Control::Destination do
   let(:ctl_file){ fixture_path 'delimited.ctl' }
-  let(:control) { ETL::Control.parse(ctl_file) }
+  let(:control) { ETL::Control::Control.parse(ctl_file) }
 
   let(:outfile) { fixture_root 'output/test_unique.txt' }
   let(:output) { File.read(outfile) }
@@ -55,7 +55,7 @@ DOCUMENT
       end
     }
 
-    let(:control) { control = ETL::Control.parse_text('') }
+    let(:control) { control = ETL::Control::Control.parse_text('') }
     let(:configuration) { {} }
     let(:mapping) { {} }
     let(:destination) { bad_destination.new(control, configuration, mapping) }

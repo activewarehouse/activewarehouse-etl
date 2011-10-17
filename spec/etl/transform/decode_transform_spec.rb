@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe ETL::Transform::DecodeTransform do
   let(:ctl_file) { fixture_path('delimited.ctl') }
-  let(:control) { ETL::Control.parse(ctl_file) }
+  let(:control) { ETL::Control::Control.parse(ctl_file) }
 
   let(:configuration) { {:decode_table_path => 'data/decode.txt'} }
   let(:decode_transform) { ETL::Transform::DecodeTransform.new(control, nil, configuration) }

@@ -28,7 +28,7 @@ describe ETL::Processor::BulkImportProcessor do
   # private
   #
   # def do_bulk_import(file = 'bulk_import.txt')
-  #   control = ETL::Control.new(File.join(File.dirname(__FILE__), 'delimited.ctl'))
+  #   control = ETL::Control::Control.new(File.join(File.dirname(__FILE__), 'delimited.ctl'))
   #   configuration = {
   #     :file => "data/#{file}",
   #     :truncate => true,

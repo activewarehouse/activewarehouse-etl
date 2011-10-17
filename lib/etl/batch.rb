@@ -4,12 +4,11 @@ require 'etl/batch/run'
 
 module ETL #:nodoc:
   module Batch #:nodoc:
+    autoload :UseTempTables, 'etl/batch/use_temp_tables'
 
     class Batch
       attr_accessor :file
       attr_accessor :engine
-
-      autoload :UseTempTables, 'etl/batch/use_temp_tables'
 
       class << self
         # Resolve the given object to an ETL::Control::Control instance. Acceptable arguments
@@ -28,7 +27,7 @@ module ETL #:nodoc:
         protected
         def parse(batch_file)
           batch_file = batch_file.path if batch_file.instance_of?(File)
-          batch = ETL::Batch.new(batch_file)
+          batch = ETL::Batch::Batch.new(batch_file)
           eval(IO.readlines(batch_file).join("\n"), Context.create(batch), batch_file)
           batch
         end
@@ -36,10 +35,10 @@ module ETL #:nodoc:
         def do_resolve(batch)
           case batch
           when String
-            ETL::Batch.parse(File.new(batch))
+            ETL::Batch::Batch.parse(File.new(batch))
           when File
-            ETL::Batch.parse(batch)
-          when ETL::Batch
+            ETL::Batch::Batch.parse(batch)
+          when ETL::Batch::Batch
             batch
           else
             raise RuntimeError, "Batch must be a String, File or Batch object"
