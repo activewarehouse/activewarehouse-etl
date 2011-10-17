@@ -1,5 +1,5 @@
 module ETL #:nodoc:
-  class Processor #:nodoc:
+  module Processor #:nodoc:
     # A row-level processor that checks if the row already exists in the
     # target table
     class CheckExistProcessor < ETL::Processor::RowProcessor

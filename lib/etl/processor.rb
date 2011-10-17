@@ -1,9 +1,6 @@
 # This source file contains the ETL::Processor class and autoloads all of the built-in processors
 module ETL #:nodoc:
-  # The ETL::Processor class contains row-level and bulk processors
-  # Base class for pre and post processors. Subclasses must implement the +process+ method.
-  class Processor
-    attr_accessor :control, :configuration
+  module Processor #:nodoc:
 
     autoload :BlockProcessor,                     'etl/processor/block_processor'
     autoload :BulkImportProcessor,                'etl/processor/bulk_import_processor'
@@ -31,15 +28,21 @@ module ETL #:nodoc:
     autoload :TruncateProcessor,                  'etl/processor/truncate_processor'
     autoload :ZipFileProcessor,                   'etl/processor/zip_file_processor'
 
-    def initialize(control, configuration)
-      self.control = control
-      self.configuration = configuration
-      after_initialize if respond_to?(:after_initialize)
-    end
+    # The ETL::Processor class contains row-level and bulk processors
+    # Base class for pre and post processors. Subclasses must implement the +process+ method.
+    class Processor
+      attr_accessor :control, :configuration
 
-    # Get the engine logger
-    def log
-      Engine.logger
+      def initialize(control, configuration)
+        self.control = control
+        self.configuration = configuration
+        after_initialize if respond_to?(:after_initialize)
+      end
+
+      # Get the engine logger
+      def log
+        Engine.logger
+      end
     end
   end
 end

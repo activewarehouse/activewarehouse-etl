@@ -1,9 +1,9 @@
 require 'iconv'
 
 module ETL #:nodoc:
-  class Processor #:nodoc:
+  module Processor #:nodoc:
     # The encode processor uses Iconv to convert a file from one encoding (eg: utf-8) to another (eg: latin1), line by line.
-    class EncodeProcessor < ETL::Processor
+    class EncodeProcessor < ETL::Processor::Processor
 
       # The file to load from
       attr_reader :source_file

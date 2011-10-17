@@ -1,5 +1,5 @@
 module ETL #:nodoc:
-  class Processor #:nodoc:
+  module Processor #:nodoc:
     # Row processor that checks whether or not the row has already passed
     # through the ETL processor, using the key fields provided as the keys
     # to check.

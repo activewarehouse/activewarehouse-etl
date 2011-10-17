@@ -2,9 +2,9 @@ optional_require 'net/pop'
 optional_require 'tmail'
 
 module ETL
-  class Processor
+  module Processor
     # Custom processor to download files via Pop3 Attachment
-    class Pop3attachmentDownloaderProcessor < ETL::Processor
+    class Pop3attachmentDownloaderProcessor < ETL::Processor::Processor
       attr_reader :host
       attr_reader :ssl
       attr_reader :port

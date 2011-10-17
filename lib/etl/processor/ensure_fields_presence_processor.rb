@@ -1,5 +1,5 @@
 module ETL
-  class Processor
+  module Processor
     # Ensure that each specified field is available
     class EnsureFieldsPresenceProcessor < ETL::Processor::RowProcessor
 

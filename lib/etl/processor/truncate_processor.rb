@@ -1,8 +1,8 @@
 module ETL #:nodoc:
-  class Processor #:nodoc:
+  module Processor #:nodoc:
     # A processor which will truncate a table. Use as a pre-processor for cleaning out a table
     # prior to loading
-    class TruncateProcessor < ETL::Processor
+    class TruncateProcessor < ETL::Processor::Processor
       # Defines the table to truncate
       attr_reader :table
 

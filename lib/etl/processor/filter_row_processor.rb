@@ -1,5 +1,5 @@
 module ETL
-  class Processor
+  module Processor
     class FilterRowProcessor < ETL::Processor::RowProcessor
       attr_reader :condition
       attr_reader :outtrue

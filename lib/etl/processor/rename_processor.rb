@@ -1,5 +1,5 @@
 module ETL #:nodoc:
-  class Processor #:nodoc:
+  module Processor #:nodoc:
     # Row level processor to rename a field in the row.
     #
     # Configuration options:
