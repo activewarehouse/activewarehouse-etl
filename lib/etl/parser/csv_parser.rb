@@ -1,5 +1,5 @@
 module ETL #:nodoc:
-  class Parser #:nodoc:
+  module Parser #:nodoc:
     # Parses CSV files
     class CsvParser < ETL::Parser::Parser
       # Initialize the parser
