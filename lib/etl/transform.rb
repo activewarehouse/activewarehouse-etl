@@ -1,7 +1,5 @@
-Dir[File.dirname(__FILE__) + "/transform/*.rb"].each { |file| require(file) }
-
-module ETL#:nodoc:
-  module Transform#:nodoc:
+module ETL #:nodoc:
+  module Transform #:nodoc:
     # Base class for transforms.
     #
     # A transform converts one value to another value using some sort of algorithm.
@@ -61,3 +59,5 @@ module ETL#:nodoc:
     end
   end
 end
+
+Dir[File.dirname(__FILE__) + "/transform/*.rb"].each { |file| require(file) }
