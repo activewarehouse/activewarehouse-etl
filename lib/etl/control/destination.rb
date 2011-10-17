@@ -248,12 +248,12 @@ module ETL #:nodoc:
               generator = generators[key] ||= value.new
               row[key] = generator.next
             when Symbol
-              generator = generators[key] ||= ETL::Generator.class_for_name(value).new(options)
+              generator = generators[key] ||= ETL::Generator::Generator.class_for_name(value).new(options)
               row[key] = generator.next
             when Proc, Method
               row[key] = value.call(row)
             else
-              if value.is_a?(ETL::Generator)
+              if value.is_a?(ETL::Generator::Generator)
                 row[key] = value.next
               else
                 row[key] = value

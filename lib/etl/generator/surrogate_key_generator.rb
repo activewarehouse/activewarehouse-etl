@@ -1,7 +1,7 @@
 # This source file contains code for a basic sequential surrogate key generator
 
 module ETL #:nodoc:
-  class Generator #:nodoc:
+  module Generator #:nodoc:
     # Surrogate key generator.
     class SurrogateKeyGenerator < Generator
       attr_reader :table
