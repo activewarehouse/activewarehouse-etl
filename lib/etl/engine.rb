@@ -498,7 +498,7 @@ module ETL #:nodoc:
 
       # say "Avg time writing execution records: #{ETL::Execution::Record.average_time_spent}"
       #
-      # ETL::Transform.benchmarks.each do |klass, t|
+      # ETL::Transform::Transform.benchmarks.each do |klass, t|
 #         say "Avg #{klass}: #{Engine.rows_read/t} rows/sec"
 #       end
 

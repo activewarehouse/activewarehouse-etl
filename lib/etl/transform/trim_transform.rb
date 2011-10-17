@@ -1,7 +1,7 @@
 module ETL #:nodoc:
-  class Transform #:nodoc:
+  module Transform #:nodoc:
     # Transform to trim string
-    class TrimTransform < ETL::Transform
+    class TrimTransform < ETL::Transform::Transform
       # Configuration options:
       # * <tt>:type</tt>: :left, :right or :both. Default is :both
       def initialize(control, name, configuration={})

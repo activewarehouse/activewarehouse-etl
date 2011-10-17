@@ -1,7 +1,7 @@
 module ETL #:nodoc:
-  class Transform #:nodoc:
+  module Transform #:nodoc:
     # Transform which looks up the value and replaces it with a foriegn key reference
-    class ForeignKeyLookupTransform < ETL::Transform
+    class ForeignKeyLookupTransform < ETL::Transform::Transform
       # The resolver to use if the foreign key is not found in the collection
       attr_accessor :resolver
 

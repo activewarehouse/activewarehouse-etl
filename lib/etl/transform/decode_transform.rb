@@ -1,7 +1,7 @@
 module ETL #:nodoc:
-  class Transform #:nodoc:
+  module Transform #:nodoc:
     # Transform which decodes coded values
-    class DecodeTransform < ETL::Transform
+    class DecodeTransform < ETL::Transform::Transform
       attr_accessor :decode_table_path
 
       attr_accessor :decode_table_delimiter

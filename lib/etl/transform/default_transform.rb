@@ -1,5 +1,5 @@
 module ETL #:nodoc:
-  class Transform #:nodoc:
+  module Transform #:nodoc:
     # Transform which will replace nil or empty values with a specified value.
     class DefaultTransform < Transform
       attr_accessor :default_value
