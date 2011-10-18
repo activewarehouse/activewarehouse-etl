@@ -5,12 +5,12 @@ module ETL #:nodoc:
   module Parser #:nodoc:
     # ETL parser implementation which uses SAX to parse XML files.
     class SaxParser < ETL::Parser::Parser
-      
+
       # The write trigger causes whatever values are currently specified for the row to be returned.
       # After returning the values will not be cleared, thus allowing for values which are assigned
       # higher in the XML tree to remain in memory.
       attr_accessor :write_trigger
-      
+
       # Initialize the parser
       # * <tt>source</tt>: The Source object
       # * <tt>options</tt>: Parser options Hash
@@ -18,7 +18,7 @@ module ETL #:nodoc:
         super
         configure
       end
-      
+
       # Returns each row
       def each(&block)
         Dir.glob(file).each do |file|
@@ -28,12 +28,12 @@ module ETL #:nodoc:
           parser.parse
         end
       end
-      
+
       # Get an array of Field objects
       def fields
         @fields ||= []
       end
-      
+
       private
       def configure
         #puts "write trigger in source.definition: #{source.definition[:write_trigger]}"
@@ -44,21 +44,21 @@ module ETL #:nodoc:
           fields << Field.new(name, XPath::Path.parse(path))
         end
       end
-      
+
       # Class representing a field to be loaded from the source
       class Field
         # The name of the field
         attr_reader :name
         # The XPath-like path to the field in the XML document
         attr_reader :path
-        
+
         def initialize(name, path) #:nodoc
           @name = name
           @path = path
         end
       end
     end
-    
+
     class Listener #:nodoc:
       include REXML::SAX2Listener
       def initialize(parser, &block)
@@ -67,7 +67,7 @@ module ETL #:nodoc:
         @value = nil
         @proc = Proc.new(&block)
       end
-      def cdata(text)    
+      def cdata(text)
         @value << text
       end
       def characters(text)
@@ -81,12 +81,12 @@ module ETL #:nodoc:
         @path = XPath::Path.new
       end
       def end_document
-        
+
       end
       def start_element(uri, localname, qname, attributes)
         element = XPath::Element.new(localname, attributes)
         @path.elements << element
-        
+
         @parser.fields.each do |field|
           #puts "#{@path} match? #{field.path}"
           if @path.match?(field.path)
@@ -100,7 +100,7 @@ module ETL #:nodoc:
       end
       def end_element(uri, localname, qname)
         element = @path.elements.last
-        
+
         @parser.fields.each do |field|
           #puts "#{@path} match? #{field.path}"
           if @path.match?(field.path)
@@ -110,14 +110,14 @@ module ETL #:nodoc:
             end
           end
         end
-        
+
         #puts @path.to_s
         if @path.match?(@parser.write_trigger)
           #puts "matched: #{@path} =~ #{@parser.write_trigger}"
           #puts "calling proc with #{@row.inspect}"
           @proc.call(@row.clone)
         end
-        
+
         @value = nil
         @path.elements.pop
       end
@@ -132,32 +132,32 @@ module ETL #:nodoc:
       class Path #:nodoc:
         # Get the elements in the path
         attr_accessor :elements
-        
+
         # Initialize
         def initialize
           @elements = []
         end
-        
+
         # Convert to a string representation
         def to_s
           @elements.map{ |e| e.to_s }.join("/")
         end
-        
+
         # Returns true if the last part of the path refers to an attribute
         def is_attribute?
           elements.last.attributes.length > 0
         end
-        
+
         # Return the name of the attribute referenced by the last element in this path. Returns nil if the last element
         # does not reference an attribute.
         #
-        # Warning: the path must only reference a single attribute, otherwise the result of this method will be random, 
+        # Warning: the path must only reference a single attribute, otherwise the result of this method will be random,
         # since attributes are stored in a Hash.
         def attribute
           return nil unless is_attribute?
           elements.last.attributes.keys.first
         end
-        
+
         # Return true if this XPath::Path matches the given path string. This is a fail-fast match, so the first mismatch
         # will cause the method to return false.
         def match?(s)
@@ -173,7 +173,7 @@ module ETL #:nodoc:
           end
           return true
         end
-        
+
         # Parse the string into an XPath::Path object
         def self.parse(s)
           return s if s.is_a?(Path)
@@ -206,7 +206,7 @@ module ETL #:nodoc:
           if !@attributes.empty?
             attr_str = @attributes.collect do |key,value|
               value = value.source if value.is_a?(Regexp)
-              "#{key}=#{value}" 
+              "#{key}=#{value}"
             end.join(",")
             s << "[" + attr_str + "]"
           end

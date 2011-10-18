@@ -9,7 +9,7 @@ module ETL #:nodoc:
         super
         configure
       end
-      
+
       # Return each row
       def each
         Dir.glob(file).each do |file|
@@ -28,12 +28,12 @@ module ETL #:nodoc:
           end
         end
       end
-      
+
       # Return a map of defined fields
       def fields
         @fields ||= {}
       end
-      
+
       private
       def configure
         source.definition.each do |field, options|
@@ -43,7 +43,7 @@ module ETL #:nodoc:
         end
       end
     end
-    
+
     class FixedWidthField #:nodoc:
       attr_reader :name, :field_start, :field_end, :field_length
       # Initialize the field.

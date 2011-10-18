@@ -1,11 +1,27 @@
-require 'bundler'
+require 'bundler/setup'
 require 'rake'
 require 'rake/testtask'
-require 'rdoc'
-require 'rdoc/task'
+require 'yard'
+
+require 'rspec'
+require 'rspec/core'
+require 'rspec/core/rake_task'
+
+Bundler::GemHelper.install_tasks
+
+desc "Run Specs"
+RSpec::Core::RakeTask.new(:spec) do |spec|
+  spec.pattern    = "spec/**/*_spec.rb"
+  spec.verbose    = true
+  spec.rspec_opts = ['--color']
+end
+
+
+desc "Generate YARD docs"
+YARD::Rake::YardocTask.new(:yard)
+
 
 namespace :test do
-
   def run_tests(rvm, rails, database)
     database_yml = File.dirname(__FILE__) + "/test/config/database.#{database}.yml"
     FileUtils.cp(database_yml, 'test/config/database.yml')
@@ -13,9 +29,9 @@ namespace :test do
     puts
     puts "============ Ruby #{rvm} - Rails #{rails} - Db #{database} ============="
     puts
-    
+
     rvm_script = File.expand_path("~/.rvm/scripts/rvm")
-    
+
     # a bit hackish - source rvm as described here
     # https://rvm.beginrescueend.com/workflow/scripting/
     sh <<-BASH
@@ -52,15 +68,6 @@ Rake::TestTask.new(:test) do |t|
   # TODO: reset the database
 end
 
-desc 'Generate documentation for the ETL application.'
-Rake::RDocTask.new(:rdoc) do |rdoc|
-  rdoc.rdoc_dir = 'rdoc'
-  rdoc.title    = 'ActiveWarehouse ETL'
-  rdoc.options << '--line-numbers' << '--inline-source'
-  rdoc.rdoc_files.include('README')
-  rdoc.rdoc_files.include('lib/**/*.rb')
-end
-
 namespace :rcov do
   desc 'Measures test coverage'
   task :test do
@@ -95,9 +102,4 @@ task :lines do
   end
 
   puts "Total: Lines #{total_lines}, LOC #{total_codelines}"
-end
-
-desc "Publish the API documentation (UNTESTED CURRENTLY)"
-task :pdoc => [:rdoc] do 
-  Rake::SshDirPublisher.new("aeden@rubyforge.org", "/var/www/gforge-projects/activewarehouse/etl/rdoc", "rdoc").upload
 end

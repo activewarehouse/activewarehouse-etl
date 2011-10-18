@@ -9,7 +9,7 @@ module ETL #:nodoc:
         super
         configure
       end
-      
+
       def get_fields_names(file)
         File.open(file) do |input|
           fields = CSV.parse(input.readline, options).first
@@ -52,23 +52,23 @@ module ETL #:nodoc:
           end
         end
       end
-      
+
       # Get an array of defined fields
       def fields
         @fields ||= []
       end
-      
+
       private
       def validate_row(row, line, file)
         ETL::Engine.logger.debug "validating line #{line} in file #{file}"
         if row.length != fields.length
-          raise_with_info( MismatchError, 
-            "The number of columns from the source (#{row.length}) does not match the number of columns in the definition (#{fields.length})", 
+          raise_with_info( MismatchError,
+            "The number of columns from the source (#{row.length}) does not match the number of columns in the definition (#{fields.length})",
             line, file
           )
         end
       end
-      
+
       def configure
         source.definition.each do |options|
           case options
@@ -81,7 +81,7 @@ module ETL #:nodoc:
           end
         end
       end
-      
+
       class Field #:nodoc:
         attr_reader :name
         def initialize(name)

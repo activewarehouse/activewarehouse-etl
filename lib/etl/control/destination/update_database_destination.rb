@@ -7,18 +7,18 @@ module ETL #:nodoc:
     class UpdateDatabaseDestination < Destination
       # The target connection
       attr_reader :target
-      
+
       # The table
       attr_reader :table
-      
+
       # Specify the order from the source
       attr_reader :order
-      
+
       # Specify the conditions from the source
       attr_reader :conditions
-      
+
       # Initialize the database destination
-      # 
+      #
       # * <tt>control</tt>: The ETL::Control::Control instance
       # * <tt>configuration</tt>: The configuration Hash
       # * <tt>mapping</tt>: The mapping
@@ -48,7 +48,7 @@ module ETL #:nodoc:
         raise ControlError, "Table required" unless @table
         raise ControlError, "Target required" unless @target
       end
-      
+
       # Flush the currently buffered data
       def flush
         conn.transaction do
@@ -59,7 +59,7 @@ module ETL #:nodoc:
 
             # add any virtual fields
             add_virtuals!(row)
-            
+
             conditionsfilter = []
             conditions.each do |cond|
               c = " #{cond[:field]} #{cond[:comp]} #{cond[:value]} "
@@ -83,13 +83,13 @@ module ETL #:nodoc:
           buffer.clear
         end
       end
-      
+
       # Close the connection
       def close
         buffer << append_rows if append_rows
         flush
       end
-      
+
       private
       def conn
         @conn ||= begin
@@ -99,11 +99,11 @@ module ETL #:nodoc:
           raise RuntimeError, "Problem to connect to db"
         end
       end
-      
+
       def table_name
         ETL::Engine.table(table, ETL::Engine.connection(target))
       end
-      
+
     end
   end
 end

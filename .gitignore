@@ -5,3 +5,12 @@ rdoc
 .rvmrc
 .bundle
 *.gem
+Gemfile.lock
+*.rbc
+*.log
+doc
+.yardoc
+*.tmproj
+*.sqlite3
+spec/fixtures/output
+.rbx

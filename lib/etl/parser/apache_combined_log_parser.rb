@@ -15,7 +15,7 @@ module ETL #:nodoc:
           end
         end
       end
-      
+
       def parse(line)
         # example line:  127.0.0.1 - frank [10/Oct/2000:13:55:36 -0700] "GET /apache_pb.gif HTTP/1.0" 200 2326 "http://www.example.com/start.html" "Mozilla/4.08 [en] (Win98; I ;Nav)"
         line =~ /^(\S+)\s(\S+)\s(\S+)\s\[([^\]]*)\]\s"([^"]*)"\s(\d*)\s(\d*)\s"([^"]*)"\s"([^"]*)"$/
@@ -33,17 +33,17 @@ module ETL #:nodoc:
         #fields[:timestamp] =~ r%{(\d\d)/(\w\w\w)/(\d\d\d\d):(\d\d):(\d\d):(\d\d) -(\d\d\d\d)}
         d = Date._strptime(fields[:timestamp], '%d/%b/%Y:%H:%M:%S') unless fields[:timestamp].nil?
         fields[:timestamp] = Time.mktime(d[:year], d[:mon], d[:mday], d[:hour], d[:min], d[:sec], d[:sec_fraction]) unless d.nil?
-        
+
         fields[:method], fields[:path] = fields[:request].split(/\s/)
 
         fields.merge!(parse_user_agent(fields[:user_agent])) unless fields[:user_agent].nil?
         fields.merge!(parse_uri(fields[:referrer], :prefix => 'referrer_'))
-        
+
         fields.each do |key, value|
           fields[key] = nil if value == '-'
         end
       end
-      
+
     end
   end
 end

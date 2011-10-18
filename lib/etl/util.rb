@@ -14,7 +14,7 @@ module ETL
       distance_in_minutes = (seconds/60).round
       seconds = seconds % 60
       distance_in_seconds = seconds
-    
+
       s = ''
       s << "#{distance_in_days} days," if distance_in_days > 0
       s << "#{distance_in_hours} hours, " if distance_in_hours > 0
@@ -22,7 +22,7 @@ module ETL
       s << "#{distance_in_seconds} seconds"
       s
     end
-  
+
     # Get the approximate disntance of time in words from the given from_time
     # to the the given to_time. If to_time is not specified then it is set
     # to Time.now. By default seconds are included...set the include_seconds
@@ -32,7 +32,7 @@ module ETL
       to_time = to_time.to_time if to_time.respond_to?(:to_time)
       distance_in_minutes = (((to_time - from_time).abs)/60).round
       distance_in_seconds = ((to_time - from_time).abs).round
-    
+
       case distance_in_minutes
         when 0..1
           return (distance_in_minutes == 0) ? 'less than a minute' : '1 minute' unless include_seconds

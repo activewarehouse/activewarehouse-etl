@@ -25,12 +25,12 @@ module ETL
         raise ControlError, ":query must be specified" unless @query
         raise ControlError, ":fields must be specified" unless @fields
       end
-      
+
       # Get a String identifier for the source
       def to_s
         "#{host}/#{database}"
       end
-      
+
       def process(row)
         return nil if row.nil?
 
@@ -68,12 +68,12 @@ module ETL
       def connection
         ETL::Engine.connection(target)
       end
-      
+
       # Get the host, defaults to 'localhost'
       def host
         ETL::Base.configurations[target.to_s]['host'] || 'localhost'
       end
-      
+
       def database
         ETL::Base.configurations[target.to_s]['database']
       end

@@ -13,7 +13,7 @@ module ETL
       attr_reader :folder
       attr_reader :username
       attr_reader :local_dir
-      
+
       # configuration options include:
       # * host - hostname or IP address of IMAP server (required)
       # * ssl  - activate encryption (default false)
@@ -36,7 +36,7 @@ module ETL
         @password = configuration[:password]
         @local_dir = configuration[:local_dir] || ''
       end
-      
+
       def process
         conn = Net::IMAP.new(@host, @port, @ssl)
         conn.login(@username, @password)
@@ -59,10 +59,10 @@ module ETL
         conn.expunge
         conn.close
       end
-      
+
       private
       attr_accessor :password
-      
+
       def local_file(name)
         File.join(@local_dir, name)
       end

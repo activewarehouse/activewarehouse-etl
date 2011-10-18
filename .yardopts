@@ -1,0 +1,5 @@
+--title "Ruby ETL"
+lib/**/*.rb
+README.textile
+CHANGELOG
+TODO

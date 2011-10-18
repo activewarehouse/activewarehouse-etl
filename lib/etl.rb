@@ -1,9 +1,5 @@
-# This source file requires all of the necessary gems and source files for ActiveWarehouse ETL. If you
-# load this source file all of the other required files and gems will also be brought into the 
-# runtime.
-
 #--
-# Copyright (c) 2006-2007 Anthony Eden
+# Copyright (c) 2006-2011 Anthony Eden
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -25,73 +21,44 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 
+require 'rexml/rexml'
+
+REXML::VERSION = REXML::Version unless defined?(REXML::VERSION)
+
 require 'logger'
 require 'yaml'
 require 'erb'
-
-require 'rubygems'
-
-unless defined?(REXML::VERSION)
-  require 'rexml/rexml'
-  unless defined?(REXML::VERSION)
-    REXML::VERSION = REXML::Version
-  end
-end
-
 require 'active_support'
+require 'active_support/core_ext'
 require 'active_record'
 require 'adapter_extensions'
 
-if RUBY_VERSION < '1.9'
-  require 'faster_csv'
-  CSV = FasterCSV unless defined?(CSV)
-else
-  require 'csv'
-end
-
-# patch for https://github.com/activewarehouse/activewarehouse-etl/issues/24
-# allow components to require optional gems
-class Object
-  def optional_require(feature)
-    begin
-      require feature
-    rescue LoadError
-    end
-  end
-end
-
-$:.unshift(File.dirname(__FILE__))
-
 require 'etl/core_ext'
+require 'etl/csv'
 require 'etl/util'
-require 'etl/http_tools'
 require 'etl/builder'
-require 'etl/version'
 require 'etl/engine'
 require 'etl/control'
-require 'etl/batch'
 require 'etl/row'
 require 'etl/parser'
 require 'etl/transform'
 require 'etl/processor'
 require 'etl/generator'
-require 'etl/screen'
+require 'etl/execution'
 
-module ETL #:nodoc:
-  class ETLError < StandardError #:nodoc:
-  end
-  class ControlError < ETLError #:nodoc:
-  end
-  class DefinitionError < ControlError #:nodoc:
-  end
-  class ConfigurationError < ControlError #:nodoc:
-  end
-  class MismatchError < ETLError #:nodoc:
-  end
-  class ResolverError < ETLError #:nodoc:
-  end
-  class ScreenError < ETLError #:nodoc:
-  end
-  class FatalScreenError < ScreenError #:nodoc:
-  end
+module ETL
+  autoload :VERSION,    'etl/version'
+  autoload :Base,       'etl/base'
+  autoload :Batch,      'etl/batch'
+  autoload :HttpTools,  'etl/http_tools'
+  autoload :Screen,     'etl/screen'
+
+  class ETLError            < StandardError;  end
+  class ControlError        < ETLError;       end
+  class DefinitionError     < ControlError;   end
+  class ConfigurationError  < ControlError;   end
+  class MismatchError       < ETLError;       end
+  class ResolverError       < ETLError;       end
+  class ScreenError         < ETLError;       end
+  class FatalScreenError    < ScreenError;    end
 end

@@ -1,7 +1,7 @@
 module ETL
   module Screen
     # This screen validates the number of rows which will be bulk loaded
-    # against the results from some sort of a row count query. If there 
+    # against the results from some sort of a row count query. If there
     # is a difference then the screen will not pass
     class RowCountScreen
       attr_accessor :control, :configuration

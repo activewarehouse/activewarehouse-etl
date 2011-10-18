@@ -12,7 +12,7 @@ module ETL #:nodoc:
         row[configuration[:dest]] = sequences[configuration[:context]] += 1
         row
       end
-      
+
       protected
       # Get a Hash of sequences
       def sequences

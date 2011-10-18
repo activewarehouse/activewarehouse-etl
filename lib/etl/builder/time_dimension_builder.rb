@@ -3,7 +3,7 @@ module ETL #:nodoc:
     # Builder that creates a simple time dimension.
     class TimeDimensionBuilder
       def initialize
-        # Returns an array of hashes representing records in the dimension. The values for each record are 
+        # Returns an array of hashes representing records in the dimension. The values for each record are
         # accessed by name.
         def build(options={})
           records = []

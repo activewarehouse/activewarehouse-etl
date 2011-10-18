@@ -1,13 +1,13 @@
 module ETL #:nodoc:
   module Processor #:nodoc:
-    # Row processor that checks whether or not the row has already passed 
+    # Row processor that checks whether or not the row has already passed
     # through the ETL processor, using the key fields provided as the keys
     # to check.
     class CheckUniqueProcessor < ETL::Processor::RowProcessor
 
       # The keys to check
       attr_accessor :keys
-      
+
       # Initialize the processor
       # Configuration options:
       # * <tt>:keys</tt>: An array of keys to check against
@@ -20,14 +20,14 @@ module ETL #:nodoc:
       def compound_key_constraints
         @compound_key_constraints ||= {}
       end
-      
+
       # Process the row. This implementation will only return a row if it
       # it's key combination has not already been seen.
       #
       # An error will be raised if the row doesn't include the keys.
       def process(row)
         ensure_columns_available_in_row!(row, keys, 'for unicity check')
-        
+
         key = (keys.collect { |k| row[k] }).join('|')
         unless compound_key_constraints[key]
           compound_key_constraints[key] = 1

@@ -1,0 +1,9 @@
+infinity_test do
+  use :rubies => %w(1.8.7 ree 1.9.2 jruby rbx)
+
+  use :test_framework => :rspec
+
+  notifications :growl do
+    show_images :mode => :fuuu
+  end
+end

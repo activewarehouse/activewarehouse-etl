@@ -1,0 +1,26 @@
+<%
+  db_adapter = 'sqlite3'
+
+  if defined?(RUBY_ENGINE)
+    db_adapter = 'jdbcsqlite3' if RUBY_ENGINE == 'jruby'
+  end
+
+  db_root = Bundler.root.join('spec/db/')
+%>
+operational_database:
+  adapter: <%= db_adapter %>
+  database: <%= db_root.join('operational_database.sqlite3').to_s %>
+  pool: 5
+  timeout: 5000
+
+data_warehouse:
+  adapter: <%= db_adapter %>
+  database: <%= db_root.join('data_warehouse.sqlite3').to_s %>
+  pool: 5
+  timeout: 5000
+
+etl_execution:
+  adapter: <%= db_adapter %>
+  database: <%= db_root.join('etl_execution.sqlite3').to_s %>
+  pool: 5
+  timeout: 5000

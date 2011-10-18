@@ -41,7 +41,7 @@ def execute
     [ '--read-locally', GetoptLong::NO_ARGUMENT],
     [ '--rails-root', GetoptLong::REQUIRED_ARGUMENT]
   )
-  
+
   options = {}
   opts.each do |opt, arg|
     case opt
@@ -81,7 +81,7 @@ def execute
       ETL::Engine.realtime_activity = true
       ETL::Engine.process(f)
     end
-  
+
     puts "ETL process complete\n\n"
   end
 end

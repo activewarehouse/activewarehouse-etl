@@ -5,7 +5,7 @@ module ETL #:nodoc:
     class RequireNonBlankProcessor < ETL::Processor::RowProcessor
       # An array of fields to check
       attr_reader :fields
-      
+
       # Initialize the processor
       #
       # Options:
@@ -15,7 +15,7 @@ module ETL #:nodoc:
         super
         @fields = configuration[:fields] || []
       end
-      
+
       # Process the row.
       def process(row)
         fields.each { |field| return if row[field].blank? }

@@ -5,13 +5,13 @@ module ETL #:nodoc:
   class Row < Hash
     # Accessor for the originating source
     attr_accessor :source
-    
+
     # All change types
     CHANGE_TYPES = [:insert, :update, :delete]
-    
+
     # Accessor for the row's change type
     attr_accessor :change_type
-    
+
     # Get the change type, defaults to :insert
     def change_type
       @change_type ||= :insert

@@ -12,7 +12,7 @@ module ETL
       attr_reader :filters
       attr_reader :username
       attr_reader :local_dir
-      
+
       # configuration options include:
       # * host - hostname or IP address of POP3 server (required)
       # * ssl  - activate encryption (default false)
@@ -33,7 +33,7 @@ module ETL
         @password = configuration[:password]
         @local_dir = configuration[:local_dir] || ''
       end
-      
+
       def process
         Net::POP3.enable_ssl(OpenSSL::SSL::VERIFY_NONE) if @ssl
         conn = Net::POP3.new(@host, @port)
@@ -58,10 +58,10 @@ module ETL
 
         conn.finish
       end
-      
+
       private
       attr_accessor :password
-      
+
       def local_file(name)
         File.join(@local_dir, name)
       end
