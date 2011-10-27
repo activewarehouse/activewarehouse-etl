@@ -176,7 +176,7 @@ module ETL #:nodoc:
         return @query if @query
         q = ''
         q << "#{with}" if with
-        q = "SELECT #{select} FROM #{@table}"
+        q << "SELECT #{select} FROM #{@table}"
         q << " #{join}" if join
         
         conditions = []
