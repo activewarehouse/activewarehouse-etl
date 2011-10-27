@@ -93,7 +93,7 @@ module ETL #:nodoc:
           end
           
           # write the values joined by the separator defined in the configuration
-          f.write(values.join(separator))
+          f.write(values.join(separator).force_encoding("UTF-8"))
           
           # write the end-of-line
           f.write(eol)
