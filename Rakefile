@@ -1,8 +1,13 @@
 require 'bundler'
 require 'rake'
 require 'rake/testtask'
-require 'rdoc'
-require 'rdoc/task'
+
+begin
+  require 'rdoc'
+  require 'rdoc/task'
+rescue LoadError
+  puts "rdoc won't be loaded"
+end
 
 namespace :test do
 
@@ -52,13 +57,15 @@ Rake::TestTask.new(:test) do |t|
   # TODO: reset the database
 end
 
-desc 'Generate documentation for the ETL application.'
-Rake::RDocTask.new(:rdoc) do |rdoc|
-  rdoc.rdoc_dir = 'rdoc'
-  rdoc.title    = 'ActiveWarehouse ETL'
-  rdoc.options << '--line-numbers' << '--inline-source'
-  rdoc.rdoc_files.include('README')
-  rdoc.rdoc_files.include('lib/**/*.rb')
+if defined?(Rake::RDocTask)
+  desc 'Generate documentation for the ETL application.'
+  Rake::RDocTask.new(:rdoc) do |rdoc|
+    rdoc.rdoc_dir = 'rdoc'
+    rdoc.title    = 'ActiveWarehouse ETL'
+    rdoc.options << '--line-numbers' << '--inline-source'
+    rdoc.rdoc_files.include('README')
+    rdoc.rdoc_files.include('lib/**/*.rb')
+  end
 end
 
 namespace :rcov do
