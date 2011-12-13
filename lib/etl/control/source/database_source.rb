@@ -204,8 +204,8 @@ module ETL #:nodoc:
       
       def query_rows
         return @query_rows if @query_rows
-        if (options[:mysqlstream] == 'true')
-          MySqlStreamer.new(query,connection)
+        if (options[:mysqlstream] == true)
+          MySqlStreamer.new(query,@target)
         else
           connection.select_all(query)
         end
