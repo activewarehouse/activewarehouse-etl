@@ -23,7 +23,7 @@ class MySqlStreamer
 				end
 			end
 			error = err.gets
-			if (error.strip.length > 0)
+			if (!error.nil? && error.strip.length > 0)
 				throw error
 			end
 		end
