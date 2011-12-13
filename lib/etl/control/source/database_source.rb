@@ -203,7 +203,12 @@ module ETL #:nodoc:
       end
       
       def query_rows
-        @query_rows ||= connection.select_all(query)
+        return @query_rows if @query_rows
+        if (options[:mysqlstream] == 'true')
+          MySqlStreamer.new(query,connection)
+        else
+          connection.select_all(query)
+        end
       end
       
       # Get the database connection to use
