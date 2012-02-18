@@ -42,6 +42,11 @@ require 'active_support'
 require 'active_record'
 require 'adapter_extensions'
 
+if ActiveSupport::VERSION::STRING >= '3.2'
+  # support for cattr_accessor
+  require 'active_support/core_ext/class/attribute_accessors'
+end
+
 if RUBY_VERSION < '1.9'
   require 'faster_csv'
   CSV = FasterCSV unless defined?(CSV)
