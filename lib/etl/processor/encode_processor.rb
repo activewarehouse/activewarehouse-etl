@@ -1,5 +1,3 @@
-require 'iconv'
-
 module ETL #:nodoc:
   module Processor #:nodoc:
     # The encode processor uses Iconv to convert a file from one encoding (eg: utf-8) to another (eg: latin1), line by line.
