@@ -84,6 +84,9 @@ module ETL #:nodoc:
         Time.now.strftime("%Y%m%d%H%M%S")
       end
 
+      # exit code to be passed to the command line
+      attr_accessor :exit_code
+
       # The current source
       attr_accessor :current_source
 
@@ -431,7 +434,7 @@ module ETL #:nodoc:
         
         if exceeded_error_threshold?(control)
           say_on_own_line "Exiting due to exceeding error threshold: #{control.error_threshold}"
-          return
+          ETL::Engine.exit_code = 1
         end
         
       end
@@ -445,7 +448,7 @@ module ETL #:nodoc:
         execute_screens(control)
       rescue FatalScreenError => e
         say "Fatal screen error during job execution: #{e.message}"
-        exit
+        ETL::Engine.exit_code = 2
       rescue ScreenError => e
         say "Screen error during job execution: #{e.message}"
         return
@@ -467,7 +470,7 @@ module ETL #:nodoc:
         execute_screens(control, :after_post_process)
       rescue FatalScreenError => e
         say "Fatal screen error during job execution: #{e.message}"
-        exit
+        ETL::Engine.exit_code = 3
       rescue ScreenError => e
         say "Screen error during job execution: #{e.message}"
         return

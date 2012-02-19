@@ -1,4 +1,5 @@
 0.9.5 - unreleased
+* A non-zero exit code should be returned on fatal screen or exceeded error threshold (thbar)
 * BREAKING CHANGE: the TruncateProcessor will now RESTART IDENTITY when using postgres - this behaviour can be changed by passing :options => 'CONTINUE IDENTITY' (thbar)
 * New EnsureFieldsPresenceProcessor (thbar)
 * New CsvDestination based on FasterCSV (lgustafson)

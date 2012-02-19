@@ -80,6 +80,7 @@ def execute
     ARGV.each do |f|
       ETL::Engine.realtime_activity = true
       ETL::Engine.process(f)
+      exit(ETL::Engine.exit_code) if ETL::Engine.exit_code
     end
   
     puts "ETL process complete\n\n"
