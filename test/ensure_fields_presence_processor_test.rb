@@ -24,5 +24,10 @@ class EnsureFieldsPresenceProcessorTest < Test::Unit::TestCase
     row = ETL::Row[:first => nil, :second => "Barry"]
     assert_equal row, new_processor(:fields => [:first, :second]).process(row)
   end
+
+  should 'accept strings instead of symbols in both places' do
+    row = ETL::Row[:first => nil, 'second' => "Barry"]
+    assert_equal row, new_processor(:fields => ['first', :second]).process(row)
+  end
   
 end

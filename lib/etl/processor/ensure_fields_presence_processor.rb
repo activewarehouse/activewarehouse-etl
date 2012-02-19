@@ -14,7 +14,7 @@ module ETL
       end
       
       def process(row)
-        missing_fields = configuration[:fields] - row.keys
+        missing_fields = configuration[:fields].map(&:to_s) - row.keys.map(&:to_s)
         raise(ETL::ControlError, 
           "Row missing required field(s) #{missing_fields.join(',')} in row. Available fields are : #{row.keys.join(',')}") unless missing_fields.empty?
         row
