@@ -74,13 +74,13 @@ module ETL #:nodoc:
             res = conn.execute(q, "Select row #{current_row}")
             none = true
             
-            case conn
-              when ActiveRecord::ConnectionAdapters::PostgreSQLAdapter
+            case conn.class.name
+              when "ActiveRecord::ConnectionAdapters::PostgreSQLAdapter"
                 res.each { none = false }
-              when ActiveRecord::ConnectionAdapters::MysqlAdapter
+              when "ActiveRecord::ConnectionAdapters::MysqlAdapter"
                 res.each_hash { none = false }
                 res.free
-              when ActiveRecord::ConnectionAdapters::Mysql2Adapter
+              when "ActiveRecord::ConnectionAdapters::Mysql2Adapter"
                 res.each { none = false }
               else raise "Unsupported adapter #{conn.class} for this destination"
             end
