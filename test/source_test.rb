@@ -100,7 +100,7 @@ class SourceTest < Test::Unit::TestCase
       @source = ETL::Control::DatabaseSource.new(control, configuration, definition)
     end
     should "set the local file for extraction storage" do
-      assert_match %r{source_data/localhost/etl_unittest/people/\d+.csv}, @source.local_file.to_s
+      assert_match %r{source_data/localhost/activewarehouse_etl_test/people/\d+.csv}, @source.local_file.to_s
     end
     should "find 1 row" do
       Person.delete_all
