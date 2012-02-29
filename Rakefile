@@ -37,8 +37,8 @@ namespace :ci do
     ENV['DB'] = args[:db] || 'mysql2'
     system! "bundle install"
     # trick: pass RAILS_ENV to force the db to be created by standalone migrations
-    system! "bundle exec rake db:create RAILS_ENV=#{ENV['DB']}"
-    system! "bundle exec rake db:schema:load RAILS_ENV=#{ENV['DB']}"
+    system! "bundle exec rake db:create"
+    system! "bundle exec rake db:schema:load"
   end
 
   desc "For current RVM, run the tests for all the combination in travis configuration"
