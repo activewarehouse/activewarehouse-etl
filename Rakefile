@@ -16,21 +16,6 @@ end
 # experimental tasks to reproduce the Travis behaviour locally
 namespace :ci do
 
-  desc "Create required databases for tests (db in [mysql, mysql2, postgresql])"
-  task :create_db, :db do |t, args|
-    db = args[:db] || ENV['DB']
-    case db
-      when /mysql/;
-        # TODO - extract this info from database.yml
-        system! "mysql -e 'create database activewarehouse_etl_test;'"
-        system! "mysql activewarehouse_etl_test < test/config/databases/mysql_setup.sql"
-      when /postgres/;
-        system! "psql -c 'create database activewarehouse_etl_test;' -U postgres"
-        system! "psql -d activewarehouse_etl_test -U postgres -f test/config/databases/postgresql_setup.sql"
-      else abort("I don't know how to create the database for DB=#{db}!")
-    end
-  end
-
   desc "For current RVM, run the tests for one db and one gemfile"
   task :run_one, :db, :gemfile do |t, args|
     ENV['BUNDLE_GEMFILE'] = File.expand_path(args[:gemfile] || (File.dirname(__FILE__) + '/test/config/gemfiles/Gemfile.rails-3.2.x'))
