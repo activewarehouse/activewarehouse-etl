@@ -10,3 +10,5 @@ env:
 #  - DB=mysql2
   - DB=mysql
 #  - DB=postgresql
+before_script:
+  - rake db:create db:schema:load
