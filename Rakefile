@@ -24,6 +24,7 @@ namespace :ci do
     # trick: pass RAILS_ENV to force the db to be created by standalone migrations
     system! "bundle exec rake db:create"
     system! "bundle exec rake db:schema:load"
+    system! "bundle exec rake"
   end
 
   desc "For current RVM, run the tests for all the combination in travis configuration"
