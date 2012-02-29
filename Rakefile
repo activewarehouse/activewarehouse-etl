@@ -13,6 +13,11 @@ rescue LoadError => e
   puts "gem install standalone_migrations to get db:migrate:* tasks! (Error: #{e})"
 end
 
+task :show_me_this do
+  puts "Hello!"
+  puts "We have DB=#{ENV['DB']}"
+end
+
 # experimental tasks to reproduce the Travis behaviour locally
 namespace :ci do
 
