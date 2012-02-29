@@ -25,9 +25,7 @@ module ETL #:nodoc:
       
       def process
         conn = ETL::Engine.connection(target)
-        if conn.is_a?(ActiveRecord::ConnectionAdapters::PostgreSQLAdapter)
-          @options ||= 'RESTART IDENTITY'
-        end
+        @options ||= 'RESTART IDENTITY' if conn.class.name =~ /postgres/i
         conn.truncate(table_name, @options)
       end
       
