@@ -20,30 +20,30 @@ One thing to keep in mind is that ActiveWarehouse-ETL is highly hackable: you ca
 
 h2. Compatibility
 
-Current code should work with any combination of Rails 2, Rails 3, Ruby 1.8.7, Ruby 1.9.2, MySQL and Postgresql. If you meet any issue, drop a line on the "Google Group":http://groups.google.com/group/activewarehouse-discuss and/or "create an issue on github":https://github.com/activewarehouse/activewarehouse-etl/issues.
+See "Travis":http://travis-ci.org/activewarehouse/activewarehouse-etl and our set of "gemfiles":https://github.com/activewarehouse/activewarehouse-etl/tree/master/test/config/gemfiles for the currently tested combinations.
+
+The codebase is being gradually upgraded to support Rails > 3.0.
+
+Be sure to use the latest code of the rails-3 branch of "adapter_extensions":https://github.com/activewarehouse/adapter_extensions/tree/rails-3 if you use Rails 3+.
+
+If you meet any error, please drop a line on the "Google Group":http://groups.google.com/group/activewarehouse-discuss so that we can fix it.
 
 h2. Contributing
 
 Fork on GitHub and after you've committed tested patches, send a pull request.
 
-If you meet any error while trying to run the tests, or any failure, please drop a line on the "Google Group":http://groups.google.com/group/activewarehouse-discuss.
-
-h3. Pre-requisites to running the tests
+TODO: explain how to run the tests like on Travis.
 
 * install RVM and Bundler
 * install MySQL and/or Postgresql (you can use brew for that)
-* create test/config/database.mysql.yml and test/config/database.postgresql.yml based on "test/config/database.example.yml":https://github.com/activewarehouse/activewarehouse-etl/blob/master/test/config/database.example.yml
-* create databases 'etl_unittest' and 'etl_unittest_execution' in each database, with access to the user given in the yml files
+* edit test/config/database.yml if needed (don't commit this file though)
+* run (for instance):
 
-If you don't install both MySQL and Postgresql, edit "test/config/common.rb":https://github.com/activewarehouse/activewarehouse-etl/blob/master/test/config/common.rb to comment out either 'mysql' or 'pg', or the test task will raise errors.
+    @rake "ci:run_one[mysql,test/config/gemfiles/Gemfile.rails-3.0.x]"@
 
-h3. Run the tests
-
-You can run the tests on a "combination of environments":https://github.com/activewarehouse/activewarehouse-etl/blob/master/test-matrix.yml using:
-
-<pre>
-  rake test:matrix
-</pre>
+or for all the combinations:
+    
+    @rake ci:run_matrix@
 
 h2. Contributors
 
