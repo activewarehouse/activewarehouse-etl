@@ -7,6 +7,12 @@ def system!(cmd)
   raise "Command failed!" unless system(cmd)
 end
 
+begin
+  require 'tasks/standalone_migrations'
+rescue LoadError => e
+  puts "gem install standalone_migrations to get db:migrate:* tasks! (Error: #{e})"
+end
+
 # experimental tasks to reproduce the Travis behaviour locally
 namespace :ci do
 
@@ -29,7 +35,10 @@ namespace :ci do
   task :run_one, :db, :gemfile do |t, args|
     ENV['BUNDLE_GEMFILE'] = File.expand_path(args[:gemfile] || (File.dirname(__FILE__) + '/test/config/gemfiles/Gemfile.rails-3.2.x'))
     ENV['DB'] = args[:db] || 'mysql2'
-    system! "bundle install && bundle exec rake"
+    system! "bundle install"
+    # trick: pass RAILS_ENV to force the db to be created by standalone migrations
+    system! "bundle exec rake db:create RAILS_ENV=#{ENV['DB']}"
+    system! "bundle exec rake db:schema:load RAILS_ENV=#{ENV['DB']}"
   end
 
   desc "For current RVM, run the tests for all the combination in travis configuration"

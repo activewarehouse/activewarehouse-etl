@@ -26,4 +26,6 @@ def declare_gems(activerecord_version)
   gem 'spreadsheet'
   gem 'nokogiri'
   gem 'fastercsv'
+
+  gem 'standalone_migrations'
 end
