@@ -2,42 +2,51 @@ require 'bundler'
 require 'rake'
 require 'rake/testtask'
 
-namespace :test do
+def system!(cmd)
+  puts cmd
+  raise "Command failed!" unless system(cmd)
+end
 
-  def run_tests(rvm, rails, database)
-    database_yml = File.dirname(__FILE__) + "/test/config/database.#{database}.yml"
-    FileUtils.cp(database_yml, 'test/config/database.yml')
+# experimental tasks to reproduce the Travis behaviour locally
+namespace :ci do
 
-    puts
-    puts "============ Ruby #{rvm} - Rails #{rails} - Db #{database} ============="
-    puts
-    
-    rvm_script = File.expand_path("~/.rvm/scripts/rvm")
-    
-    # a bit hackish - source rvm as described here
-    # https://rvm.beginrescueend.com/workflow/scripting/
-    sh <<-BASH
-    source #{rvm_script}
-    export BUNDLE_GEMFILE=test/config/Gemfile.rails-#{rails}
-    rvm #{rvm}
-    bundle install
-    rake test
-BASH
-  end
-
-  desc 'Run the tests in all combinations described in test-matrix.yml'
-  task :matrix do
-    # a la travis
-    require 'yaml'
-    data = YAML.load(IO.read(File.dirname(__FILE__) + '/test-matrix.yml'))
-    data['rvm'].each do |rvm|
-      data['rails'].each do |rails|
-        data['database'].each do |database|
-          run_tests(rvm, rails, database)
-        end
-      end
+  desc "Create required databases for tests (db in [mysql, mysql2, postgresql])"
+  task :create_db, :db do |t, args|
+    db = args[:db] || ENV['DB']
+    case db
+      when /mysql/;
+        # TODO - extract this info from database.yml
+        system! "mysql -e 'create database activewarehouse_etl_test;'"
+        system! "mysql activewarehouse_etl_test < test/config/databases/mysql_setup.sql"
+      when /postgres/;
+        system! "psql -c 'create database activewarehouse_etl_test;' -U postgres"
+        system! "psql -d activewarehouse_etl_test -U postgres -f test/config/databases/postgresql_setup.sql"
+      else abort("I don't know how to create the database for DB=#{db}!")
     end
   end
+
+  desc "For current RVM, run the tests for one db and one gemfile"
+  task :run_one, :db, :gemfile do |t, args|
+    ENV['BUNDLE_GEMFILE'] = File.expand_path(args[:gemfile] || (File.dirname(__FILE__) + '/test/config/gemfiles/Gemfile.rails-3.2.x'))
+    ENV['DB'] = args[:db] || 'mysql2'
+    system! "bundle install && bundle exec rake"
+  end
+
+  desc "For current RVM, run the tests for all the combination in travis configuration"
+  task :run_matrix do
+    require 'cartesian'
+    config = YAML.load_file('.travis.yml')
+    config['env'].cartesian(config['gemfile']).each do |*x|
+      env, gemfile = *x.flatten
+      db = env.gsub('DB=', '')
+      print [db, gemfile].inspect.ljust(40) + ": "
+      cmd = "rake \"ci:run_one[#{db},#{gemfile}]\""
+      result = system "#{cmd} > /dev/null 2>&1"
+      result = result ? "OK" : "FAILED! - re-run with: #{cmd}"
+      puts result
+    end
+  end
+
 end
 
 task :default => :test
