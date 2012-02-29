@@ -4,6 +4,8 @@ ActiveWarehouse-ETL is a Ruby Extract-Transform-Load (ETL) tool.
 
 This tool is both usable and used in production under its current form - but be aware the project is under reorganization: a new team is shaping up and we're working mostly on making it easier for people to contribute first. Up-to-date documentation will only come later.
 
+"!https://secure.travis-ci.org/activewarehouse/activewarehouse-etl.png!":http://travis-ci.org/activewarehouse/activewarehouse-etl
+
 h2. Usage
 
 The documentation is sparse and not everything is up to date, too, but here are useful bits to get you started:
