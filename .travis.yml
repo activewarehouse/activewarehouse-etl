@@ -11,6 +11,5 @@ env:
   - DB=mysql
   - DB=postgresql
 before_script:
-  - bundle exec rake show_me_this
-  - bundle exec rake db:create:all
-  - bundle exec rake db:schema:load
+  - bundle exec rake db:create
+  - bundle exec rake db:schema:load RAILS_ENV=$DB
