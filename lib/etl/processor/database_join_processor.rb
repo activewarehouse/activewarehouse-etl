@@ -43,14 +43,15 @@ module ETL
         ETL::Engine.logger.debug("Executing select: #{q}")
         res = connection.execute(q)
 
-        case connection
-          when ActiveRecord::ConnectionAdapters::PostgreSQLAdapter;
+        case connection.class.name
+          when "ActiveRecord::ConnectionAdapters::PostgreSQLAdapter";
             res.each do |r|
               @fields.each do |field|
                 row[field.to_sym] = r[field.to_s]
               end
             end
-          when ActiveRecord::ConnectionAdapters::MysqlAdapter;
+          # TODO - support Mysql2 here?
+          when "ActiveRecord::ConnectionAdapters::MysqlAdapter";
             res.each_hash do |r|
               @fields.each do |field|
                 row[field.to_sym] = r[field.to_s]
