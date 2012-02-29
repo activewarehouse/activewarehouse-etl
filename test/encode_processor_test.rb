@@ -1,6 +1,8 @@
 # encoding: utf-8
 require File.dirname(__FILE__) + '/test_helper'
 
+require 'iconv'
+
 class EncodeProcessorTest < Test::Unit::TestCase
 
   SOURCE = 'data/encode_source_latin1.txt'
