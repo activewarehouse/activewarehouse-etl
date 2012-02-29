@@ -9,6 +9,6 @@ rvm:
 env:
 #  - DB=mysql2
   - DB=mysql
-#  - DB=postgresql
+  - DB=postgresql
 before_script:
   - rake db:create db:schema:load
