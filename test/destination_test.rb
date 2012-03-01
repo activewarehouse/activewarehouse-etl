@@ -1,9 +1,6 @@
 require 'spreadsheet'
 require File.dirname(__FILE__) + '/test_helper'
 
-class Person < ActiveRecord::Base
-end
-
 class BadDestination < ETL::Control::Destination
   def initialize(control, configuration, mapping)
     super

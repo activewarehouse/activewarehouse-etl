@@ -1,8 +1,5 @@
 require File.dirname(__FILE__) + '/test_helper'
 
-class Person < ActiveRecord::Base
-end
-
 # Test pre- and post-processors
 class ProcessorTest < Test::Unit::TestCase
   # Test bulk import functionality

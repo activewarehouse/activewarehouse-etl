@@ -28,3 +28,5 @@ end
 
 puts "ActiveRecord::VERSION = #{ActiveRecord::VERSION::STRING}"
 
+class Person < ActiveRecord::Base
+end

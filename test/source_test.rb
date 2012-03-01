@@ -1,7 +1,5 @@
 require File.dirname(__FILE__) + '/test_helper'
 
-class Person < ActiveRecord::Base
-end
 class SourceTest < Test::Unit::TestCase
   
   context "source" do
