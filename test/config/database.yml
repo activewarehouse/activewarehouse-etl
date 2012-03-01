@@ -8,6 +8,8 @@ mysql2: &mysql2
   username: root
   encoding: utf8
   local_infile: true
+  # the tests would require a rework: disabling casting for now
+  cast: false
 
 mysql: &mysql
   adapter: mysql
