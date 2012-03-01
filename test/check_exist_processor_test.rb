@@ -1,8 +1,5 @@
 require File.dirname(__FILE__) + '/test_helper'
 
-class Person < ActiveRecord::Base
-end
-
 class CheckExistProcessorTest < Test::Unit::TestCase
 
   context 'CheckExistProcessor' do
