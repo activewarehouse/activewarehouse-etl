@@ -22,10 +22,6 @@ h2. Compatibility
 
 See "Travis":http://travis-ci.org/activewarehouse/activewarehouse-etl and our set of "gemfiles":https://github.com/activewarehouse/activewarehouse-etl/tree/master/test/config/gemfiles for the currently tested combinations.
 
-The codebase is being gradually upgraded to support Rails > 3.0.
-
-Be sure to use the latest code of the rails-3 branch of "adapter_extensions":https://github.com/activewarehouse/adapter_extensions/tree/rails-3 if you use Rails 3+.
-
 If you meet any error, please drop a line on the "Google Group":http://groups.google.com/group/activewarehouse-discuss so that we can fix it.
 
 h2. Contributing
@@ -39,7 +35,7 @@ TODO: explain how to run the tests like on Travis.
 * edit test/config/database.yml if needed (don't commit this file though)
 * run (for instance):
 
-    @rake "ci:run_one[mysql,test/config/gemfiles/Gemfile.rails-3.0.x]"@
+    @rake "ci:run_one[mysql2,test/config/gemfiles/Gemfile.rails-3.0.x]"@
 
 or for all the combinations:
     
