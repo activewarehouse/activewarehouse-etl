@@ -60,6 +60,9 @@ class ScdTest < Test::Unit::TestCase
     context "of type 2" do
       context "on run 1" do
         setup do
+          flexmock(Time) do |mock|
+            mock.should_receive(:now).returns(Time.new(2011, 3, 2, 21, 28, 15))
+          end
           do_type_2_run(1)
         end
         should "insert record" do
@@ -91,6 +94,9 @@ class ScdTest < Test::Unit::TestCase
       end
       context "on run 2" do
         setup do
+          flexmock(Time) do |mock|
+            mock.should_receive(:now).returns(Time.new(2011, 3, 2, 21, 28, 15))
+          end
           do_type_2_run(1)
           do_type_2_run(2)
         end
