@@ -12,8 +12,6 @@ def declare_gems(activerecord_version)
     gem 'mysql2', :git => 'https://github.com/activewarehouse/mysql2.git'
   end
 
-  gem 'mysql'
-
   gem 'pg'
   gem 'activerecord-sqlserver-adapter'
 
