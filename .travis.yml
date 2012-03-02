@@ -4,8 +4,8 @@ gemfile:
 #  - test/config/gemfiles/Gemfile.rails-3.1.x
   - test/config/gemfiles/Gemfile.rails-3.0.x
 rvm:
- - 1.9.3
-#  - 1.8.7
+  - 1.9.3
+  - 1.8.7
 env:
   - DB=mysql2
   - DB=mysql
