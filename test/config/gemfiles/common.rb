@@ -20,7 +20,7 @@ def declare_gems(activerecord_version)
   gem 'awesome_print'
   gem 'rake'
   gem 'flexmock'
-  gem 'shoulda'
+  gem 'shoulda', '3.0.1'
   gem 'sqlite3'
 
   gem 'spreadsheet'
