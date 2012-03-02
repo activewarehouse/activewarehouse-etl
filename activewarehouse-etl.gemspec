@@ -24,10 +24,7 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency('shoulda', '~>2.11.3')
   s.add_development_dependency('flexmock', '~>0.9.0')
-  s.add_development_dependency('mysql', '~>2.8.1')
-  s.add_development_dependency('mysql2', '~>0.3.7')
-  s.add_development_dependency('rdoc')
-  s.add_development_dependency('spreadsheet', '~>0.6.5.4')
+  s.add_development_dependency('cartesian')
 
   s.files              = `git ls-files`.split("\n")
   s.test_files         = `git ls-files -- {test}/*`.split("\n")
