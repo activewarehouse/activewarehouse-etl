@@ -60,9 +60,7 @@ class ScdTest < Test::Unit::TestCase
     context "of type 2" do
       context "on run 1" do
         setup do
-          flexmock(Time) do |mock|
-            mock.should_receive(:now).returns(Time.new(2011, 3, 2, 21, 28, 15))
-          end
+          @run_time = current_datetime
           do_type_2_run(1)
         end
         should "insert record" do
@@ -78,7 +76,7 @@ class ScdTest < Test::Unit::TestCase
           # doing comparison on strings, as comparison on objects
           # doesn't consider things equal for some yet to be understood
           # reason
-          assert_equal current_datetime.to_s, find_bobs.first.effective_date.to_s
+          assert_equal @run_time.to_s, find_bobs.first.effective_date.to_s
         end
         should "set the end date" do
           assert_equal @end_of_time, find_bobs.first.end_date
@@ -94,9 +92,7 @@ class ScdTest < Test::Unit::TestCase
       end
       context "on run 2" do
         setup do
-          flexmock(Time) do |mock|
-            mock.should_receive(:now).returns(Time.new(2011, 3, 2, 21, 28, 15))
-          end
+          @run_time = current_datetime
           do_type_2_run(1)
           do_type_2_run(2)
         end
@@ -124,7 +120,7 @@ class ScdTest < Test::Unit::TestCase
           # doing comparison on strings, as comparison on objects
           # doesn't consider things equal for some yet to be understood
           # reason
-          assert_equal current_datetime.to_s, find_bobs.detect { |bob| 2 == bob.id }.effective_date.to_s
+          assert_equal @run_time.to_s, find_bobs.detect { |bob| 2 == bob.id }.effective_date.to_s
         end
         should "set the end date for the new record" do
           assert_equal @end_of_time, find_bobs.detect { |bob| 2 == bob.id }.end_date
