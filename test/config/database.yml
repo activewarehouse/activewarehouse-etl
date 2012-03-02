@@ -30,5 +30,5 @@ data_warehouse:
   <<: *<%= ENV['DB'] %>
 
 etl_execution:
-  adapter: sqlite3
-  database: ":memory:"
+  adapter: mysql
+  database: etl_execution

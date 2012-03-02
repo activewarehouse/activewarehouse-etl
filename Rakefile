@@ -21,8 +21,8 @@ namespace :ci do
     ENV['BUNDLE_GEMFILE'] = File.expand_path(args[:gemfile] || (File.dirname(__FILE__) + '/test/config/gemfiles/Gemfile.rails-3.2.x'))
     ENV['DB'] = args[:db] || 'mysql2'
     system! "bundle install"
-    # trick: pass RAILS_ENV to force the db to be created by standalone migrations
     system! "bundle exec rake db:create"
+    system! "bundle exec rake db:create RAILS_ENV=etl_execution"
     system! "bundle exec rake db:schema:load"
     system! "bundle exec rake"
   end
