@@ -1,7 +1,7 @@
 language: ruby
 gemfile:
-#  - test/config/gemfiles/Gemfile.rails-3.2.x
-#  - test/config/gemfiles/Gemfile.rails-3.1.x
+  - test/config/gemfiles/Gemfile.rails-3.2.x
+  - test/config/gemfiles/Gemfile.rails-3.1.x
   - test/config/gemfiles/Gemfile.rails-3.0.x
 rvm:
   - 1.9.3
