@@ -11,12 +11,6 @@ mysql2: &mysql2
   # the tests would require a rework: disabling casting for now
   cast: false
 
-mysql: &mysql
-  adapter: mysql
-  database: activewarehouse_etl_test
-  username: root
-  encoding: utf8
-
 postgresql: &postgresql
   adapter: postgresql
   database: activewarehouse_etl_test
@@ -30,5 +24,5 @@ data_warehouse:
   <<: *<%= ENV['DB'] %>
 
 etl_execution:
-  adapter: mysql
+  adapter: mysql2
   database: etl_execution
