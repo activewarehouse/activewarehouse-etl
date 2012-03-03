@@ -17,8 +17,8 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = ">= 1.3.6"
 
   s.add_runtime_dependency('rake',                '>= 0.8.3')
-  s.add_runtime_dependency('activesupport',       '>= 2.1.0')
-  s.add_runtime_dependency('activerecord',        '>= 2.1.0')
+  s.add_runtime_dependency('activesupport',       '>= 3.0.0')
+  s.add_runtime_dependency('activerecord',        '>= 3.0.0')
   s.add_runtime_dependency('fastercsv',           '>= 1.2.0')
   s.add_runtime_dependency('adapter_extensions',  '>= 0.9.5.rc1')
 
