@@ -60,7 +60,6 @@ class ScdTest < Test::Unit::TestCase
     context "of type 2" do
       context "on run 1" do
         setup do
-          @run_time = current_datetime
           do_type_2_run(1)
         end
         should "insert record" do
@@ -73,10 +72,7 @@ class ScdTest < Test::Unit::TestCase
           assert_equal 1, find_bobs.first.id
         end
         should "set the effective date" do
-          # doing comparison on strings, as comparison on objects
-          # doesn't consider things equal for some yet to be understood
-          # reason
-          assert_equal @run_time.to_s, find_bobs.first.effective_date.to_s
+          assert_in_delta 1, current_datetime.to_time.to_i, find_bobs.first.effective_date.to_time.to_i
         end
         should "set the end date" do
           assert_equal @end_of_time, find_bobs.first.end_date
@@ -92,7 +88,6 @@ class ScdTest < Test::Unit::TestCase
       end
       context "on run 2" do
         setup do
-          @run_time = current_datetime
           do_type_2_run(1)
           do_type_2_run(2)
         end
@@ -117,10 +112,7 @@ class ScdTest < Test::Unit::TestCase
           assert_los_angeles_address(find_bobs.detect { |bob| 2 == bob.id })
         end
         should "activate the new record" do
-          # doing comparison on strings, as comparison on objects
-          # doesn't consider things equal for some yet to be understood
-          # reason
-          assert_equal @run_time.to_s, find_bobs.detect { |bob| 2 == bob.id }.effective_date.to_s
+          assert_in_delta 1, current_datetime.to_time.to_i, find_bobs.detect { |bob| 2 == bob.id }.effective_date.to_time.to_i
         end
         should "set the end date for the new record" do
           assert_equal @end_of_time, find_bobs.detect { |bob| 2 == bob.id }.end_date
