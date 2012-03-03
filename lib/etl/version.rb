@@ -1,3 +1,3 @@
 module ETL#:nodoc:
-  VERSION = "0.9.5.rc1"
+  VERSION = "1.0.0.rc1"
 end
