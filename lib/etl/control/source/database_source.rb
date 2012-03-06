@@ -212,9 +212,9 @@ module ETL #:nodoc:
       def query_rows
         return @query_rows if @query_rows
         if mysqlstream
-          @mysql_stream.run_query
+          @query_rows = @mysql_stream.run_query
         else
-          connection.select_all(query)
+          @query_rows = connection.select_all(query)
         end
       end
 
