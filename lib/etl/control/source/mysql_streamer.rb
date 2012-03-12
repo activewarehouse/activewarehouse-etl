@@ -37,7 +37,6 @@ class MySqlStreamer
 	end
 
 	def each
-		puts "Using the Streaming MySQL from the command line"
 		keys = nil
 		connection_configuration = ETL::Base.configurations[@name.to_s]
 		mysql_command = """mysql --quick -h #{connection_configuration["host"]} -u #{connection_configuration["username"]} -e \"#{@query.gsub("\n","")}\" -D #{connection_configuration["database"]} --password=#{connection_configuration["password"]} -B"""
