@@ -36,10 +36,22 @@ class MySqlStreamer
 	    @first_row.first
 	end
 
+	def mandatory_option!(hash, key)
+		value = hash[key]
+		raise "Missing key #{key} in connection configuration #{@name}" if value.blank?
+		value
+	end
+
 	def each
 		keys = nil
-		connection_configuration = ETL::Base.configurations[@name.to_s]
-		mysql_command = """mysql --quick -h #{connection_configuration["host"]} -u #{connection_configuration["username"]} -e \"#{@query.gsub("\n","")}\" -D #{connection_configuration["database"]} --password=#{connection_configuration["password"]} -B"""
+
+		config = ETL::Base.configurations[@name.to_s]
+		host = mandatory_option!(config, 'host')
+		username = mandatory_option!(config, 'username')
+		database = mandatory_option!(config, 'database')
+		password = config['password'] # this one can omitted in some cases
+
+		mysql_command = """mysql --quick -h #{host} -u #{username} -e \"#{@query.gsub("\n","")}\" -D #{database} --password=#{password} -B"""
 		Open3.popen3(mysql_command) do |stdin, out, err, external|
 			until (line = out.gets).nil? do
 				line = line.gsub("\n","")
