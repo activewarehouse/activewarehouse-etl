@@ -1,4 +1,5 @@
-0.9.5 - unreleased
+1.0.0 - release candidate
+* Support for mysql streaming for better performance on large data sets - use :mysqlstream => true on database source (main code by pdodds, tests and fixes by sgrgic and thbar)
 * EnsureFieldsPresenceProcessor treat symbols and strings equally (thbar)
 * BREAKING CHANGE: you must require 'iconv' if you use the :encode_processor from now on (thbar)
 * A non-zero exit code should be returned on fatal screen or exceeded error threshold (thbar)
