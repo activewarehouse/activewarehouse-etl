@@ -25,6 +25,8 @@ Gem::Specification.new do |s|
   s.add_development_dependency('shoulda', '~>2.11.3')
   s.add_development_dependency('flexmock', '~>0.9.0')
   s.add_development_dependency('cartesian')
+  s.add_development_dependency('guard')
+  s.add_development_dependency('guard-shell')
 
   s.files              = `git ls-files`.split("\n")
   s.test_files         = `git ls-files -- {test}/*`.split("\n")

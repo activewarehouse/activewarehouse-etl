@@ -3,6 +3,7 @@
 # a bit hackish - tests would require a refactoring instead
 
 mysql2: &mysql2
+  host: localhost
   adapter: mysql2
   database: activewarehouse_etl_test
   username: root
