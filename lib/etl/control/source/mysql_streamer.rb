@@ -57,6 +57,10 @@ class MySqlStreamer
           keys = line.split("\t")
         else
           hash = Hash[keys.zip(line.split("\t"))]
+          # map out NULL to nil
+          hash.each do |k, v|
+            hash[k] = nil if v == 'NULL'
+          end
           yield hash
         end
       end

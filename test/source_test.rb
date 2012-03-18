@@ -110,20 +110,40 @@ class SourceTest < Test::Unit::TestCase
     end
     if current_adapter =~ /mysql/
       context 'with mysqlstream enabled' do
+
+        def source(options = {})
+          ETL::Control::DatabaseSource.new(nil, {
+            :target => 'operational_database',
+            :table => 'people',
+            :mysqlstream => true
+          }.merge(options), nil)
+        end
+
         setup do
           Person.delete_all
           Person.create!(:first_name => 'Bob', :last_name => 'Smith', :ssn => '123456789')
           Person.create!(:first_name => 'John', :last_name => 'Barry', :ssn => '123456790')
         end
+
         should 'support store_locally' do
-          source = ETL::Control::DatabaseSource.new(nil, {
-            :target => 'operational_database',
-            :table => 'people',
-            :mysqlstream => true,
-            :store_locally => true
-          }, nil)
-          assert_equal 2, source.to_a.size
+          assert_equal 2, source(:store_locally => true).to_a.size
         end
+
+        context 'with a NULL value' do
+
+          should 'return nil in row attribute' do
+            Person.create!(:first_name => nil)
+            assert_equal nil, source.to_a.last[:first_name]
+          end
+
+          # does not work yet - we probably need a switch on --quick for this
+          should_eventually 'return NULL for string containing NULL' do
+            Person.create!(:first_name => 'NULL', :last_name => 'NULL2')
+            assert_equal 'NULL', source.to_a.last[:first_name]
+          end
+
+        end
+
       end
     end
   end
