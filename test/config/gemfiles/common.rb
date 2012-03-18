@@ -2,7 +2,7 @@ def declare_gems(activerecord_version)
   source :rubygems
 
   gem 'activerecord', activerecord_version
-  gem 'adapter_extensions', :git => 'https://github.com/activewarehouse/adapter_extensions.git', :branch => 'rails-3'
+  gem 'adapter_extensions', :git => 'https://github.com/activewarehouse/adapter_extensions.git'
 
   if activerecord_version < '3.1'
     gem 'mysql2', '< 0.3'
