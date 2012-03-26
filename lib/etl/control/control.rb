@@ -41,7 +41,12 @@ module ETL #:nodoc:
       def dependencies
         control.dependencies
       end
-      
+
+      # Register an error handler
+      def on_error(&block)
+        control.error_handlers << block
+      end
+
       # Define a source.
       def source(name, configuration={}, definition={})
         if configuration[:type]
@@ -375,6 +380,11 @@ module ETL #:nodoc:
           :error => [],
           :warn => []
         }
+      end
+
+      # A array of Procs to be invoked for errors notifications
+      def error_handlers
+        @error_handlers ||= []
       end
       
       # Get the error threshold. Defaults to 100.
