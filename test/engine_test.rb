@@ -33,6 +33,19 @@ CTL
       
       assert_equal 1, engine.errors.size
     end
+
+    should 'call error callbacks' do
+      engine = ETL::Engine.new
+
+      $our_errors = []
+      engine.process ETL::Control::Control.parse_text <<CTL
+        source :in, { :type => :enumerable, :enumerable => (1..100) }
+        on_error { |error| $our_errors << error }
+        after_read { |row| raise "Failure" }
+CTL
+      assert_equal 100, $our_errors.size
+      assert_match /on line 100: Failure$/, $our_errors.last
+    end
     
   end
   
