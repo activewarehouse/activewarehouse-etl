@@ -10,12 +10,12 @@ def build_source(options = {})
 end
 
 class SourceTest < Test::Unit::TestCase
-  
+
   context "source" do
     should "set store_locally to true by default" do
       assert_equal true, Source.new(nil, { :store_locally => true }, nil).store_locally
     end
-    
+
     should "let the user set store_locally to true" do
       assert_equal true, Source.new(nil, { :store_locally => true }, nil).store_locally
     end
@@ -24,7 +24,7 @@ class SourceTest < Test::Unit::TestCase
       assert_equal false, Source.new(nil, { :store_locally => false }, nil).store_locally
     end
   end
-  
+
   context "a file source" do
     context "with delimited data" do
       setup do
@@ -34,7 +34,7 @@ class SourceTest < Test::Unit::TestCase
           :parser => :csv
         }
         definition = self.definition + [:sex]
-    
+
         source = ETL::Control::FileSource.new(control, configuration, definition)
         @rows = source.collect { |row| row }
       end
@@ -43,7 +43,7 @@ class SourceTest < Test::Unit::TestCase
       end
     end
   end
-  
+
   context "a file source with a glob" do
     setup do
       control = ETL::Control::Control.parse(File.dirname(__FILE__) + '/multiple_delimited.ctl')
@@ -59,12 +59,12 @@ class SourceTest < Test::Unit::TestCase
       assert_equal 6, @rows.length
     end
   end
-  
+
   context "a file source with an absolute path" do
     setup do
       FileUtils.cp(File.dirname(__FILE__) + '/data/delimited.txt', '/tmp/delimited_abs.txt')
 
-      control = ETL::Control::Control.parse(File.dirname(__FILE__) + 
+      control = ETL::Control::Control.parse(File.dirname(__FILE__) +
         '/delimited_absolute.ctl')
       configuration = {
         :file => '/tmp/delimited_abs.txt',
@@ -79,10 +79,10 @@ class SourceTest < Test::Unit::TestCase
       assert_equal 3, @rows.length
     end
   end
-  
+
   context "multiple sources" do
     setup do
-      control = ETL::Control::Control.parse(File.dirname(__FILE__) + 
+      control = ETL::Control::Control.parse(File.dirname(__FILE__) +
         '/multiple_source_delimited.ctl')
       @rows = control.sources.collect { |source| source.collect { |row| row }}.flatten!
     end
@@ -90,22 +90,62 @@ class SourceTest < Test::Unit::TestCase
       assert_equal 12, @rows.length
     end
   end
-  
+
   context "a database source" do
     setup do
+      @offset = 2
+      @limit = 5
       control = ETL::Control::Control.parse(File.dirname(__FILE__) + '/delimited.ctl')
       configuration = {
         :database => 'etl_unittest',
         :target => :operational_database,
         :table => 'people',
       }
-      definition = [ 
+      definition = [
         :first_name,
         :last_name,
         :ssn,
       ]
       @source = ETL::Control::DatabaseSource.new(control, configuration, definition)
     end
+
+    context "with a specified LIMIT `n`" do
+      setup do
+        ETL::Engine.limit = @limit
+        10.times { |i| Person.create!( :first_name => 'Bob',
+                                       :last_name => 'Smith',
+                                       :ssn => i ) }
+      end
+
+      should "only return N rows" do
+        size = build_source(:store_locally => true, :mysqlstream => false).to_a.size
+        assert_equal 5, size
+      end
+
+      teardown do
+        Person.delete_all
+        ETL::Engine.limit = nil
+      end
+    end
+
+    context "with a specified OFFSET `offset`" do
+      setup do
+        ETL::Engine.limit = @limit
+        ETL::Engine.offset = @offset
+      end
+
+      should "raise an exception without LIMIT specified" do
+        ETL::Engine.limit = nil
+        assert_raise (NoLimitSpecifiedError) { build_source(:store_locally => true, :mysqlstream => false).to_a.size }
+      end
+
+      teardown do
+        Person.delete_all
+        ETL::Engine.limit = nil
+        ETL::Engine.offset = nil
+      end
+    end
+
     should "set the local file for extraction storage" do
       assert_match %r{source_data/localhost/activewarehouse_etl_test/people/\d+.csv}, @source.local_file.to_s
     end
@@ -121,6 +161,7 @@ class SourceTest < Test::Unit::TestCase
       context 'with mysqlstream enabled' do
 
         setup do
+          build_source(:store_locally => true, :mysqlstream => true)
           Person.delete_all
           Person.create!(:first_name => 'Bob', :last_name => 'Smith', :ssn => '123456789')
           Person.create!(:first_name => 'John', :last_name => 'Barry', :ssn => '123456790')
@@ -148,10 +189,10 @@ class SourceTest < Test::Unit::TestCase
       end
     end
   end
-  
+
   context "a file source with an xml parser" do
     setup do
-      control = ETL::Control::Control.parse(File.dirname(__FILE__) + 
+      control = ETL::Control::Control.parse(File.dirname(__FILE__) +
         '/xml.ctl')
       @rows = control.sources.collect{ |source| source.collect { |row| row }}.flatten!
     end
@@ -173,12 +214,12 @@ class SourceTest < Test::Unit::TestCase
       ]
     end
     should_eventually "find n rows" do
-      
+
     end
   end
-  
+
   def definition
-    [ 
+    [
       :first_name,
       :last_name,
       :ssn,
