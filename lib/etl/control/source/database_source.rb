@@ -1,6 +1,8 @@
 require 'fileutils'
 
 module ETL #:nodoc:
+  class NoLimitSpecifiedError < StandardError; end
+  
   class Source < ::ActiveRecord::Base #:nodoc:
     # Connection for database sources
   end
@@ -193,7 +195,7 @@ module ETL #:nodoc:
         limit = ETL::Engine.limit
         offset = ETL::Engine.offset
         if limit || offset
-          raise "Specifying offset without limit is not allowed" if offset and limit.nil?
+          raise NoLimitSpecifiedError, "Specifying offset without limit is not allowed" if offset and limit.nil?
           q << " LIMIT #{limit}"
           q << " OFFSET #{offset}" if offset
         end
