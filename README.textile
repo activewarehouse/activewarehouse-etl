@@ -67,6 +67,7 @@ ActiveWarehouse-ETL is the work of many people since late 2006 - here is a list,
 * "Philip Dodds":https://github.com/pdodds
 * "Sinisa Grgic":https://github.com/sgrgic
 * "Kenny Meyer":https://github.com/kennym
+* "Chris":https://github.com/chrisgogreen
 
 If your name should be on the list but isn't, please leave a comment!
 

@@ -1,4 +1,5 @@
 1.0.0 - release candidate
+* Allow .ctl.rb and .ebf.rb extensions for easier syntax coloring (chrisgogreen)
 * Support for limit/offset in database source (kennym)
 * Support for error handlers in etl: can be declared with on_error { |error| } (thbar)
 * Support for mysql streaming for better performance on large data sets - use :mysqlstream => true on database source (main code by pdodds, tests and fixes by sgrgic and thbar)
