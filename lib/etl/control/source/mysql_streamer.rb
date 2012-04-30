@@ -28,7 +28,7 @@ class MySqlStreamer
   # can use them
   def any?
     @first_row.any?
-  end 
+  end
 
   def first
     @first_row.first

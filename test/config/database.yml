@@ -3,10 +3,12 @@
 # a bit hackish - tests would require a refactoring instead
 
 mysql2: &mysql2
+  socket: /Applications/MAMP/tmp/mysql/mysql.sock
   host: localhost
   adapter: mysql2
   database: activewarehouse_etl_test
   username: root
+  password: root
   encoding: utf8
   local_infile: true
   # the tests would require a rework: disabling casting for now
@@ -27,3 +29,6 @@ data_warehouse:
 etl_execution:
   adapter: mysql2
   database: etl_execution
+  username: root
+  password: root
+  socket: /Applications/MAMP/tmp/mysql/mysql.sock
