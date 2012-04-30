@@ -93,6 +93,8 @@ class SourceTest < Test::Unit::TestCase
   
   context "a database source" do
     setup do
+      @offset = 2
+      @limit = 5
       control = ETL::Control::Control.parse(File.dirname(__FILE__) + '/delimited.ctl')
       configuration = {
         :database => 'etl_unittest',
@@ -106,6 +108,44 @@ class SourceTest < Test::Unit::TestCase
       ]
       @source = ETL::Control::DatabaseSource.new(control, configuration, definition)
     end
+
+    context "with a specified LIMIT `n`" do
+      setup do
+        ETL::Engine.limit = @limit
+        10.times { |i| Person.create!( :first_name => 'Bob',
+                                       :last_name => 'Smith',
+                                       :ssn => i ) }
+      end
+
+      should "only return N rows" do
+        size = build_source(:store_locally => true, :mysqlstream => false).to_a.size
+        assert_equal 5, size
+      end
+
+      teardown do
+        Person.delete_all
+        ETL::Engine.limit = nil
+      end
+    end
+
+    context "with a specified OFFSET `offset`" do
+      setup do
+        ETL::Engine.limit = @limit
+        ETL::Engine.offset = @offset
+      end
+
+      should "raise an exception without LIMIT specified" do
+        ETL::Engine.limit = nil
+        assert_raise (NoLimitSpecifiedError) { build_source(:store_locally => true, :mysqlstream => false).to_a.size }
+      end
+
+      teardown do
+        Person.delete_all
+        ETL::Engine.limit = nil
+        ETL::Engine.offset = nil
+      end
+    end
+
     should "set the local file for extraction storage" do
       assert_match %r{source_data/localhost/activewarehouse_etl_test/people/\d+.csv}, @source.local_file.to_s
     end
