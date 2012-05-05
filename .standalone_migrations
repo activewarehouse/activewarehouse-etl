@@ -1,2 +1,0 @@
-config:
-  database: test/config/database.yml

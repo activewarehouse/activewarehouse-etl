@@ -1,6 +1,0 @@
-# This is an ETL Batch File and defines a means for executing
-# a collection of ETL scripts as a single process.
-
-use_temp_tables
-run 'batched1.ctl'
-run 'batched2.ctl'

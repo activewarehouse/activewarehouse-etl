@@ -1,6 +1,0 @@
-The 0.9 revision of ActiveWarehouse ETL significantly changes how connections are maintained. This release is not backwards compatible.
-
-To upgrade, you must do the following:
-
-1.) All database connections used in ETL control files must be declared in database.yml in the directory that contains your ETL control files.
-2.) All sources, destinations, transforms and processors that use a database connection must include the configuration name/value pair of :target => 'name' where name is replaced with the connection name defined in database.yml. Connection information should no longer be included in control files.

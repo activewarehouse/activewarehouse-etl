@@ -1,2 +1,0 @@
-éphémère has accents.
-let's encode them.

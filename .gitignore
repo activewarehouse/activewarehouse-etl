@@ -1,8 +1,0 @@
-pkg/*
-source_data
-test/output/*
-rdoc
-.rvmrc
-.bundle
-*.gem
-*.lock
