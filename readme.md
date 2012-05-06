@@ -1,5 +1,13 @@
 Work in progress: guides for ActiveWarehouse-ETL.
 
+To run - make sure you have pygments installed, then:
+
+```
+bundle
+jekyll --server --auto
+open http://localhost:4000/docs/installation.html
+```
+
 The documentation structure and styling I'm gradually adding is based (with autorisation) on Vagrant docs (except for the homepage).
 
 ### Potential sections
