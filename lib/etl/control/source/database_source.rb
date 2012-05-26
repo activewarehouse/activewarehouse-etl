@@ -77,6 +77,11 @@ module ETL #:nodoc:
         configuration[:order]
       end
       
+      # Get the with clause for the query, defaults to nil
+      def with
+        configuration[:with]
+      end
+      
       # Return the column which is used for in the where clause to identify
       # new rows
       def new_records_only
@@ -171,7 +176,9 @@ module ETL #:nodoc:
       # Get the query to use
       def query
         return @query if @query
-        q = "SELECT #{select} FROM #{@table}"
+        q = ''
+        q << "#{with}" if with
+        q << "SELECT #{select} FROM #{@table}"
         q << " #{join}" if join
         
         conditions = []
