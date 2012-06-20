@@ -49,8 +49,8 @@ module ETL #:nodoc:
       # * ETL::Control::Control instance
       # * ETL::Batch::Batch instance
       #
-      # The process command will accept either a .ctl Control file or a .ebf
-      # ETL Batch File.
+      # The process command will accept either a .ctl or .ctl.rb for a Control file or a .ebf
+      #  or .ebf.rb for an ETL Batch File.
       def process(file)
         new().process(file)
       end
@@ -272,8 +272,8 @@ module ETL #:nodoc:
           process(File.new(file))
         when File
           case file.path
-            when /.ctl$/; process_control(file)
-            when /.ebf$/; process_batch(file)
+            when /\.ctl(\.rb)?$/; process_control(file)
+            when /\.ebf(\.rb)?$/; process_batch(file)
             else raise RuntimeError, "Unsupported file type - #{file.path}"
           end
         when ETL::Control::Control

@@ -1,6 +1,8 @@
 require 'fileutils'
 
 module ETL #:nodoc:
+  class NoLimitSpecifiedError < StandardError; end
+  
   class Source < ::ActiveRecord::Base #:nodoc:
     # Connection for database sources
   end
@@ -189,12 +191,13 @@ module ETL #:nodoc:
         
         q << " GROUP BY #{group}" if group
         q << " ORDER BY #{order}" if order
-
-        if ETL::Engine.limit || ETL::Engine.offset
-          options = {}
-          options[:limit] = ETL::Engine.limit if ETL::Engine.limit
-          options[:offset] = ETL::Engine.offset if ETL::Engine.offset
-          connection.add_limit_offset!(q, options)
+        
+        limit = ETL::Engine.limit
+        offset = ETL::Engine.offset
+        if limit || offset
+          raise NoLimitSpecifiedError, "Specifying offset without limit is not allowed" if offset and limit.nil?
+          q << " LIMIT #{limit}"
+          q << " OFFSET #{offset}" if offset
         end
         
         q = q.gsub(/\n/,' ')
