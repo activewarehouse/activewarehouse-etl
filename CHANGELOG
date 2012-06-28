@@ -1,3 +1,6 @@
+1.0.1 (unreleased)
+* Fix #95 - source :join does not prepend 'join' in SQL query (seeingidog)
+
 1.0.0
 * Fixes for Rails 3.2 (pgericson)
 * Allow .ctl.rb and .ebf.rb extensions for easier syntax coloring (chrisgogreen)
