@@ -67,8 +67,8 @@ module ETL #:nodoc:
         @value = nil
         @proc = Proc.new(&block)
       end
-      def cdata(text)    
-        @value << text
+      def cdata(text)
+        characters(text)
       end
       def characters(text)
         text = text.strip
