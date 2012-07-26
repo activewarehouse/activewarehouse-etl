@@ -1,4 +1,5 @@
 1.0.1 (unreleased)
+* Fix to make sure CDATA is properly handled by the SaxParser (tchukuchuk)
 * Fix #95 - source :join does not prepend 'join' in SQL query (seeingidog)
 
 1.0.0
