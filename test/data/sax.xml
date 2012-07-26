@@ -2,6 +2,7 @@
 
 <people>
   <person age="24">
+    <!-- do not remove the CDATA, we're testing against it -->
     <first_name><![CDATA[Bob]]></first_name>
     <last_name>Smith</last_name>
     <social_security_number>123456789</social_security_number>
