@@ -87,7 +87,11 @@ module ETL #:nodoc:
       def new_records_only
         configuration[:new_records_only]
       end
-      
+
+      def new_records_only_minimum_lag
+        configuration[:new_records_only_minimum_lag]
+      end
+
       # Get the number of rows in the source
       def count(use_cache=true)
         return @count if @count && use_cache
@@ -186,7 +190,11 @@ module ETL #:nodoc:
             :conditions => ['control_file = ? and completed_at is not null', control.file]
           )
           if last_completed
-            conditions << "#{new_records_only} > #{connection.quote(last_completed.to_s(:db))}"
+            cutoff_time = last_completed
+            if(new_records_only_minimum_lag)
+              cutoff_time = [last_completed, (last_completed - new_records_only_minimum_lag) || last_completed, (Time.now - new_records_only_minimum_lag) || Time.now].min
+            end
+            conditions << "#{new_records_only} > #{connection.quote(cutoff_time.to_s(:db))}"
           end
         elsif last_completed_id_table
           last_completed = ETL::Execution::Job.maximum('last_completed_id', :conditions => ['control_file = ? and completed_at IS NOT NULL and last_completed_id IS NOT NULL', control.file])
