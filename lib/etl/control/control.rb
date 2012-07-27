@@ -132,7 +132,7 @@ module ETL #:nodoc:
           else
             #transformer.class.inspect
             if transformer.is_a?(ETL::Transform::Transform)
-              Engine.logger.debug "Adding transformer #{transformer.inspect} for field #{name}"
+              Engine.logger.info "Adding transformer #{transformer.inspect} for field #{name}"
               t = transformer.dup
               t.name = name
               transforms << t 

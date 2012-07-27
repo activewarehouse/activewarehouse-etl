@@ -131,7 +131,7 @@ module ETL #:nodoc:
       # error.
       def each(&block)
         if read_locally # Read from the last stored source
-          ETL::Engine.logger.debug "Reading from local cache"
+          ETL::Engine.logger.info "Reading from local cache..."
           read_rows(last_local_file, &block)
         else # Read from the original source
           if @store_locally
