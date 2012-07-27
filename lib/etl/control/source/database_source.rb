@@ -169,7 +169,10 @@ module ETL #:nodoc:
       def read_rows(file)
         raise "Local cache file not found" unless File.exists?(file)
         raise "Local cache trigger file not found" unless File.exists?(local_file_trigger(file))
-        
+
+        puts "Reading from local cache file #{file.to_s}"
+        puts "Using last trigger of #{local_file_trigger(file).to_s}"
+
         t = Benchmark.realtime do
           CSV.open(file, :headers => true).each do |row|
             result_row = ETL::Row.new
