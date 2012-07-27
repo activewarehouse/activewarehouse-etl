@@ -136,7 +136,10 @@ module ETL #:nodoc:
       
       # Accessor for the average rows per second processed
       attr_accessor :average_rows_per_second
-      
+
+      # For the last completed id, if :last_completed_id_table is specified
+      attr_accessor :last_completed_id
+
       # Get a named connection
       def connection(name)
         logger.debug "Retrieving connection #{name}"
@@ -427,6 +430,9 @@ module ETL #:nodoc:
                 Engine.current_destination = destination
                 rows.each do |row|
                   destination.write(row)
+                  if(source.last_completed_id_table)
+                    Engine.last_completed_id = row[:id]
+                  end
                   Engine.rows_written += 1 if index == 0
                 end
               end
@@ -504,7 +510,10 @@ module ETL #:nodoc:
       ActiveRecord::Base.verify_active_connections!
       ETL::Engine.job.completed_at = Time.now
       ETL::Engine.job.status = (errors.length > 0 ? 'completed with errors' : 'completed')
+      ETL::Engine.job.last_completed_id = (Engine.last_completed_id ? Engine.last_completed_id : nil)
       ETL::Engine.job.save!
+      #reset last completed id
+      Engine.last_completed_id = nil
     end
     
     def empty_row?(row)
