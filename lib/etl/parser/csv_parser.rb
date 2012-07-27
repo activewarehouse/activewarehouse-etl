@@ -7,6 +7,7 @@ module ETL #:nodoc:
       # * <tt>options</tt>: Hash of options for the parser, defaults to an empty hash
       def initialize(source, options={})
         super
+        options = {} if options.nil?
         configure
       end
       
