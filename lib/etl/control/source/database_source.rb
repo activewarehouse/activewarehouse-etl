@@ -67,6 +67,11 @@ module ETL #:nodoc:
         configuration[:last_completed_id_table]
       end
 
+      # Maximum rows to be returned per query
+      def max_select_size
+        configuration[:max_select_size] || 1000000
+      end
+
       # Get the select part of the query, defaults to '*'
       def select
         configuration[:select] || '*'
@@ -90,6 +95,10 @@ module ETL #:nodoc:
 
       def new_records_only_minimum_lag
         configuration[:new_records_only_minimum_lag]
+      end
+
+      def use_limit
+        configuration[:use_limit].nil? ? true : configuration[:use_limit]
       end
 
       # Get the number of rows in the source
@@ -125,13 +134,25 @@ module ETL #:nodoc:
             @query_rows = nil # free the memory
             read_rows(file, &block)
           else
-            query_rows.each do |r|
-              row = ETL::Row.new()
-              r.symbolize_keys.each_pair { |key, value|
-                row[key] = value
-              }
-              row.source = self
-              yield row
+            if use_limit &&  max_select_size
+              puts "Doing subselect with starting offset = #{@starting_offset}, max select = #{max_select_size}..."
+              rows = query_rows_with_limit(@starting_offset, max_select_size)
+              while(rows && rows.size > 0)
+                @starting_offset += max_select_size
+                rows.each do |row|
+                  yield row
+                end
+                rows = query_rows_with_limit(@starting_offset, max_select_size)
+              end
+            else
+              query_rows.each do |r|
+                row = ETL::Row.new()
+                r.symbolize_keys.each_pair { |key, value|
+                  row[key] = value
+                }
+                row.source = self
+                yield row
+              end
             end
           end
         end
@@ -165,12 +186,27 @@ module ETL #:nodoc:
       # Write rows to the local cache
       def write_local(file)
         lines = 0
+        @starting_offset = 0
         t = Benchmark.realtime do
           CSV.open(file, 'w') do |f|
             f << columns
-            query_rows.each do |row|
-              f << columns.collect { |column| row[column.to_s] }
-              lines += 1
+            if use_limit && max_select_size
+              rows = query_rows_with_limit(@starting_offset, max_select_size)
+              while(rows && rows.size > 0)
+                puts "Doing subselect with starting offset = #{@starting_offset}, max select = #{max_select_size}"
+                @starting_offset += max_select_size
+                rows.each do |row|
+                  f << columns.collect { |column| row[column.to_s] }
+                  lines += 1
+                end
+                rows = query_rows_with_limit(@starting_offset, max_select_size)
+              end
+            else
+              puts "No max_select_size given, reading entire table..."
+              query_rows.each do |row|
+                f << columns.collect { |column| row[column.to_s] }
+                lines += 1
+              end
             end
           end
           File.open(local_file_trigger(file), 'w') {|f| }
@@ -232,7 +268,13 @@ module ETL #:nodoc:
           connection.select_all(query)
         end
       end
-      
+
+      def query_rows_with_limit(offset, limit)
+        ETL::Engine.logger.debug "query_rows_with_limit called with offset=#{offset}, limit=#{limit}"
+        query_string = query + " LIMIT #{offset},#{limit}"
+        @query_rows = connection.select_all(query_string)
+      end
+
       # Get the database connection to use
       def connection
         ETL::Engine.connection(target)
