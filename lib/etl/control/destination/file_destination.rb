@@ -83,6 +83,7 @@ module ETL #:nodoc:
             end
           end
 
+          values.collect! { |v| v.nil? ? v : v.encode("UTF-8")}
           values.collect! { |v| v.nil? ? v : v.gsub(/\\/, '\\\\\\\\')}
           values.collect! { |v| v.nil? ? v : v.gsub(separator, "\\#{separator}")}
           values.collect! { |v| v.nil? ? v : v.gsub(/\n|\r/, '')}
