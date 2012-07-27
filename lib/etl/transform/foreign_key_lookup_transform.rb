@@ -47,7 +47,7 @@ module ETL #:nodoc:
           end
           fk = resolver.resolve(value)
           fk ||= @default
-          raise ResolverError, "Unable to resolve #{value} to foreign key for #{name} in row #{ETL::Engine.rows_read}. You may want to specify a :default value." unless fk
+          raise ResolverError, "Unable to resolve #{value} to foreign key for #{name} in row #{ETL::Engine.rows_read}. You may want to specify a :default value." unless (fk || @default.nil?)
           @collection[value] = fk
         end
         fk
