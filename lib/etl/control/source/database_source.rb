@@ -114,8 +114,14 @@ module ETL #:nodoc:
       # Get the list of columns to read. This is defined in the source
       # definition as either an Array or Hash
       def columns
-        # weird default is required for writing to cache correctly
-        @columns ||= query_rows.any? ? query_rows.first.keys : ['']
+        if use_limit && max_select_size
+          # pull only 10 cols to get col names
+          # weird default is required for writing to cache correctly
+          @columns ||= query_rows_with_limit(0, 10).any? ? query_rows_with_limit(0, 10).first.keys : ['']
+        else
+          # weird default is required for writing to cache correctly
+          @columns ||= query_rows.any? ? query_rows.first.keys : ['']
+        end
       end
       
       # Returns each row from the source. If read_locally is specified then
