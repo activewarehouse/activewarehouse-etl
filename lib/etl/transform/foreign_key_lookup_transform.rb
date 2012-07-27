@@ -42,6 +42,9 @@ module ETL #:nodoc:
         unless fk
           raise ResolverError, "Foreign key for #{value} not found and no resolver specified" unless resolver
           raise ResolverError, "Resolver does not appear to respond to resolve method" unless resolver.respond_to?(:resolve)
+          if(resolver.is_a?(SQLResolver) && resolver.get_field.kind_of?(Array))
+            value = resolver.get_field.collect {|f| row[f.to_sym]}
+          end
           fk = resolver.resolve(value)
           fk ||= @default
           raise ResolverError, "Unable to resolve #{value} to foreign key for #{name} in row #{ETL::Engine.rows_read}. You may want to specify a :default value." unless fk
@@ -83,6 +86,13 @@ class ActiveRecordResolver
 end
 
 class SQLResolver
+  # Need to make fields publicly accesible
+  attr_accessor :field
+
+  def get_field
+    @field
+  end
+
   # Initialize the SQL resolver. Use the given table and field name to search
   # for the appropriate foreign key. The field should be the name of a natural
   # key that is used to locate the surrogate key for the record.
