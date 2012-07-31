@@ -227,7 +227,7 @@ module ETL #:nodoc:
       def query
         return @query if @query
         q = "SELECT #{select} FROM #{@table}"
-        q << " JOIN #{join}" if join
+        q << " #{join}" if join
         
         conditions = []
         if new_records_only
