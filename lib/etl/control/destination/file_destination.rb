@@ -78,6 +78,8 @@ module ETL #:nodoc:
             case value
             when Date, Time, DateTime
               value.to_s(:db)
+            when nil
+              value
             else
               value.to_s
             end
