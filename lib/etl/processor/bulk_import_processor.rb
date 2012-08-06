@@ -82,6 +82,7 @@ module ETL #:nodoc:
             options[:fields][:enclosed_by] = field_enclosure if field_enclosure
             options[:fields][:terminated_by] = line_separator if line_separator
           end
+          options[:local_infile] = true
           conn.bulk_load(file, table_name, options)
         end
       end
