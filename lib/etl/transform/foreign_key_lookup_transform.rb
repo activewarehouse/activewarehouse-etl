@@ -17,6 +17,7 @@ module ETL #:nodoc:
       # *<tt>:resolver</tt>: Object or Class which implements the method resolve(value)
       # *<tt>:default</tt>: A default foreign key to use if no foreign key is found
       # *<tt>:cache</tt>: If true and the resolver responds to load_cache, load_cache will be called
+      # *<tt>:accept_nil</tt>: Boolean - should nil be an acceptable resolution for a key (true) or should it raise an error (false)
       def initialize(control, name, configuration={})
         super
         
@@ -24,6 +25,7 @@ module ETL #:nodoc:
         @resolver = configuration[:resolver]
         @resolver = @resolver.new if @resolver.is_a?(Class)
         @default = configuration[:default]
+        @accept_nil = configuration[:accept_nil]
         
         configuration[:cache] = true if configuration[:cache].nil?
         
@@ -42,9 +44,12 @@ module ETL #:nodoc:
         unless fk
           raise ResolverError, "Foreign key for #{value} not found and no resolver specified" unless resolver
           raise ResolverError, "Resolver does not appear to respond to resolve method" unless resolver.respond_to?(:resolve)
+          if(resolver.is_a?(SQLResolver) && resolver.get_field.kind_of?(Array))
+            value = resolver.get_field.collect {|f| row[f.to_sym]}
+          end
           fk = resolver.resolve(value)
           fk ||= @default
-          raise ResolverError, "Unable to resolve #{value} to foreign key for #{name} in row #{ETL::Engine.rows_read}. You may want to specify a :default value." unless fk
+          raise ResolverError, "Unable to resolve #{value} to foreign key for #{name} in row #{ETL::Engine.rows_read}. You may want to specify a :default value." unless (fk || @accept_nil)
           @collection[value] = fk
         end
         fk
@@ -83,6 +88,13 @@ class ActiveRecordResolver
 end
 
 class SQLResolver
+  # Need to make fields publicly accesible
+  attr_accessor :field
+
+  def get_field
+    @field
+  end
+
   # Initialize the SQL resolver. Use the given table and field name to search
   # for the appropriate foreign key. The field should be the name of a natural
   # key that is used to locate the surrogate key for the record.

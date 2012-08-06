@@ -136,7 +136,10 @@ module ETL #:nodoc:
       
       # Accessor for the average rows per second processed
       attr_accessor :average_rows_per_second
-      
+
+      # For the last completed id, if :last_completed_id_table is specified
+      attr_accessor :last_completed_id
+
       # Get a named connection
       def connection(name)
         logger.debug "Retrieving connection #{name}"
@@ -326,7 +329,7 @@ module ETL #:nodoc:
       
       sources.each do |source|
         Engine.current_source = source
-        Engine.logger.debug "Processing source #{source.inspect}"
+        Engine.logger.info "Processing source #{source.inspect}"
         say "Source: #{source}"
         say "Limiting enabled: #{Engine.limit}" if Engine.limit != nil
         say "Offset enabled: #{Engine.offset}" if Engine.offset != nil
@@ -427,6 +430,9 @@ module ETL #:nodoc:
                 Engine.current_destination = destination
                 rows.each do |row|
                   destination.write(row)
+                  if(source.last_completed_id_table)
+                    Engine.last_completed_id = row[:id]
+                  end
                   Engine.rows_written += 1 if index == 0
                 end
               end
@@ -504,7 +510,10 @@ module ETL #:nodoc:
       ActiveRecord::Base.verify_active_connections!
       ETL::Engine.job.completed_at = Time.now
       ETL::Engine.job.status = (errors.length > 0 ? 'completed with errors' : 'completed')
+      ETL::Engine.job.last_completed_id = (Engine.last_completed_id ? Engine.last_completed_id : nil)
       ETL::Engine.job.save!
+      #reset last completed id
+      Engine.last_completed_id = nil
     end
     
     def empty_row?(row)
@@ -520,27 +529,27 @@ module ETL #:nodoc:
     
     # Execute all preprocessors
     def pre_process(control)
-      Engine.logger.debug "Pre-processing #{control.file}"
+      Engine.logger.info "Pre-processing #{control.file}"
       control.pre_processors.each do |processor|
         processor.process
       end
-      Engine.logger.debug "Pre-processing complete"
+      Engine.logger.info "Pre-processing complete"
     end
     
     # Execute all postprocessors
     def post_process(control)
       say_on_own_line "Executing post processes"
-      Engine.logger.debug "Post-processing #{control.file}"
+      Engine.logger.info "Post-processing #{control.file}"
       control.post_processors.each do |processor|
         processor.process
       end
-      Engine.logger.debug "Post-processing complete"
+      Engine.logger.info "Post-processing complete"
       say "Post-processing complete"
     end
     
     # Execute all dependencies
     def execute_dependencies(control)
-      Engine.logger.debug "Executing dependencies"
+      Engine.logger.info "Executing dependencies"
       control.dependencies.flatten.each do |dependency|
         case dependency
         when Symbol

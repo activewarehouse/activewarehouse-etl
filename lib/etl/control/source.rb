@@ -124,7 +124,12 @@ module ETL #:nodoc:
       def read_locally
         Engine.read_locally
       end
-      
+
+      # Need this for sources that don't support last completed id
+      def last_completed_id_table
+        false
+      end
+
       # Get the order of fields that this source will present to the pipeline
       def order
         order = []

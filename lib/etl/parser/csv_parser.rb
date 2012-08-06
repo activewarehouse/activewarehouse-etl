@@ -7,6 +7,7 @@ module ETL #:nodoc:
       # * <tt>options</tt>: Hash of options for the parser, defaults to an empty hash
       def initialize(source, options={})
         super
+        options = {} if options.nil?
         configure
       end
       
@@ -28,7 +29,7 @@ module ETL #:nodoc:
       # Returns each row.
       def each
         Dir.glob(file).each do |file|
-          ETL::Engine.logger.debug "parsing #{file}"
+          ETL::Engine.logger.info "parsing #{file}"
           if fields.length == 0
             ETL::Engine.logger.debug "no columns specified so reading names from first line of #{file}"
             @fields = get_fields_names(file)

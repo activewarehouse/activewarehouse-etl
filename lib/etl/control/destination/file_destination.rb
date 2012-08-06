@@ -78,14 +78,18 @@ module ETL #:nodoc:
             case value
             when Date, Time, DateTime
               value.to_s(:db)
+            when nil
+              value
             else
               value.to_s
             end
           end
-          
-          values.collect! { |v| v.gsub(/\\/, '\\\\\\\\')}
-          values.collect! { |v| v.gsub(separator, "\\#{separator}")}
-          values.collect! { |v| v.gsub(/\n|\r/, '')}
+
+          values.collect! { |v| v.nil? ? v : v.encode("UTF-8")}
+          values.collect! { |v| v.nil? ? v : v.gsub(/\\/, '\\\\\\\\')}
+          values.collect! { |v| v.nil? ? v : v.gsub(separator, "\\#{separator}")}
+          values.collect! { |v| v.nil? ? v : v.gsub(/\n|\r/, '')}
+          values.collect! { |v| v.nil? ? "\\N" : v}
           
           # enclose the value if required
           if !enclose.nil?

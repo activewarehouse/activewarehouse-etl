@@ -61,7 +61,17 @@ module ETL #:nodoc:
       def join
         configuration[:join]
       end
-      
+
+      # Table to use with the last_completed_id from etl_execution table
+      def last_completed_id_table
+        configuration[:last_completed_id_table]
+      end
+
+      # Maximum rows to be returned per query
+      def max_select_size
+        configuration[:max_select_size] || 1000000
+      end
+
       # Get the select part of the query, defaults to '*'
       def select
         configuration[:select] || '*'
@@ -82,7 +92,15 @@ module ETL #:nodoc:
       def new_records_only
         configuration[:new_records_only]
       end
-      
+
+      def new_records_only_minimum_lag
+        configuration[:new_records_only_minimum_lag]
+      end
+
+      def use_limit
+        configuration[:use_limit].nil? ? true : configuration[:use_limit]
+      end
+
       # Get the number of rows in the source
       def count(use_cache=true)
         return @count if @count && use_cache
@@ -96,8 +114,14 @@ module ETL #:nodoc:
       # Get the list of columns to read. This is defined in the source
       # definition as either an Array or Hash
       def columns
-        # weird default is required for writing to cache correctly
-        @columns ||= query_rows.any? ? query_rows.first.keys : ['']
+        if use_limit && max_select_size
+          # pull only 10 cols to get col names
+          # weird default is required for writing to cache correctly
+          @columns ||= query_rows_with_limit(0, 10).any? ? query_rows_with_limit(0, 10).first.keys : ['']
+        else
+          # weird default is required for writing to cache correctly
+          @columns ||= query_rows.any? ? query_rows.first.keys : ['']
+        end
       end
       
       # Returns each row from the source. If read_locally is specified then
@@ -107,21 +131,34 @@ module ETL #:nodoc:
       # error.
       def each(&block)
         if read_locally # Read from the last stored source
-          ETL::Engine.logger.debug "Reading from local cache"
+          ETL::Engine.logger.info "Reading from local cache..."
           read_rows(last_local_file, &block)
         else # Read from the original source
           if @store_locally
             file = local_file
             write_local(file)
+            @query_rows = nil # free the memory
             read_rows(file, &block)
           else
-            query_rows.each do |r|
-              row = ETL::Row.new()
-              r.symbolize_keys.each_pair { |key, value|
-                row[key] = value
-              }
-              row.source = self
-              yield row
+            if use_limit &&  max_select_size
+              puts "Doing subselect with starting offset = #{@starting_offset}, max select = #{max_select_size}..."
+              rows = query_rows_with_limit(@starting_offset, max_select_size)
+              while(rows && rows.size > 0)
+                @starting_offset += max_select_size
+                rows.each do |row|
+                  yield row
+                end
+                rows = query_rows_with_limit(@starting_offset, max_select_size)
+              end
+            else
+              query_rows.each do |r|
+                row = ETL::Row.new()
+                r.symbolize_keys.each_pair { |key, value|
+                  row[key] = value
+                }
+                row.source = self
+                yield row
+              end
             end
           end
         end
@@ -132,7 +169,10 @@ module ETL #:nodoc:
       def read_rows(file)
         raise "Local cache file not found" unless File.exists?(file)
         raise "Local cache trigger file not found" unless File.exists?(local_file_trigger(file))
-        
+
+        puts "Reading from local cache file #{file.to_s}"
+        puts "Using last trigger of #{local_file_trigger(file).to_s}"
+
         t = Benchmark.realtime do
           CSV.open(file, :headers => true).each do |row|
             result_row = ETL::Row.new
@@ -155,12 +195,27 @@ module ETL #:nodoc:
       # Write rows to the local cache
       def write_local(file)
         lines = 0
+        @starting_offset = 0
         t = Benchmark.realtime do
           CSV.open(file, 'w') do |f|
             f << columns
-            query_rows.each do |row|
-              f << columns.collect { |column| row[column.to_s] }
-              lines += 1
+            if use_limit && max_select_size
+              rows = query_rows_with_limit(@starting_offset, max_select_size)
+              while(rows && rows.size > 0)
+                puts "Doing subselect with starting offset = #{@starting_offset}, max select = #{max_select_size}"
+                @starting_offset += max_select_size
+                rows.each do |row|
+                  f << columns.collect { |column| row[column.to_s] }
+                  lines += 1
+                end
+                rows = query_rows_with_limit(@starting_offset, max_select_size)
+              end
+            else
+              puts "No max_select_size given, reading entire table..."
+              query_rows.each do |row|
+                f << columns.collect { |column| row[column.to_s] }
+                lines += 1
+              end
             end
           end
           File.open(local_file_trigger(file), 'w') {|f| }
@@ -172,7 +227,7 @@ module ETL #:nodoc:
       def query
         return @query if @query
         q = "SELECT #{select} FROM #{@table}"
-        q << " JOIN #{join}" if join
+        q << " #{join}" if join
         
         conditions = []
         if new_records_only
@@ -180,7 +235,16 @@ module ETL #:nodoc:
             :conditions => ['control_file = ? and completed_at is not null', control.file]
           )
           if last_completed
-            conditions << "#{new_records_only} > #{connection.quote(last_completed.to_s(:db))}"
+            cutoff_time = last_completed
+            if(new_records_only_minimum_lag)
+              cutoff_time = [last_completed, (last_completed - new_records_only_minimum_lag) || last_completed, (Time.now - new_records_only_minimum_lag) || Time.now].min
+            end
+            conditions << "#{new_records_only} > #{connection.quote(cutoff_time.to_s(:db))}"
+          end
+        elsif last_completed_id_table
+          last_completed = ETL::Execution::Job.maximum('last_completed_id', :conditions => ['control_file = ? and completed_at IS NOT NULL and last_completed_id IS NOT NULL', control.file])
+          if(last_completed)
+            conditions << "#{last_completed_id_table}.id > #{last_completed}"
           end
         end
         
@@ -213,7 +277,13 @@ module ETL #:nodoc:
           connection.select_all(query)
         end
       end
-      
+
+      def query_rows_with_limit(offset, limit)
+        ETL::Engine.logger.debug "query_rows_with_limit called with offset=#{offset}, limit=#{limit}"
+        query_string = query + " LIMIT #{offset},#{limit}"
+        @query_rows = connection.select_all(query_string)
+      end
+
       # Get the database connection to use
       def connection
         ETL::Engine.connection(target)
