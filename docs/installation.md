@@ -8,15 +8,21 @@ current: Installation
 
 To install ActiveWarehouse ETL you must first install Ruby and Rubygems. Once you have a functioning Ruby and Rubygems installation you can install by simply running gem install:
 
-    gem install activewarehouse-etl
+{% highlight bash %}
+gem install activewarehouse-etl
+{% endhighlight %}
 
 If you are installing this into a Ruby on Rails project then yo may use the Bundler `Gemfile`.  Make sure you run `bundle install` after making the changes.
 
-    gem 'activewarehouse-etl'
+{% highlight ruby %}
+gem 'activewarehouse-etl'
+{% endhighlight %}
 
 Or you may simply clone the repository into some place on your Ruby load path.
 
-    git clone http://github.com/activewarehouse/activewarehouse-etl.git
+{% highlight bash %}
+git clone http://github.com/activewarehouse/activewarehouse-etl.git
+{% endhighlight %}
 
 Note that if you do not use the gem install you will still require Ruby Gems and all the other dependencies listed below. Further, the etl executable will reside in activewarehouse-etl/bin. You must either link to etl from somewhere in your PATH or run it by specifying the full directory path /path/to/activewarehouse-etl/bin/etl
 
