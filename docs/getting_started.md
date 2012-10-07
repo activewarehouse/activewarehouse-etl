@@ -22,3 +22,4 @@ We need to create a `database.yml` file to configure ActiveRecord, ActiveWarehou
 
 Here we configure the `etl_execution` environment to connect to the `my_app_etl_execution` database. The `etl_execution` environment is the one that ActiveWarehouse ETL uses to track internal status, and is required.  Here we gave it MySQL configuration options, but you are free to use any adapters that ActiveRecord supports.
 
+Create the database above and let's move on to a simple control script.

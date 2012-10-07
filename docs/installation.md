@@ -29,3 +29,7 @@ Note that if you do not use the gem install you will still require Ruby Gems and
 ActiveWarehouse ETL depends on FasterCSV, ActiveRecord, ActiveSupport and SQLite3. If these libraries are not already installed they should be installed along with ActiveWarehouse ETL. Naturally, if you use any other DBMS you need the adapter for that as well.
 
 Finally, if you are running the etl command line, ensure that you are either including a config file that includes rails or add `require 'rails/all'` to the bin/etl script if required.
+
+TODO: 
+- installing from git
+- installing a release candidate
