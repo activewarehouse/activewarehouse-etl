@@ -6,6 +6,8 @@ current: Styles
 ---
 # Styles
 
+This is an example styles page that you can refer to as you add to the documentation. Documentation should look good and emphasize information where necessary.
+
 Integer sollicitudin erat vel lacus viverra et ullamcorper nunc gravida. Mauris pellentesque suscipit velit, id eleifend arcu scelerisque eu. Nunc luctus arcu id mauris hendrerit sed convallis orci pretium. Pellentesque dapibus enim non justo accumsan porttitor. Curabitur interdum nunc et dui tincidunt aliquet. In hac habitasse platea dictumst. Morbi eu mi nunc, vestibulum gravida nisi. Aliquam eu neque dolor.
 
 Suspendisse potenti. Maecenas porta sem sed sapien imperdiet in sagittis velit bibendum. Nam molestie elit in eros fermentum sed sagittis nibh blandit. Aliquam facilisis bibendum quam sit amet eleifend. Duis pellentesque tristique iaculis. Pellentesque vitae nunc vitae leo rhoncus tempus nec vitae nisl. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse id neque arcu. Donec ut malesuada dui. Sed quis nulla velit, vel ultricies leo. Vivamus sit amet sem massa. Praesent egestas eleifend purus ut consequat. Ut id dui neque, id interdum elit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse potenti. Fusce a libero dolor.
