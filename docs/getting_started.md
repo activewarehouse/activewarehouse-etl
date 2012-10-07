@@ -8,12 +8,11 @@ current: Getting Started
 
 Be sure to run through the <a href="/docs/installation.html">Installation page</a> to get the gem installed first.
 
-ActiveWarehouse ETL uses ActiveRecord to configure databases that it will connect to, whether that be the `etl_execution` that it uses internally to track status or the databases you are using in your control scripts.
+ActiveWarehouse ETL currently uses ActiveRecord to connect to databases that are configured, whether that be the `etl_execution` that it uses internally to track status or the databases you are using in your control scripts.
 
-We need to create a `database.yml` file to configure ActiveRecord, ActiveWarehouse ETL will look for this `config/database.yml` in your current directory.  Here's an starter example:
+We need to create a `database.yml` file to configure ActiveRecord, ActiveWarehouse ETL will look for a `database.yml` in the config directory.  Here's an example:
 
     # APP_ROOT/config/database.yml
-
     etl_execution:
       database: my_app_etl_execution
       adapter: mysql
