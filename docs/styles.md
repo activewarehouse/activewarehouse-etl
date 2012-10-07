@@ -1,10 +1,10 @@
 ---
 layout: documentation
-title: Documentation - Installation
+title: Documentation - Styles
 
-current: Installation
+current: Styles
 ---
-# Installation
+# Styles
 
 Integer sollicitudin erat vel lacus viverra et ullamcorper nunc gravida. Mauris pellentesque suscipit velit, id eleifend arcu scelerisque eu. Nunc luctus arcu id mauris hendrerit sed convallis orci pretium. Pellentesque dapibus enim non justo accumsan porttitor. Curabitur interdum nunc et dui tincidunt aliquet. In hac habitasse platea dictumst. Morbi eu mi nunc, vestibulum gravida nisi. Aliquam eu neque dolor.
 
