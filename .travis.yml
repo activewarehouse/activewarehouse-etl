@@ -13,3 +13,7 @@ before_script:
   - bundle exec rake db:create RAILS_ENV=$DB
   - bundle exec rake db:create RAILS_ENV=etl_execution
   - bundle exec rake db:schema:load RAILS_ENV=$DB
+
+branches:
+  only:
+    - master
