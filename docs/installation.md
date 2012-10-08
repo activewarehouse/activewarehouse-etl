@@ -6,30 +6,54 @@ current: Installation
 ---
 # Installation
 
-To install ActiveWarehouse ETL you must first install Ruby and Rubygems. Once you have a functioning Ruby and Rubygems installation you can install by simply running gem install:
+To install ActiveWarehouse ETL you must first install Ruby and RubyGems.
+
+### From RubyGems
+
+Install by simply running gem install:
 
 {% highlight bash %}
 gem install activewarehouse-etl
 {% endhighlight %}
 
-If you are installing this into a Ruby on Rails project then yo may use the Bundler `Gemfile`.  Make sure you run `bundle install` after making the changes.
+### Into a Rails project
+
+If you are installing this into a Ruby on Rails project then you should use the Bundler `Gemfile`.  Make sure you run `bundle install` after making the changes.
+
+To use the latest stable release:
 
 {% highlight ruby %}
 gem 'activewarehouse-etl'
 {% endhighlight %}
 
-Or you may simply clone the repository into some place on your Ruby load path.
+To use the latest dev release, use with caution:
+
+{% highlight ruby %}
+gem 'activewarehouse-etl', :git => "git://github.com/activewarehouse/activewarehouse-etl.git" 
+{% endhighlight %}
+
+
+### Building the gem from source
+
+Alternatively you can install by cloning the repository, building the gem and installing it manually:
+
+{% highlight bash %}
+git clone http://github.com/activewarehouse/activewarehouse-etl.git
+cd activewarehouse-etl
+bundle --without test
+bundle exec rake install
+{% endhighlight %}
+
+### Using directly from the source
 
 {% highlight bash %}
 git clone http://github.com/activewarehouse/activewarehouse-etl.git
 {% endhighlight %}
 
-Note that if you do not use the gem install you will still require Ruby Gems and all the other dependencies listed below. Further, the etl executable will reside in activewarehouse-etl/bin. You must either link to etl from somewhere in your PATH or run it by specifying the full directory path /path/to/activewarehouse-etl/bin/etl
+The etl executable will reside in activewarehouse-etl/bin. You must either link to etl from somewhere in your PATH or run it by specifying the full directory path `/path/to/activewarehouse-etl/bin/etl`.
 
-ActiveWarehouse ETL depends on FasterCSV, ActiveRecord, ActiveSupport and SQLite3. If these libraries are not already installed they should be installed along with ActiveWarehouse ETL. Naturally, if you use any other DBMS you need the adapter for that as well.
-
-Finally, if you are running the etl command line, ensure that you are either including a config file that includes rails or add `require 'rails/all'` to the bin/etl script if required.
+Finally, when you run the etl command line, ensure that you are either including a config file that includes rails or add `require 'rails/all'` to the bin/etl script if required.
 
 TODO: 
-- installing from git
-- installing a release candidate
+
+* installing a specific release candidate
