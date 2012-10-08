@@ -1,0 +1,19 @@
+language: ruby
+gemfile:
+  - test/config/gemfiles/Gemfile.rails-3.2.x
+  - test/config/gemfiles/Gemfile.rails-3.1.x
+  - test/config/gemfiles/Gemfile.rails-3.0.x
+rvm:
+  - 1.9.3
+  - 1.8.7
+env:
+  - DB=mysql2
+  - DB=postgresql
+before_script:
+  - bundle exec rake db:create RAILS_ENV=$DB
+  - bundle exec rake db:create RAILS_ENV=etl_execution
+  - bundle exec rake db:schema:load RAILS_ENV=$DB
+
+branches:
+  only:
+    - master
