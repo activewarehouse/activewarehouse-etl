@@ -71,6 +71,7 @@ ActiveWarehouse-ETL is the work of many people since late 2006 - here is a list,
 * "Peter Glerup Ericson":https://github.com/pgericson
 * "Ian Morgan":https://github.com/seeingidog
 * "Julien Biard":https://github.com/tchukuchuk
+* "Jamie van Dyke":https://github.com/fearoffish
 
 If your name should be on the list but isn't, please leave a comment!
 
