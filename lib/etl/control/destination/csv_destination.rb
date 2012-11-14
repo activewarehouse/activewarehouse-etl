@@ -32,7 +32,7 @@ module ETL #:nodoc:
       # * <tt>:append</tt>: Set to true to append to the file (default is to overwrite)
       # * <tt>:separator</tt>: Record separator (default is a comma)
       # * <tt>:eol</tt>: End of line marker (default is \n)
-      # * <tt>:enclose</tt>: Set to true of false
+      # * <tt>:enclose</tt>: Set the character enclosure (default is  none)
       # * <tt>:unique</tt>: Set to true to only write unique records
       # * <tt>:append_rows</tt>: Array of rows to append
       # 
@@ -45,7 +45,7 @@ module ETL #:nodoc:
         @append = configuration[:append] ||= false
         @separator = configuration[:separator] ||= ','
         @eol = configuration[:eol] ||= "\n"
-        @enclose = true & configuration[:enclose]
+        @enclose = configuration[:enclose]
         @unique = configuration[:unique] ? configuration[:unique] + scd_required_fields : configuration[:unique]
         @unique.uniq! unless @unique.nil?
         @write_header = configuration[:write_header]
@@ -102,14 +102,15 @@ module ETL #:nodoc:
       private
       # Get the open file stream
       def f
-        @f ||= FasterCSV.open(file, mode, options)
+        @f ||= CSV.open(file, mode, options)
       end
       
       def options
         @options ||= {
           :col_sep => separator,
           :row_sep => eol,
-          :force_quotes => enclose
+          :quote_char => enclose,
+          :force_quotes => true & enclose
         }
       end
       
