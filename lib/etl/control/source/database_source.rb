@@ -28,6 +28,8 @@ module ETL #:nodoc:
       # Other options:
       # * <tt>:join</tt>: Optional join part for the query (ignored unless 
       #   specified)
+      # * <tt>:join_type</tt>: Optional join clause type for a query with a
+      #   join part (defaults to 'JOIN')
       # * <tt>:select</tt>: Optional select part for the query (defaults to 
       #   '*')
       # * <tt>:group</tt>: Optional group by part for the query (ignored 
@@ -62,6 +64,11 @@ module ETL #:nodoc:
         configuration[:join]
       end
       
+      # Get the type of join for the query, defaults to JOIN
+      def join_type
+        configuration[:join_type] || 'JOIN'
+      end
+
       # Get the select part of the query, defaults to '*'
       def select
         configuration[:select] || '*'
@@ -172,7 +179,7 @@ module ETL #:nodoc:
       def query
         return @query if @query
         q = "SELECT #{select} FROM #{@table}"
-        q << " JOIN #{join}" if join
+        q << " #{join_type} #{join}" if join
         
         conditions = []
         if new_records_only

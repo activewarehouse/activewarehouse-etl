@@ -109,6 +109,30 @@ class SourceTest < Test::Unit::TestCase
       @source = ETL::Control::DatabaseSource.new(control, configuration, definition)
     end
 
+    context 'with a join clause' do
+      setup do
+        Person.destroy_all
+        Person.create!( :first_name => 'Bob', :last_name => 'Jones', :ssn => '123456789')
+        Person.create!( :first_name => 'Carol', :last_name => 'Jones')
+        Person.create!( :first_name => 'Bob', :last_name => 'Smith')
+      end
+
+      should 'perform an inner join by default' do
+        size = build_source( :store_locally => true,
+                             :mysqlstream => false,
+                             :join => 'people p2 on p2.last_name = people.last_name and p2.id != people.id').to_a.size
+        assert_equal 2, size
+      end
+
+      should 'allow other types of joins' do
+        size = build_source( :store_locally => true,
+                             :mysqlstream => false,
+                             :join => 'people p2 on p2.last_name = people.last_name and p2.id != people.id',
+                             :join_type => 'left outer join').to_a.size
+        assert_equal 3, size
+      end
+    end
+
     context "with a specified LIMIT `n`" do
       setup do
         ETL::Engine.limit = @limit
