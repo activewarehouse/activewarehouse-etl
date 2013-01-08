@@ -8,7 +8,7 @@ module ETL
       attr_reader :aws_secret_access_key
       attr_reader :bucket_name
       attr_reader :remote_key
-      attr_reader :data_stream
+      attr_reader :local_file
       attr_reader :options
       
 
@@ -17,13 +17,13 @@ module ETL
         @aws_secret_access_key = configuration[:aws_secret_access_key]
         @bucket_name = configuration[:bucket_name]
         @remote_key = configuration[:remote_key]
-        @data_stream = configuration[:data_stream]
+        @local_file = configuration[:local_file]
         @options = configuration[:options]
       end
       
       def process
       	s3 = RightAws::S3Interface.new(@aws_access_key_id, @aws_secret_access_key, @options) 
-  		s3.put(@bucket_name,@remote_key,@data)
+  		s3.put(@bucket_name,@remote_key,File.open(@local_file))
   		s3.head_link("shopify-reports-cache",@remote_key)
       end
 
