@@ -17,7 +17,7 @@ module ETL
       
       def process
         conn = ETL::Engine.connection(target)
-        conn.execute("COPY #{@table_name} FROM '#{@s3object}' CREDENTIALS '#{aws_credentials}' DELIMITER AS ',';")
+        conn.execute("COPY #{@table_name} [(#{@columns.join(',')})] FROM '#{@s3object}' CREDENTIALS '#{aws_credentials}' DELIMITER AS ',';")
       end
     end
   end
