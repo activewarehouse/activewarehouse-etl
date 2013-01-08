@@ -24,6 +24,7 @@ module ETL
       def process
       	s3 = RightAws::S3Interface.new(@aws_access_key_id, @aws_secret_access_key, @options) 
   		s3.put(@bucket_name,@remote_key,@data)
+  		s3.head_link("shopify-reports-cache",@remote_key)
       end
 
     end
