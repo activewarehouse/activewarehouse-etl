@@ -1,3 +1,4 @@
+module ETL #:nodoc:
   module Control #:nodoc:
     # Base class for destinations.
     class Destination
