@@ -1,10 +1,10 @@
-optional_require 'spreadsheet'
+optional_require 'roo'
 
 module ETL
   module Parser
     class ExcelParser < ETL::Parser::Parser
 
-      attr_accessor :ignore_blank_line
+      attr_accessor :ignore_blank_line, :worksheet_column, :validate_rows
 
       # Initialize the parser
       # * <tt>source</tt>: The Source object
@@ -20,18 +20,27 @@ module ETL
           ETL::Engine.logger.debug "parsing #{file}"
           line = 0
           lines_skipped = 0
-          book = Spreadsheet.open file
+          book = Roo::Spreadsheet.open file
           loopworksheets = []
 
           if worksheets.empty?
-            loopworksheets = book.worksheets
+            loopworksheets = book.sheets
           else
             worksheets.each do |index|
-              loopworksheets << book.worksheet(index)
+              loopworksheets << book.sheet(index)
             end
           end
+          
+          sheet_index = -1
 
-          loopworksheets.each do |sheet|
+          book.each_with_pagename do |name, sheet|
+            sheet_index += 1
+            # puts "Sheet: #{name}"
+            # puts worksheets.inspect
+            if !worksheets.empty? && !worksheets.include?(sheet_index)
+              # puts "No!!! #{sheet_index.inspect}"
+              next
+            end
             sheet.each do |raw_row|
               if lines_skipped < source.skip_lines
                 ETL::Engine.logger.debug "skipping line"
@@ -44,11 +53,12 @@ module ETL
                 lines_skipped += 1
                 next
               end
-              validate_row(raw_row, line, file)
+              validate_row(raw_row, line, file) if self.validate_rows
               raw_row.each_with_index do |value, index|
                 f = fields[index]
                 row[f.name] = value
               end
+              row[worksheet_column] = name if worksheet_column
               yield row
             end
           end
@@ -87,6 +97,12 @@ module ETL
         end unless source.definition[:worksheets].nil?
 
         self.ignore_blank_line = source.definition[:ignore_blank_line]
+        self.worksheet_column  = source.definition[:worksheet_column]
+        self.validate_rows     = if source.configuration.has_key?(:validate_rows)
+                                   source.configuration[:validate_rows]
+                                 else
+                                   true
+                                 end
 
         source.definition[:fields].each do |options|
           case options
