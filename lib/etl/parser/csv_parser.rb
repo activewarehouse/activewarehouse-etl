@@ -10,6 +10,8 @@ module ETL #:nodoc:
         configure
       end
       
+      attr_reader :validate_rows
+
       def get_fields_names(file)
         File.open(file) do |input|
           fields = CSV.parse(input.readline, options).first
@@ -43,7 +45,7 @@ module ETL #:nodoc:
             end
             line += 1
             row = {}
-            validate_row(raw_row, line, file)
+            validate_row(raw_row, line, file) if self.validate_rows
             raw_row.each_with_index do |value, index|
               f = fields[index]
               row[f.name] = value
@@ -70,6 +72,12 @@ module ETL #:nodoc:
       end
       
       def configure
+        @validate_rows = if source.configuration.has_key?(:validate_rows)
+                           source.configuration[:validate_rows]
+                         else
+                           true
+                         end
+        
         source.definition.each do |options|
           case options
           when Symbol
