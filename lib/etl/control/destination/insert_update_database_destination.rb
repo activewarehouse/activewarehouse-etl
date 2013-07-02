@@ -82,6 +82,8 @@ module ETL #:nodoc:
                 res.free
               when "ActiveRecord::ConnectionAdapters::Mysql2Adapter"
                 res.each { none = false }
+              when "ActiveRecord::ConnectionAdapters::SQLite3Adapter"
+                res.each { none = false }
               else raise "Unsupported adapter #{conn.class} for this destination"
             end
 
