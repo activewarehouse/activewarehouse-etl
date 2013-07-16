@@ -502,7 +502,6 @@ module ETL #:nodoc:
 #         say "Avg #{klass}: #{Engine.rows_read/t} rows/sec"
 #       end
 
-      ActiveRecord::Base.verify_active_connections!
       ETL::Engine.job.completed_at = Time.now
       ETL::Engine.job.status = (errors.length > 0 ? 'completed with errors' : 'completed')
       ETL::Engine.job.save!
