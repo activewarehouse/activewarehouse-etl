@@ -25,5 +25,5 @@ data_warehouse:
   <<: *<%= ENV['DB'] %>
 
 etl_execution:
-  <<: *mysql2
+  <<: *<%= ENV['DB'] %>
   database: etl_execution
