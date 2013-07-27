@@ -8,11 +8,7 @@ def system!(cmd)
   raise "Command failed!" unless system(cmd)
 end
 
-begin
-  require 'tasks/standalone_migrations'
-rescue LoadError => e
-  puts "gem install standalone_migrations to get db:migrate:* tasks! (Error: #{e})"
-end
+require 'tasks/standalone_migrations'
 
 # experimental tasks to reproduce the Travis behaviour locally
 namespace :ci do
