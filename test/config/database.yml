@@ -3,7 +3,7 @@
 # a bit hackish - tests would require a refactoring instead
 
 mysql2: &mysql2
-  host: localhost
+  host: 127.0.0.1
   adapter: mysql2
   database: activewarehouse_etl_test
   username: root
@@ -25,5 +25,5 @@ data_warehouse:
   <<: *<%= ENV['DB'] %>
 
 etl_execution:
-  adapter: mysql2
+  <<: *mysql2
   database: etl_execution
