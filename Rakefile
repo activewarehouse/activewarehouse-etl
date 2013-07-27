@@ -15,13 +15,15 @@ namespace :ci do
 
   desc "For current RVM, run the tests for one db and one gemfile"
   task :run_one, :db, :gemfile do |t, args|
-    ENV['BUNDLE_GEMFILE'] = File.expand_path(args[:gemfile] || (File.dirname(__FILE__) + '/test/config/gemfiles/Gemfile.rails-3.2.x'))
-    ENV['DB'] = args[:db] || 'mysql2'
-    system! "bundle install"
-    system! "bundle exec rake db:create"
-    system! "bundle exec rake db:create RAILS_ENV=etl_execution"
-    system! "bundle exec rake db:schema:load"
-    system! "bundle exec rake"
+    Bundler.with_clean_env do
+      ENV['BUNDLE_GEMFILE'] = File.expand_path(args[:gemfile] || (File.dirname(__FILE__) + '/test/config/gemfiles/Gemfile.rails-3.2.x'))
+      ENV['DB'] = args[:db] || 'mysql2'
+      system! "bundle install"
+      system! "bundle exec rake db:create"
+      system! "bundle exec rake db:create RAILS_ENV=etl_execution"
+      system! "bundle exec rake db:schema:load"
+      system! "bundle exec rake"
+    end
   end
 
   desc "For current RVM, run the tests for all the combination in travis configuration"
