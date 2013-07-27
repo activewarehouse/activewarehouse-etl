@@ -1,5 +1,5 @@
 def declare_gems(activerecord_version)
-  source :rubygems
+  source "https://rubygems.org"
 
   gem 'activerecord', activerecord_version
   gem 'adapter_extensions', :git => 'https://github.com/activewarehouse/adapter_extensions.git'
