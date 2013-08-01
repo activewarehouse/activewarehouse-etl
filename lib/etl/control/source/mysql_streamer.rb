@@ -21,7 +21,7 @@ class MySqlStreamer
     # in the SQL - its bound to cause trouble
     @query = query.split.join(' ')
     @name = target
-    @first_row = connection.select_all("#{query} LIMIT 1")
+    @first_row = connection.select_all("#{query.sub(/ LIMIT \d+/, '')} LIMIT 1")
   end
 
   # We implement some bits of a hash so that database_source
