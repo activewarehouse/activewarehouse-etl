@@ -1,5 +1,7 @@
 h1. ActiveWarehouse-ETL
 
+>>> AT THE MOMENT, THIS GEM IS NOT MAINTAINED ANYMORE <<<
+
 ActiveWarehouse-ETL is a Ruby Extract-Transform-Load (ETL) tool.
 
 This tool is both usable and used in production under its current form - but be aware the project is under reorganization: a new team is shaping up and we're working mostly on making it easier for people to contribute first. Up-to-date documentation will only come later.
