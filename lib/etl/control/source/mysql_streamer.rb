@@ -49,8 +49,9 @@ class MySqlStreamer
     database = mandatory_option!(config, 'database')
     password = config['password'] # this one can omitted in some cases
 
-    mysql_command = """mysql --quick -h #{host} -u #{username} -e \"#{@query.gsub("\n","")}\" -D #{database} --password=#{password} -B"""
+    mysql_command = """mysql --quick -h #{host} -u #{username} -e \"#{@query.gsub("\n","")}\" -D #{database} -B"""
     Open3.popen3(mysql_command) do |stdin, out, err, external|
+      stdin.puts password
       until (line = out.gets).nil? do
         line = line.gsub("\n","")
         if keys.nil?
