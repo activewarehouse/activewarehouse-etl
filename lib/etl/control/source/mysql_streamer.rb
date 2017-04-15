@@ -28,7 +28,7 @@ class MySqlStreamer
   # can use them
   def any?
     @first_row.any?
-  end 
+  end
 
   def first
     @first_row.first
@@ -44,12 +44,13 @@ class MySqlStreamer
     keys = nil
 
     config = ETL::Base.configurations[@name.to_s]
-    host = mandatory_option!(config, 'host')
-    username = mandatory_option!(config, 'username')
-    database = mandatory_option!(config, 'database')
-    password = config['password'] # this one can omitted in some cases
+    host = mandatory_option!(config, :host)
+    username = mandatory_option!(config, :username)
+    database = mandatory_option!(config, :database)
+    password = config[:password] # this one can omitted in some cases
+    port = config[:port]
 
-    mysql_command = """mysql --quick -h #{host} -u #{username} -e \"#{@query.gsub("\n","")}\" -D #{database} --password=#{password} -B"""
+    mysql_command = """mysql --quick -h #{host} -P #{port} -u #{username} -e \"#{@query.gsub("\n","")}\" -D #{database} --password=#{password} -B"""
     Open3.popen3(mysql_command) do |stdin, out, err, external|
       until (line = out.gets).nil? do
         line = line.gsub("\n","")
