@@ -49,7 +49,7 @@ module ETL #:nodoc:
         @control = control
         @configuration = configuration
         @mapping = mapping
-        @buffer_size = configuration[:buffer_size] ||= 100
+        @buffer_size = configuration[:buffer_size] ||= 1000
         @condition = configuration[:condition]
         @append_rows = configuration[:append_rows]
       end
