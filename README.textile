@@ -1,6 +1,6 @@
 h1. ActiveWarehouse-ETL
 
->>> AT THE MOMENT, THIS GEM IS NOT MAINTAINED ANYMORE <<<
+>>> :warning: THIS GEM IS NOT MAINTAINED ANYMORE - Consider using "Kiba ETL":http://www.kiba-etl.org instead <<<
 
 ActiveWarehouse-ETL is a Ruby Extract-Transform-Load (ETL) tool.
 
