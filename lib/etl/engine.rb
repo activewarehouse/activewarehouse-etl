@@ -300,7 +300,7 @@ module ETL #:nodoc:
       batch.execute
       
       ETL::Engine.batch.completed_at = Time.now
-      ETL::Engine.batch.status = (errors.length > 0 ? 'completed with errors' : 'completed')
+      ETL::Engine.batch.status = (ETL::Engine.exit_code > 0 ? 'failed' : 'completed')
       ETL::Engine.batch.save!
     end
     
@@ -501,10 +501,9 @@ module ETL #:nodoc:
       # ETL::Transform::Transform.benchmarks.each do |klass, t|
 #         say "Avg #{klass}: #{Engine.rows_read/t} rows/sec"
 #       end
-
       ActiveRecord::Base.verify_active_connections!
       ETL::Engine.job.completed_at = Time.now
-      ETL::Engine.job.status = (errors.length > 0 ? 'completed with errors' : 'completed')
+      ETL::Engine.job.status = (ETL::Engine.exit_code > 0 ? 'failed' : 'completed')
       ETL::Engine.job.save!
     end
     
