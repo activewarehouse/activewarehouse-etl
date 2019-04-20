@@ -12,6 +12,7 @@ module ETL
       attr_reader :filters
       attr_reader :username
       attr_reader :local_dir
+      attr_reader :number_mails
       
       # configuration options include:
       # * host - hostname or IP address of POP3 server (required)
@@ -22,6 +23,7 @@ module ETL
       # * username - username for POP3 server authentication (default: anonymous)
       # * password - password for POP3 server authentication (default: nil)
       # * local_dir - local output directory to save downloaded files (default: '')
+      # * number_mails - number max of mails to download (default: nil)
       #
       def initialize(control, configuration)
         @host = configuration[:host]
@@ -32,12 +34,17 @@ module ETL
         @username = configuration[:username] || 'anonymous'
         @password = configuration[:password]
         @local_dir = configuration[:local_dir] || ''
+        @number_mails = configuration[:number_mails] || nil
+        raise ControlError, ":host must be specified" unless @host
+        raise ControlError, ":password must be specified" unless @password
       end
       
       def process
         Net::POP3.enable_ssl(OpenSSL::SSL::VERIFY_NONE) if @ssl
         conn = Net::POP3.new(@host, @port)
         conn.start(@username, @password)
+        count = 0
+
         if !conn.mails.empty?
           conn.each_mail do |message|
             stringmail = message.pop
@@ -52,6 +59,8 @@ module ETL
               end
 
               message.delete if @delete
+              count += 1
+              break if (!@number_mails.nil? && count > @number_mails.to_i)
             end
           end
         end
@@ -71,12 +80,12 @@ module ETL
 
         first = cond[1]
         if (cond[1].class == Array)
-          first = eval_condition(row, cond[1])
+          first = applyfilter(mail, cond[1])
         end
 
         second = cond[2]
         if (cond[2].class == Array)
-          second = eval_condition(row, cond[2])
+          second = applyfilter(mail, cond[2])
         end
 
         return eval("#{cond[0]}#{first}#{second}") if cond[0] == "!"

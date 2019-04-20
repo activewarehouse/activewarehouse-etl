@@ -13,6 +13,7 @@ module ETL
       attr_reader :folder
       attr_reader :username
       attr_reader :local_dir
+      attr_reader :number_mails
       
       # configuration options include:
       # * host - hostname or IP address of IMAP server (required)
@@ -24,6 +25,7 @@ module ETL
       # * username - username for IMAP server authentication (default: anonymous)
       # * password - password for IMAP server authentication (default: nil)
       # * local_dir - local output directory to save downloaded files (default: '')
+      # * number_mails - number max of mails to download (default: nil)
       #
       def initialize(control, configuration)
         @host = configuration[:host]
@@ -35,11 +37,15 @@ module ETL
         @username = configuration[:username] || 'anonymous'
         @password = configuration[:password]
         @local_dir = configuration[:local_dir] || ''
+        @number_mails = configuration[:number_mails] || nil
+        raise ControlError, ":host must be specified" unless @host
+        raise ControlError, ":password must be specified" unless @password
       end
       
       def process
         conn = Net::IMAP.new(@host, @port, @ssl)
         conn.login(@username, @password)
+        count = 0
 
         conn.select(@folder)
         conn.uid_search(["NOT", "DELETED"]).each do |msguuid|
@@ -54,6 +60,8 @@ module ETL
             end
 
             conn.store(msguuid, "+FLAGS", [:Deleted]) if @delete
+            count += 1
+            break if (!@number_mails.nil? && count > @number_mails.to_i)
           end
         end
         conn.expunge
@@ -72,12 +80,12 @@ module ETL
 
         first = cond[1]
         if (cond[1].class == Array)
-          first = eval_condition(row, cond[1])
+          first = applyfilter(mail, cond[1])
         end
 
         second = cond[2]
         if (cond[2].class == Array)
-          second = eval_condition(row, cond[2])
+          second = applyfilter(mail, cond[2])
         end
 
         return eval("#{cond[0]}#{first}#{second}") if cond[0] == "!"
