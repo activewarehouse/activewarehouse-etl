@@ -1,4 +1,5 @@
 require 'open3'
+require 'tempfile'
 
 # Internal: The MySQL streamer is a helper with works with the database_source
 #           in order to allow you to use the --quick option (which stops MySQL)
@@ -42,15 +43,7 @@ class MySqlStreamer
 
   def each
     keys = nil
-
-    config = ETL::Base.configurations[@name.to_s]
-    host = mandatory_option!(config, 'host')
-    username = mandatory_option!(config, 'username')
-    database = mandatory_option!(config, 'database')
-    password = config['password'] # this one can omitted in some cases
-
-    mysql_command = """mysql --quick -h #{host} -u #{username} -e \"#{@query.gsub("\n","")}\" -D #{database} --password=#{password} -B"""
-    Open3.popen3(mysql_command) do |stdin, out, err, external|
+    run_mysql(:quick, :batch) do |stdin, out, err, external|
       until (line = out.gets).nil? do
         line = line.gsub("\n","")
         if keys.nil?
@@ -68,6 +61,27 @@ class MySqlStreamer
       if (!error.nil? && error.strip.length > 0)
         throw error
       end
+    end
+  end
+
+  private
+
+  def run_mysql(*args)
+    config = ETL::Base.configurations[@name.to_s]
+    options = args.extract_options!.merge(
+      'host' => mandatory_option!(config, 'host'),
+      'user' => mandatory_option!(config, 'username'),
+      'database' => mandatory_option!(config, 'database'),
+      'password' => config['password'],
+      'execute' => "\"#{@query}\"")
+
+    Tempfile.open('mysqlstreamer') do |option_file|
+      option_file.puts '[client]'
+      args.each {|keyword| option_file.puts keyword}
+      options.each {|key, value| option_file.puts "#{key}=#{value}"}
+      option_file.flush
+
+      yield Open3.popen3("mysql --defaults-extra-file=#{option_file.path}")
     end
   end
 end
